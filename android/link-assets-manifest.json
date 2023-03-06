@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/fonts/Caveat-Bold.ttf",
+      "sha1": "b8cf7188694f0ad229fec80e8074b1df6305cdfa"
+    },
+    {
+      "path": "src/assets/fonts/Caveat-Regular.ttf",
+      "sha1": "6c6e0943c8a1af2aa1fe7d751c62e84e18cc4c72"
+    }
+  ]
+}
