@@ -1,15 +1,24 @@
-import { StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View } from "react-native";
 import React from "react";
+import { useNavigation } from "@react-navigation/native";
+import { RootScreenNavigationProps } from "../navigation/types";
 
-const ChatListScreen = () => {
+const ChatListScreen: React.FC = () => {
+  const navigation = useNavigation<RootScreenNavigationProps>();
+
   return (
     <View style={styles.container}>
       <Text>Chat List Screen</Text>
+
+      <Button
+        title="Go to settings"
+        onPress={() => {
+          navigation.navigate("ChatSettings");
+        }}
+      />
     </View>
   );
 };
-
-export default ChatListScreen;
 
 const styles = StyleSheet.create({
   container: {
@@ -18,3 +27,5 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
 });
+
+export default ChatListScreen;

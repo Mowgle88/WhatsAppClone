@@ -5,8 +5,10 @@ import SplashScreen from "react-native-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import ChatListScreen from "./screens/ChatListScreen";
+import ChatSettingsScreen from "./screens/ChatSettingsScreen";
+import { RootStackParamList } from "./navigation/types";
 
-const Stack = createStackNavigator();
+const Stack = createStackNavigator<RootStackParamList>();
 
 export default function App() {
   useEffect(() => {
@@ -17,7 +19,8 @@ export default function App() {
     <SafeAreaProvider style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Chat List" component={ChatListScreen} />
+          <Stack.Screen name="Home" component={ChatListScreen} />
+          <Stack.Screen name="ChatSettings" component={ChatSettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
