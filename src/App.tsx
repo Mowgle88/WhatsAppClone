@@ -6,9 +6,37 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import ChatListScreen from "./screens/ChatListScreen";
 import ChatSettingsScreen from "./screens/ChatSettingsScreen";
-import { RootStackParamList } from "./navigation/types";
+import { RootStackParamList, TabParamList } from "./navigation/types";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import SettingsScreen from "./screens/SettingsScreen";
 
 const Stack = createStackNavigator<RootStackParamList>();
+const Tab = createBottomTabNavigator<TabParamList>();
+
+const TabNavigator = () => {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        headerTitle: "",
+      }}
+    >
+      <Tab.Screen
+        name="ChatList"
+        component={ChatListScreen}
+        options={{
+          tabBarLabel: "Chats",
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingsScreen}
+        options={{
+          tabBarLabel: "Settings",
+        }}
+      />
+    </Tab.Navigator>
+  );
+};
 
 export default function App() {
   useEffect(() => {
@@ -19,7 +47,13 @@ export default function App() {
     <SafeAreaProvider style={styles.container}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={ChatListScreen} />
+          <Stack.Screen
+            name="Home"
+            component={TabNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Stack.Screen
             name="ChatSettings"
             component={ChatSettingsScreen}
