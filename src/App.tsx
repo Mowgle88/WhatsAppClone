@@ -9,6 +9,7 @@ import ChatSettingsScreen from "./screens/ChatSettingsScreen";
 import { RootStackParamList, TabParamList } from "./navigation/types";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import SettingsScreen from "./screens/SettingsScreen";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -25,6 +26,9 @@ const TabNavigator = () => {
         component={ChatListScreen}
         options={{
           tabBarLabel: "Chats",
+          tabBarIcon: ({ size, color }) => (
+            <Icon name="chatbubble-outline" size={size} color={color} />
+          ),
         }}
       />
       <Tab.Screen
@@ -32,6 +36,9 @@ const TabNavigator = () => {
         component={SettingsScreen}
         options={{
           tabBarLabel: "Settings",
+          tabBarIcon: ({ size, color }) => (
+            <Icon name="settings-outline" size={size} color={color} />
+          ),
         }}
       />
     </Tab.Navigator>
