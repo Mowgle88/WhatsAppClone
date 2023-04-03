@@ -2,48 +2,7 @@ import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import ChatListScreen from "./screens/ChatListScreen";
-import ChatSettingsScreen from "./screens/ChatSettingsScreen";
-import { RootStackParamList, TabParamList } from "./navigation/types";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import SettingsScreen from "./screens/SettingsScreen";
-import Icon from "react-native-vector-icons/Ionicons";
-
-const Stack = createStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<TabParamList>();
-
-const TabNavigator = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerTitle: "",
-      }}
-    >
-      <Tab.Screen
-        name="ChatList"
-        component={ChatListScreen}
-        options={{
-          tabBarLabel: "Chats",
-          tabBarIcon: ({ size, color }) => (
-            <Icon name="chatbubble-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarLabel: "Settings",
-          tabBarIcon: ({ size, color }) => (
-            <Icon name="settings-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
+import AppNavigator from "./navigation/AppNavigator";
 
 export default function App() {
   useEffect(() => {
@@ -52,25 +11,7 @@ export default function App() {
 
   return (
     <SafeAreaProvider style={styles.container}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          <Stack.Screen
-            name="Home"
-            component={TabNavigator}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Stack.Screen
-            name="ChatSettings"
-            component={ChatSettingsScreen}
-            options={{
-              headerTitle: "Settings",
-              headerBackTitle: "Back",
-            }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <AppNavigator />
     </SafeAreaProvider>
   );
 }
