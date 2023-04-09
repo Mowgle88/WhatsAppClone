@@ -1,10 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { ImageBackground, StyleSheet, View } from "react-native";
 
 const ChatScreen: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text>Chat Screen</Text>
+      <ImageBackground
+        source={require("../assets/images/droplet.jpeg")}
+        resizeMode="cover"
+        style={styles.backgroundImage}
+      />
     </View>
   );
 };
@@ -12,8 +16,9 @@ const ChatScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  backgroundImage: {
+    flex: 1,
   },
 });
 
