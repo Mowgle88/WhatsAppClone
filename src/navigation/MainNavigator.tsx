@@ -5,6 +5,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
+import ChatScreen from "../screens/ChatScreen";
 import { RootStackParamList, TabParamList } from "./types";
 
 const Stack = createStackNavigator<RootStackParamList>();
@@ -49,6 +50,14 @@ const MainNavigator = () => {
         component={TabNavigator}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{
+          headerTitle: "",
+          headerBackTitle: "Back",
         }}
       />
       <Stack.Screen
