@@ -6,6 +6,8 @@ import {
   TextInput,
   SafeAreaView,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
@@ -19,35 +21,41 @@ const ChatScreen: React.FC = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ImageBackground
-        source={require("../assets/images/droplet.jpeg")}
-        resizeMode="cover"
-        style={styles.backgroundImage}
-      />
-      <View style={styles.inputContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
-          <Icon name="add-outline" size={24} color={colors.blue} />
-        </TouchableOpacity>
-        <TextInput
-          value={messageText}
-          onChangeText={(text) => setMessageText(text)}
-          onSubmitEditing={sendMassage}
-          style={styles.input}
+      <KeyboardAvoidingView
+        keyboardVerticalOffset={100}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+        style={styles.container}
+      >
+        <ImageBackground
+          source={require("../assets/images/droplet.jpeg")}
+          resizeMode="cover"
+          style={styles.backgroundImage}
         />
-        {messageText && (
-          <TouchableOpacity
-            style={[styles.button, styles.sendButton]}
-            onPress={sendMassage}
-          >
-            <Icon name="send-sharp" size={20} color={"white"} />
-          </TouchableOpacity>
-        )}
-        {!messageText && (
+        <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.button} onPress={() => {}}>
-            <Icon name="camera-outline" size={24} color={colors.blue} />
+            <Icon name="add-outline" size={24} color={colors.blue} />
           </TouchableOpacity>
-        )}
-      </View>
+          <TextInput
+            value={messageText}
+            onChangeText={(text) => setMessageText(text)}
+            onSubmitEditing={sendMassage}
+            style={styles.input}
+          />
+          {messageText && (
+            <TouchableOpacity
+              style={[styles.button, styles.sendButton]}
+              onPress={sendMassage}
+            >
+              <Icon name="send-sharp" size={20} color={"white"} />
+            </TouchableOpacity>
+          )}
+          {!messageText && (
+            <TouchableOpacity style={styles.button} onPress={() => {}}>
+              <Icon name="camera-outline" size={24} color={colors.blue} />
+            </TouchableOpacity>
+          )}
+        </View>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 };
