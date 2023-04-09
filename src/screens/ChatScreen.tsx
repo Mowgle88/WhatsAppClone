@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -11,6 +11,12 @@ import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 
 const ChatScreen: React.FC = () => {
+  const [messageText, setMessageText] = useState("");
+
+  const sendMassage = useCallback(() => {
+    setMessageText("");
+  }, [messageText]);
+
   return (
     <SafeAreaView style={styles.container}>
       <ImageBackground
@@ -22,10 +28,25 @@ const ChatScreen: React.FC = () => {
         <TouchableOpacity style={styles.button} onPress={() => {}}>
           <Icon name="add-outline" size={24} color={colors.blue} />
         </TouchableOpacity>
-        <TextInput style={styles.input} />
-        <TouchableOpacity style={styles.button} onPress={() => {}}>
-          <Icon name="camera-outline" size={24} color={colors.blue} />
-        </TouchableOpacity>
+        <TextInput
+          value={messageText}
+          onChangeText={(text) => setMessageText(text)}
+          onSubmitEditing={sendMassage}
+          style={styles.input}
+        />
+        {messageText && (
+          <TouchableOpacity
+            style={[styles.button, styles.sendButton]}
+            onPress={sendMassage}
+          >
+            <Icon name="send-sharp" size={20} color={"white"} />
+          </TouchableOpacity>
+        )}
+        {!messageText && (
+          <TouchableOpacity style={styles.button} onPress={() => {}}>
+            <Icon name="camera-outline" size={24} color={colors.blue} />
+          </TouchableOpacity>
+        )}
       </View>
     </SafeAreaView>
   );
@@ -48,6 +69,11 @@ const styles = StyleSheet.create({
     width: 36,
     justifyContent: "center",
     alignItems: "center",
+  },
+  sendButton: {
+    backgroundColor: colors.blue,
+    borderRadius: 50,
+    paddingLeft: 4,
   },
   input: {
     flex: 1,
