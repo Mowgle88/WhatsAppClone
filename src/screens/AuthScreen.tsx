@@ -1,19 +1,24 @@
-import React from "react";
-import { SafeAreaView, StyleSheet } from "react-native";
-import IonIcon from "react-native-vector-icons/Ionicons";
+import React, { useState } from "react";
+import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import colors from "../constants/colors";
 import PageContainer from "../components/PageContainer";
-import Input from "../components/Input";
-import SubmitButton from "../components/SubmitButton";
+import SignUpForm from "../components/SignUpForm";
+import SignInForm from "../components/SignInForm";
 
 const AuthScreen: React.FC = () => {
+  const [isSignUp, setIsSignUp] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
       <PageContainer>
-        <Input label="First Name" icon="person-outline" IconPack={IonIcon} />
-        <Input label="Last Name" icon="person-outline" IconPack={IonIcon} />
-        <Input label="Email" icon="mail-outline" IconPack={IonIcon} />
-        <Input label="Password" icon="lock-closed-outline" IconPack={IonIcon} />
-        <SubmitButton title="Submit" onPress={() => {}} style={styles.button} />
+        {isSignUp ? <SignUpForm /> : <SignInForm />}
+        <TouchableOpacity
+          onPress={() => setIsSignUp((prevState) => !prevState)}
+          style={styles.linkContainer}
+        >
+          <Text style={styles.link}>{`witch to ${
+            isSignUp ? "sign in" : "sign up"
+          }`}</Text>
+        </TouchableOpacity>
       </PageContainer>
     </SafeAreaView>
   );
@@ -25,6 +30,17 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 20,
+  },
+  linkContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: 16,
+  },
+  link: {
+    color: colors.blue,
+    fontFamily: "Caveat-Bold",
+    fontSize: 20,
+    letterSpacing: 0.3,
   },
 });
 
