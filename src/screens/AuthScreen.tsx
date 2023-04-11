@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -11,28 +13,37 @@ import colors from "../constants/colors";
 import PageContainer from "../components/PageContainer";
 import SignUpForm from "../components/SignUpForm";
 import SignInForm from "../components/SignInForm";
+import { ScrollView } from "react-native-gesture-handler";
 
 const AuthScreen: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
       <PageContainer>
-        <View style={styles.imageContainer}>
-          <Image
-            source={require("../assets/images/logo.png")}
-            resizeMode="contain"
-            style={styles.image}
-          />
-        </View>
-        {isSignUp ? <SignUpForm /> : <SignInForm />}
-        <TouchableOpacity
-          onPress={() => setIsSignUp((prevState) => !prevState)}
-          style={styles.linkContainer}
-        >
-          <Text style={styles.link}>{`witch to ${
-            isSignUp ? "sign in" : "sign up"
-          }`}</Text>
-        </TouchableOpacity>
+        <ScrollView>
+          <KeyboardAvoidingView
+            style={styles.keyboardAvoidingView}
+            behavior={Platform.OS === "ios" ? "height" : undefined}
+            keyboardVerticalOffset={140}
+          >
+            <View style={styles.imageContainer}>
+              <Image
+                source={require("../assets/images/logo.png")}
+                resizeMode="contain"
+                style={styles.image}
+              />
+            </View>
+            {isSignUp ? <SignUpForm /> : <SignInForm />}
+            <TouchableOpacity
+              onPress={() => setIsSignUp((prevState) => !prevState)}
+              style={styles.linkContainer}
+            >
+              <Text style={styles.link}>{`witch to ${
+                isSignUp ? "sign in" : "sign up"
+              }`}</Text>
+            </TouchableOpacity>
+          </KeyboardAvoidingView>
+        </ScrollView>
       </PageContainer>
     </SafeAreaView>
   );
@@ -62,6 +73,10 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "50%",
+  },
+  keyboardAvoidingView: {
+    flex: 1,
+    justifyContent: "center",
   },
 });
 
