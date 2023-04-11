@@ -11,7 +11,7 @@ import { RootStackParamList, TabParamList } from "./types";
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
-const TabNavigator = () => {
+const TabNavigator: React.FC = () => {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -42,7 +42,7 @@ const TabNavigator = () => {
   );
 };
 
-const MainNavigator = () => {
+const MainNavigator: React.FC = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
