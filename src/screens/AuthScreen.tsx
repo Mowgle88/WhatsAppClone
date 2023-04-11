@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import {
+  Image,
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import colors from "../constants/colors";
 import PageContainer from "../components/PageContainer";
 import SignUpForm from "../components/SignUpForm";
@@ -10,6 +17,13 @@ const AuthScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <PageContainer>
+        <View style={styles.imageContainer}>
+          <Image
+            source={require("../assets/images/logo.png")}
+            resizeMode="contain"
+            style={styles.image}
+          />
+        </View>
         {isSignUp ? <SignUpForm /> : <SignInForm />}
         <TouchableOpacity
           onPress={() => setIsSignUp((prevState) => !prevState)}
@@ -41,6 +55,13 @@ const styles = StyleSheet.create({
     fontFamily: "Caveat-Bold",
     fontSize: 20,
     letterSpacing: 0.3,
+  },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  image: {
+    width: "50%",
   },
 });
 
