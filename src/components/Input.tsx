@@ -1,29 +1,56 @@
-import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
 import colors from "../constants/colors";
 
-interface InputProps {
+interface InputProps extends TextInputProps {
   IconPack: React.ComponentClass<IconProps, any>;
   icon?: string;
+  id: string;
   label?: string;
   iconSize?: number;
   errorText?: string;
+  onInputChanged: (id: string, value: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({
   IconPack,
   icon,
+  id,
   label = "",
   iconSize = 16,
   errorText = "",
+  onInputChanged = () => {},
+  ...props
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const onChangeText = (text: string) => {
+    onInputChanged(id, text);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <View style={[styles.inputContainer, isFocused && styles.inputInFocus]}>
         {icon && <IconPack name={icon} size={iconSize} style={styles.icon} />}
-        <TextInput style={styles.input} />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeText}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+          {...props}
+        />
       </View>
       {errorText && (
         <View style={styles.errorContainer}>
@@ -53,6 +80,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.nearlyWhite,
     flexDirection: "row",
     alignItems: "center",
+  },
+  inputInFocus: {
+    borderWidth: 2,
+    borderColor: colors.primary,
   },
   icon: {
     marginRight: 8,
