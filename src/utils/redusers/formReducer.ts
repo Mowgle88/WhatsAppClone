@@ -1,16 +1,18 @@
+import { IdEnum } from "../../types/types";
+
 export type State = {
   inputValidities: {
-    firstName?: boolean;
-    lastName?: boolean;
-    email: boolean;
-    password: boolean;
+    firstName?: string;
+    lastName?: string;
+    email: string;
+    password: string;
   };
   formIsValid: boolean;
 };
 
 export const reducer = (
   state: State,
-  action: { id: string; validationResult: boolean }
+  action: { id: IdEnum; validationResult: string }
 ) => {
   const { validationResult, id } = action;
 
@@ -19,9 +21,19 @@ export const reducer = (
     [id]: validationResult,
   };
 
+  let updateFormIsValid = true;
+  for (const key in updatedValidities) {
+    if (
+      updatedValidities[key as keyof State["inputValidities"]] !== undefined
+    ) {
+      updateFormIsValid = false;
+      break;
+    }
+  }
+
   return {
     ...state,
     inputValidities: updatedValidities,
-    formIsValid: !Object.values(updatedValidities).some(Boolean),
+    formIsValid: updateFormIsValid,
   };
 };

@@ -5,26 +5,25 @@ import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
-
-interface SignUpFormProps {}
+import { IdEnum } from "../types/types";
 
 const initialState: State = {
   inputValidities: {
-    firstName: false,
-    lastName: false,
-    email: false,
-    password: false,
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
   },
   formIsValid: false,
 };
 
-const SignUpForm: React.FC<SignUpFormProps> = () => {
+const SignUpForm: React.FC = () => {
   const [formState, dispatch] = useReducer(reducer, initialState);
 
   const inputChangedHandler = useCallback(
-    (id: string, value: string) => {
+    (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: !!result });
+      dispatch({ id, validationResult: result });
     },
     [dispatch]
   );
@@ -32,38 +31,42 @@ const SignUpForm: React.FC<SignUpFormProps> = () => {
   return (
     <>
       <Input
-        id="firstName"
+        id={IdEnum.FirstName}
         label="First Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.firstName}
       />
       <Input
-        id="lastName"
+        id={IdEnum.LastName}
         label="Last Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.lastName}
       />
       <Input
-        id="email"
+        id={IdEnum.Email}
         label="Email"
         icon="mail-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.email}
       />
       <Input
-        id="password"
+        id={IdEnum.Password}
         label="Password"
         icon="lock-closed-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         secureTextEntry
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.password}
       />
       <SubmitButton
         title="Sign Up"

@@ -1,19 +1,19 @@
+import { IdEnum } from "../../types/types";
 import {
   validateString,
   validateEmail,
   validatePasword,
 } from "../validationConstraints";
 
-export const validateInput = (id: string, value: string) => {
-  if (id === "firstName" || id === "lastName") {
+export const validateInput = (id: IdEnum, value: string) => {
+  if (id === IdEnum.FirstName || id === IdEnum.LastName) {
     return validateString(id, value);
   }
-
-  if (id === "email") {
+  if (id === IdEnum.Email) {
     return validateEmail(id, value);
   }
-
-  if (id === "password") {
+  if (id === IdEnum.Password) {
     return validatePasword(id, value);
   }
+  return "";
 };

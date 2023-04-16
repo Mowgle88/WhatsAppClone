@@ -8,15 +8,16 @@ import {
 } from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
 import colors from "../constants/colors";
+import { IdEnum } from "../types/types";
 
 interface InputProps extends TextInputProps {
   IconPack: React.ComponentClass<IconProps, any>;
   icon?: string;
-  id: string;
+  id: IdEnum;
   label?: string;
   iconSize?: number;
   errorText?: string;
-  onInputChanged: (id: string, value: string) => void;
+  onInputChanged: (id: IdEnum, value: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -38,7 +39,13 @@ const Input: React.FC<InputProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <View style={[styles.inputContainer, isFocused && styles.inputInFocus]}>
+      <View
+        style={[
+          styles.inputContainer,
+          isFocused && styles.inputInFocus,
+          !!errorText && styles.invalidInput,
+        ]}
+      >
         {icon && <IconPack name={icon} size={iconSize} style={styles.icon} />}
         <TextInput
           style={styles.input}
@@ -85,6 +92,10 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: colors.primary,
   },
+  invalidInput: {
+    borderWidth: 2,
+    borderColor: colors.red,
+  },
   icon: {
     marginRight: 8,
     color: colors.grey,
@@ -96,10 +107,10 @@ const styles = StyleSheet.create({
     fontFamily: "Caveat-Regular",
   },
   errorContainer: {
-    marginVertical: 8,
+    marginVertical: 4,
   },
   errorText: {
-    color: "red",
+    color: colors.red,
     fontSize: 16,
     fontFamily: "Caveat-Regular",
     letterSpacing: 0.3,

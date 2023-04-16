@@ -5,46 +5,47 @@ import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
-
-interface SignInFormProps {}
+import { IdEnum } from "../types/types";
 
 const initialState: State = {
   inputValidities: {
-    email: false,
-    password: false,
+    email: "",
+    password: "",
   },
   formIsValid: false,
 };
 
-const SignInForm: React.FC<SignInFormProps> = () => {
+const SignInForm: React.FC = () => {
   const [formState, dispatch] = useReducer(reducer, initialState);
 
   const inputChangedHandler = useCallback(
-    (id: string, value: string) => {
+    (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: !!result });
+      dispatch({ id, validationResult: result });
     },
     [dispatch]
   );
   return (
     <>
       <Input
-        id="email"
+        id={IdEnum.Email}
         label="Email"
         icon="mail-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         keyboardType="email-address"
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.email}
       />
       <Input
-        id="password"
+        id={IdEnum.Password}
         label="Password"
         icon="lock-closed-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
         secureTextEntry
         onInputChanged={inputChangedHandler}
+        errorText={formState.inputValidities.password}
       />
       <SubmitButton
         title="Sign In"
