@@ -1,5 +1,5 @@
-import React, { useCallback, useReducer } from "react";
-import { Alert, StyleSheet } from "react-native";
+import React, { useCallback, useReducer, useState } from "react";
+import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
@@ -7,6 +7,7 @@ import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
 import { signUp } from "../utils/actions/authActions";
+import colors from "../constants/colors";
 
 const initialState: State = {
   inputValues: {
@@ -26,6 +27,7 @@ const initialState: State = {
 
 const SignUpForm: React.FC = () => {
   const [formState, dispatch] = useReducer(reducer, initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const inputChangedHandler = useCallback(
     (id: IdEnum, value: string) => {
@@ -37,6 +39,7 @@ const SignUpForm: React.FC = () => {
 
   const authHandler = async () => {
     try {
+      setIsLoading(true);
       await signUp(
         formState.inputValues.firstName!,
         formState.inputValues.lastName!,
@@ -45,6 +48,7 @@ const SignUpForm: React.FC = () => {
       );
     } catch (error: any) {
       Alert.alert("An error occurred", error.message);
+      setIsLoading(false);
     }
   };
 
@@ -92,12 +96,20 @@ const SignUpForm: React.FC = () => {
         onInputChanged={inputChangedHandler}
         errorText={formState.inputValidities.password}
       />
-      <SubmitButton
-        title="Sign Up"
-        onPress={authHandler}
-        style={styles.button}
-        disabled={!formState.formIsValid}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          size={"small"}
+          color={colors.primary}
+          style={styles.button}
+        />
+      ) : (
+        <SubmitButton
+          title="Sign Up"
+          onPress={authHandler}
+          style={styles.button}
+          disabled={!formState.formIsValid}
+        />
+      )}
     </>
   );
 };
