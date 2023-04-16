@@ -20,11 +20,11 @@ const AuthScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <PageContainer>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <KeyboardAvoidingView
             style={styles.keyboardAvoidingView}
             behavior={Platform.OS === "ios" ? "height" : undefined}
-            keyboardVerticalOffset={140}
+            keyboardVerticalOffset={100}
           >
             <View style={styles.imageContainer}>
               <Image

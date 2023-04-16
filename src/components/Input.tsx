@@ -1,29 +1,63 @@
-import React from "react";
-import { StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useState } from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
 import colors from "../constants/colors";
+import { IdEnum } from "../types/types";
 
-interface InputProps {
+interface InputProps extends TextInputProps {
   IconPack: React.ComponentClass<IconProps, any>;
   icon?: string;
+  id: IdEnum;
   label?: string;
   iconSize?: number;
   errorText?: string;
+  onInputChanged: (id: IdEnum, value: string) => void;
 }
 
 const Input: React.FC<InputProps> = ({
   IconPack,
   icon,
+  id,
   label = "",
   iconSize = 16,
   errorText = "",
+  onInputChanged = () => {},
+  ...props
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
+  const onChangeText = (text: string) => {
+    onInputChanged(id, text);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.label}>{label}</Text>
-      <View style={styles.inputContainer}>
+      <View
+        style={[
+          styles.inputContainer,
+          isFocused && styles.inputInFocus,
+          !!errorText && styles.invalidInput,
+        ]}
+      >
         {icon && <IconPack name={icon} size={iconSize} style={styles.icon} />}
-        <TextInput style={styles.input} />
+        <TextInput
+          style={styles.input}
+          onChangeText={onChangeText}
+          onFocus={() => {
+            setIsFocused(true);
+          }}
+          onBlur={() => {
+            setIsFocused(false);
+          }}
+          {...props}
+        />
       </View>
       {errorText && (
         <View style={styles.errorContainer}>
@@ -54,6 +88,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  inputInFocus: {
+    borderWidth: 2,
+    borderColor: colors.primary,
+  },
+  invalidInput: {
+    borderWidth: 2,
+    borderColor: colors.red,
+  },
   icon: {
     marginRight: 8,
     color: colors.grey,
@@ -65,10 +107,10 @@ const styles = StyleSheet.create({
     fontFamily: "Caveat-Regular",
   },
   errorContainer: {
-    marginVertical: 8,
+    marginVertical: 4,
   },
   errorText: {
-    color: "red",
+    color: colors.red,
     fontSize: 16,
     fontFamily: "Caveat-Regular",
     letterSpacing: 0.3,
