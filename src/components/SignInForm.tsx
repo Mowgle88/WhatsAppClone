@@ -8,6 +8,10 @@ import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
 
 const initialState: State = {
+  inputValues: {
+    email: "",
+    password: "",
+  },
   inputValidities: {
     email: "",
     password: "",
@@ -21,7 +25,7 @@ const SignInForm: React.FC = () => {
   const inputChangedHandler = useCallback(
     (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: result });
+      dispatch({ id, validationResult: result, value });
     },
     [dispatch]
   );

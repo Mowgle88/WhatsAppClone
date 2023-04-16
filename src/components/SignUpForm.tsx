@@ -1,13 +1,20 @@
 import React, { useCallback, useReducer } from "react";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
+import { signUp } from "../utils/actions/authActions";
 
 const initialState: State = {
+  inputValues: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  },
   inputValidities: {
     firstName: "",
     lastName: "",
@@ -23,10 +30,23 @@ const SignUpForm: React.FC = () => {
   const inputChangedHandler = useCallback(
     (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: result });
+      dispatch({ id, validationResult: result, value });
     },
     [dispatch]
   );
+
+  const authHandler = async () => {
+    try {
+      await signUp(
+        formState.inputValues.firstName!,
+        formState.inputValues.lastName!,
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+    } catch (error: any) {
+      Alert.alert("An error occurred", error.message);
+    }
+  };
 
   return (
     <>
@@ -74,7 +94,7 @@ const SignUpForm: React.FC = () => {
       />
       <SubmitButton
         title="Sign Up"
-        onPress={() => {}}
+        onPress={authHandler}
         style={styles.button}
         disabled={!formState.formIsValid}
       />
