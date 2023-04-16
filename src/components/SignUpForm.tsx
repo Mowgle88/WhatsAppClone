@@ -33,6 +33,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.FirstName}
         label="First Name"
+        placeholder="First Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -42,6 +43,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.LastName}
         label="Last Name"
+        placeholder="Last Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -51,6 +53,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.Email}
         label="Email"
+        placeholder="Email"
         icon="mail-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -61,6 +64,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.Password}
         label="Password"
+        placeholder="Password"
         icon="lock-closed-outline"
         IconPack={IonIcon}
         autoCapitalize="none"

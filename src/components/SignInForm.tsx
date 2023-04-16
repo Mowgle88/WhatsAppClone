@@ -30,6 +30,7 @@ const SignInForm: React.FC = () => {
       <Input
         id={IdEnum.Email}
         label="Email"
+        placeholder="Email"
         icon="mail-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -40,6 +41,7 @@ const SignInForm: React.FC = () => {
       <Input
         id={IdEnum.Password}
         label="Password"
+        placeholder="Password"
         icon="lock-closed-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
