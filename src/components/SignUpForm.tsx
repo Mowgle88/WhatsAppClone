@@ -8,6 +8,7 @@ import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
 import { signUp } from "../utils/actions/authActions";
 import colors from "../constants/colors";
+import { useAppDispatch } from "../store/hooks";
 
 const initialState: State = {
   inputValues: {
@@ -26,26 +27,29 @@ const initialState: State = {
 };
 
 const SignUpForm: React.FC = () => {
-  const [formState, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useAppDispatch();
+
+  const [formState, dispatchFormState] = useReducer(reducer, initialState);
   const [isLoading, setIsLoading] = useState(false);
 
   const inputChangedHandler = useCallback(
     (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: result, value });
+      dispatchFormState({ id, validationResult: result, value });
     },
-    [dispatch]
+    [dispatchFormState]
   );
 
   const authHandler = async () => {
     try {
       setIsLoading(true);
-      await signUp(
+      const action = signUp(
         formState.inputValues.firstName!,
         formState.inputValues.lastName!,
         formState.inputValues.email,
         formState.inputValues.password
       );
+      dispatch(action);
     } catch (error: any) {
       Alert.alert("An error occurred", error.message);
       setIsLoading(false);
