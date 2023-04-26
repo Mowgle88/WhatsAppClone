@@ -10,11 +10,13 @@ export interface AuthState {
     userId: string;
     signUpDate: string;
   } | null;
+  didTryAutoLogin: boolean;
 }
 
 const initialState: AuthState = {
   token: null,
   userData: null,
+  didTryAutoLogin: false,
 };
 
 export const authSlice = createSlice({
