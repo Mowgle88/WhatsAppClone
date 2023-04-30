@@ -112,7 +112,7 @@ const logoutOnTokenExpiration = (expiryDate: Date, dispatch: AppDispatch) => {
 };
 
 export const userLogout = () => {
-  return async (dispatch: any) => {
+  return async (dispatch: AppDispatch) => {
     AsyncStorage.clear();
     clearTimeout(timer);
     dispatch(logout());

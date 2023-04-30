@@ -1,4 +1,5 @@
 import React from "react";
+import { StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -7,11 +8,16 @@ import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import { RootStackParamList, TabParamList } from "./types";
+import colors from "../constants/colors";
+import { useAppDispatch } from "../store/hooks";
+import { userLogout } from "../utils/actions/authActions";
 
 const Stack = createStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -35,6 +41,17 @@ const TabNavigator: React.FC = () => {
           tabBarLabel: "Settings",
           tabBarIcon: ({ size, color }) => (
             <Icon name="settings-outline" size={size} color={color} />
+          ),
+          headerRight: () => (
+            <Icon
+              name="exit-outline"
+              size={24}
+              color={colors.blue}
+              style={styles.logout}
+              onPress={() => {
+                dispatch(userLogout());
+              }}
+            />
           ),
         }}
       />
@@ -71,5 +88,11 @@ const MainNavigator: React.FC = () => {
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  logout: {
+    marginRight: 12,
+  },
+});
 
 export default MainNavigator;
