@@ -11,9 +11,9 @@ const AppNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      {!isAuth && didTryAutoLogin && <AuthScreen />}
-      {isAuth && !didTryAutoLogin && <StartUpScreen />}
       {isAuth && <MainNavigator />}
+      {!isAuth && didTryAutoLogin && <AuthScreen />}
+      {!isAuth && !didTryAutoLogin && <StartUpScreen />}
     </NavigationContainer>
   );
 };
