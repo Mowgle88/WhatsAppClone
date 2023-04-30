@@ -1,9 +1,12 @@
 import { getFirebaseApp } from "../firebaseHelper";
 import {
-  getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import {
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth/react-native";
 import { FirebaseError } from "@firebase/util";
 import { getDatabase, set, ref, child } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -21,7 +24,9 @@ export const signUp = (
 ) => {
   return async (dispatch: AppDispatch) => {
     const app = getFirebaseApp();
-    const auth = getAuth(app);
+    const auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
 
     try {
       const response = await createUserWithEmailAndPassword(
@@ -60,7 +65,9 @@ export const signUp = (
 export const signIn = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
     const app = getFirebaseApp();
-    const auth = getAuth(app);
+    const auth = initializeAuth(app, {
+      persistence: getReactNativePersistence(AsyncStorage),
+    });
 
     try {
       const response = await signInWithEmailAndPassword(auth, email, password);
