@@ -17,6 +17,15 @@ const StartUpScreen = () => {
         dispatch(setDidTryAutoLogin);
         return;
       }
+
+      const parsedData = JSON.parse(storedAuthInfo);
+      const { token, userId, expiryData: expiryDataString } = parsedData;
+      const expiryData = new Date(expiryDataString);
+
+      if (expiryData <= new Date() || !token || !userId) {
+        dispatch(setDidTryAutoLogin);
+        return;
+      }
     };
     tryLogin();
   }, []);
