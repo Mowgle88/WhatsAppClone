@@ -7,8 +7,11 @@ import {
 import { FirebaseError } from "@firebase/util";
 import { getDatabase, set, ref, child } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { authenticate } from "../../store/authSlice";
+import { authenticate, logout } from "../../store/authSlice";
 import { getUserData } from "./userActions";
+import type { AppDispatch } from "../../store/store";
+
+let timer: number;
 
 export const signUp = (
   firstName: string,
@@ -16,7 +19,7 @@ export const signUp = (
   email: string,
   password: string
 ) => {
-  return async (dispatch: any) => {
+  return async (dispatch: AppDispatch) => {
     const app = getFirebaseApp();
     const auth = getAuth(app);
 
@@ -36,6 +39,8 @@ export const signUp = (
 
       dispatch(authenticate({ token, userData }));
       saveDataToStorage(token, uid, expiryDate);
+
+      logoutOnTokenExpiration(expiryDate, dispatch);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code;
@@ -53,7 +58,7 @@ export const signUp = (
 };
 
 export const signIn = (email: string, password: string) => {
-  return async (dispatch: any) => {
+  return async (dispatch: AppDispatch) => {
     const app = getFirebaseApp();
     const auth = getAuth(app);
 
@@ -69,6 +74,8 @@ export const signIn = (email: string, password: string) => {
 
       dispatch(authenticate({ token, userData }));
       saveDataToStorage(token, uid, expiryDate);
+
+      logoutOnTokenExpiration(expiryDate, dispatch);
     } catch (error: unknown) {
       if (error instanceof FirebaseError) {
         const errorCode = error.code;
@@ -85,6 +92,23 @@ export const signIn = (email: string, password: string) => {
         throw new Error(message);
       }
     }
+  };
+};
+
+const logoutOnTokenExpiration = (expiryDate: Date, dispatch: AppDispatch) => {
+  const timeNow = new Date();
+  const millisecondsUntilExpiry = +expiryDate - +timeNow;
+
+  timer = setTimeout(() => {
+    dispatch(userLogout());
+  }, millisecondsUntilExpiry);
+};
+
+export const userLogout = () => {
+  return async (dispatch: any) => {
+    AsyncStorage.clear();
+    clearTimeout(timer);
+    dispatch(logout());
   };
 };
 
