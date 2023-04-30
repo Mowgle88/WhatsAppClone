@@ -49,7 +49,7 @@ const SignUpForm: React.FC = () => {
         formState.inputValues.email,
         formState.inputValues.password
       );
-      dispatch(action);
+      await dispatch(action);
     } catch (error: any) {
       Alert.alert("An error occurred", error.message);
       setIsLoading(false);
