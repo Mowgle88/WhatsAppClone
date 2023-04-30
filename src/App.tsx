@@ -2,9 +2,12 @@ import React, { useEffect } from "react";
 import { StyleSheet } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
+// import AsyncStorage from "@react-native-async-storage/async-storage";
 import AppNavigator from "./navigation/AppNavigator";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
+
+// AsyncStorage.clear();
 
 export default function App() {
   useEffect(() => {

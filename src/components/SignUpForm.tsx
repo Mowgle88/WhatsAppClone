@@ -40,7 +40,7 @@ const SignUpForm: React.FC = () => {
     [dispatchFormState]
   );
 
-  const authHandler = async () => {
+  const authHandler = useCallback(async () => {
     try {
       setIsLoading(true);
       const action = signUp(
@@ -54,7 +54,7 @@ const SignUpForm: React.FC = () => {
       Alert.alert("An error occurred", error.message);
       setIsLoading(false);
     }
-  };
+  }, [dispatch, formState]);
 
   return (
     <>
