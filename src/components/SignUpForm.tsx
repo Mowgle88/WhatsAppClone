@@ -1,13 +1,22 @@
-import React, { useCallback, useReducer } from "react";
-import { StyleSheet } from "react-native";
+import React, { useCallback, useReducer, useState } from "react";
+import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
+import { signUp } from "../utils/actions/authActions";
+import colors from "../constants/colors";
+import { useAppDispatch } from "../store/hooks";
 
 const initialState: State = {
+  inputValues: {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  },
   inputValidities: {
     firstName: "",
     lastName: "",
@@ -18,21 +27,41 @@ const initialState: State = {
 };
 
 const SignUpForm: React.FC = () => {
-  const [formState, dispatch] = useReducer(reducer, initialState);
+  const dispatch = useAppDispatch();
+
+  const [formState, dispatchFormState] = useReducer(reducer, initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
   const inputChangedHandler = useCallback(
     (id: IdEnum, value: string) => {
       const result = validateInput(id, value);
-      dispatch({ id, validationResult: result });
+      dispatchFormState({ id, validationResult: result, value });
     },
-    [dispatch]
+    [dispatchFormState]
   );
+
+  const authHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const action = signUp(
+        formState.inputValues.firstName!,
+        formState.inputValues.lastName!,
+        formState.inputValues.email,
+        formState.inputValues.password
+      );
+      await dispatch(action);
+    } catch (error: any) {
+      Alert.alert("An error occurred", error.message);
+      setIsLoading(false);
+    }
+  }, [dispatch, formState]);
 
   return (
     <>
       <Input
         id={IdEnum.FirstName}
         label="First Name"
+        placeholder="First Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -42,6 +71,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.LastName}
         label="Last Name"
+        placeholder="Last Name"
         icon="person-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -51,6 +81,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.Email}
         label="Email"
+        placeholder="Email"
         icon="mail-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -61,6 +92,7 @@ const SignUpForm: React.FC = () => {
       <Input
         id={IdEnum.Password}
         label="Password"
+        placeholder="Password"
         icon="lock-closed-outline"
         IconPack={IonIcon}
         autoCapitalize="none"
@@ -68,12 +100,20 @@ const SignUpForm: React.FC = () => {
         onInputChanged={inputChangedHandler}
         errorText={formState.inputValidities.password}
       />
-      <SubmitButton
-        title="Sign Up"
-        onPress={() => {}}
-        style={styles.button}
-        disabled={!formState.formIsValid}
-      />
+      {isLoading ? (
+        <ActivityIndicator
+          size={"small"}
+          color={colors.primary}
+          style={styles.button}
+        />
+      ) : (
+        <SubmitButton
+          title="Sign Up"
+          onPress={authHandler}
+          style={styles.button}
+          disabled={!formState.formIsValid}
+        />
+      )}
     </>
   );
 };

@@ -2,8 +2,24 @@
   "migIndex": 1,
   "data": [
     {
+      "path": "src/assets/fonts/Alkatra-Bold.ttf",
+      "sha1": "091f359796a11546e5492aeafefd582b1c6267b7"
+    },
+    {
+      "path": "src/assets/fonts/Alkatra-Medium.ttf",
+      "sha1": "546c105063c2530c3115a02f4fdcfddb6ebdd304"
+    },
+    {
+      "path": "src/assets/fonts/Alkatra-Regular.ttf",
+      "sha1": "4d69ea1bbf0cb4f277177046543a595d6401802b"
+    },
+    {
       "path": "src/assets/fonts/Caveat-Bold.ttf",
       "sha1": "b8cf7188694f0ad229fec80e8074b1df6305cdfa"
+    },
+    {
+      "path": "src/assets/fonts/Caveat-Medium.ttf",
+      "sha1": "c9bd952b5223789f0dea78ca654ac857bd625462"
     },
     {
       "path": "src/assets/fonts/Caveat-Regular.ttf",

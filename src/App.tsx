@@ -1,8 +1,14 @@
 import React, { useEffect } from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, LogBox } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import AppNavigator from "./navigation/AppNavigator";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
+
+LogBox.ignoreLogs([
+  "Warning: Async Storage has been extracted from react-native core",
+]);
 
 export default function App() {
   useEffect(() => {
@@ -10,9 +16,11 @@ export default function App() {
   }, []);
 
   return (
-    <SafeAreaProvider style={styles.container}>
-      <AppNavigator />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <SafeAreaProvider style={styles.container}>
+        <AppNavigator />
+      </SafeAreaProvider>
+    </Provider>
   );
 }
 

@@ -25,7 +25,7 @@ const Input: React.FC<InputProps> = ({
   icon,
   id,
   label = "",
-  iconSize = 16,
+  iconSize = 24,
   errorText = "",
   onInputChanged = () => {},
   ...props
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   label: {
     marginVertical: 8,
-    fontFamily: "Caveat-Bold",
+    fontFamily: "Alkatra-Bold",
     fontSize: 16,
     letterSpacing: 0.3,
     color: colors.textColor,
@@ -82,7 +82,6 @@ const styles = StyleSheet.create({
   inputContainer: {
     width: "100%",
     paddingHorizontal: 8,
-    paddingVertical: 12,
     borderRadius: 4,
     backgroundColor: colors.nearlyWhite,
     flexDirection: "row",
@@ -103,8 +102,9 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     color: colors.textColor,
-    paddingTop: 0,
-    fontFamily: "Caveat-Regular",
+    padding: 8,
+    fontFamily: "Alkatra-Regular",
+    fontSize: 16,
   },
   errorContainer: {
     marginVertical: 4,
@@ -112,7 +112,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: colors.red,
     fontSize: 16,
-    fontFamily: "Caveat-Regular",
+    fontFamily: "Alkatra-Regular",
     letterSpacing: 0.3,
   },
 });

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   text: {
     color: "white",
-    fontFamily: "Caveat-Bold",
+    fontFamily: "Alkatra-Medium",
     fontSize: 20,
     letterSpacing: 1,
   },
