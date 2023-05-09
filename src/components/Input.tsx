@@ -18,6 +18,7 @@ interface InputProps extends TextInputProps {
   iconSize?: number;
   errorText?: string;
   onInputChanged: (id: IdEnum, value: string) => void;
+  initialValue?: string;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -27,12 +28,15 @@ const Input: React.FC<InputProps> = ({
   label = "",
   iconSize = 24,
   errorText = "",
+  initialValue = "",
   onInputChanged = () => {},
   ...props
 }) => {
   const [isFocused, setIsFocused] = useState(false);
+  const [value, setValue] = useState(initialValue);
 
   const onChangeText = (text: string) => {
+    setValue(text);
     onInputChanged(id, text);
   };
 
@@ -49,6 +53,7 @@ const Input: React.FC<InputProps> = ({
         {icon && <IconPack name={icon} size={iconSize} style={styles.icon} />}
         <TextInput
           style={styles.input}
+          value={value}
           onChangeText={onChangeText}
           onFocus={() => {
             setIsFocused(true);

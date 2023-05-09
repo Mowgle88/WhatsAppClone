@@ -7,6 +7,7 @@ import Input from "../components/Input";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
+import { useAppSelector } from "../store/hooks";
 
 const initialState: State = {
   inputValues: {
@@ -25,6 +26,8 @@ const initialState: State = {
 };
 
 const SettingsScreen: React.FC = () => {
+  const userData = useAppSelector((state) => state.auth.userData);
+
   const [formState, dispatchFormState] = useReducer(reducer, initialState);
 
   const inputChangedHandler = useCallback(
@@ -41,6 +44,7 @@ const SettingsScreen: React.FC = () => {
 
       <Input
         id={IdEnum.FirstName}
+        initialValue={userData?.firstName}
         label="First Name"
         placeholder="First Name"
         icon="person-outline"
@@ -51,6 +55,7 @@ const SettingsScreen: React.FC = () => {
       />
       <Input
         id={IdEnum.LastName}
+        initialValue={userData?.lastName}
         label="Last Name"
         placeholder="Last Name"
         icon="person-outline"
@@ -61,6 +66,7 @@ const SettingsScreen: React.FC = () => {
       />
       <Input
         id={IdEnum.Email}
+        initialValue={userData?.email}
         label="Email"
         placeholder="Email"
         icon="mail-outline"
