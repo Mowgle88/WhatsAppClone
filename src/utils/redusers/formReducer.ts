@@ -4,14 +4,14 @@ export type State = {
   inputValues: {
     firstName?: string;
     lastName?: string;
-    email: string;
+    email?: string;
     password?: string;
     about?: string;
   };
   inputValidities: {
     firstName?: string;
     lastName?: string;
-    email: string;
+    email?: string;
     password?: string;
     about?: string;
   };

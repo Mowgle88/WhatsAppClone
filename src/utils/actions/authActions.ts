@@ -9,11 +9,12 @@ import {
 //   getReactNativePersistence,
 // } from "firebase/auth/react-native";
 import { FirebaseError } from "@firebase/util";
-import { getDatabase, set, ref, child } from "firebase/database";
+import { getDatabase, set, ref, child, update } from "firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authenticate, logout } from "../../store/authSlice";
 import { getUserData } from "./userActions";
 import type { AppDispatch } from "../../store/store";
+import { State } from "../redusers/formReducer";
 
 let timer: number;
 
@@ -120,6 +121,15 @@ export const userLogout = () => {
     clearTimeout(timer);
     dispatch(logout());
   };
+};
+
+export const updateSignedInUserData = async (
+  userId: string,
+  newData: State["inputValues"]
+) => {
+  const dbRef = ref(getDatabase());
+  const childRef = child(dbRef, `users/${userId}`);
+  await update(childRef, newData);
 };
 
 const createUser = async (

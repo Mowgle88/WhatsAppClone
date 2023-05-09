@@ -1,32 +1,45 @@
-import React, { useCallback, useReducer } from "react";
+import React, { useCallback, useReducer, useState } from "react";
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
-
 import ScreenTitle from "../components/ScreenTitle";
 import ScreenContainer from "../components/ScreenContainer";
 import Input from "../components/Input";
+import SubmitButton from "../components/SubmitButton";
+import colors from "../constants/colors";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
+import { updateSignedInUserData } from "../utils/actions/authActions";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { updateLoggetInUserData } from "../store/authSlice";
 import { IdEnum } from "../types/types";
-import { useAppSelector } from "../store/hooks";
-
-const initialState: State = {
-  inputValues: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    about: "",
-  },
-  inputValidities: {
-    firstName: "",
-    lastName: "",
-    email: "",
-    about: "",
-  },
-  formIsValid: false,
-};
 
 const SettingsScreen: React.FC = () => {
+  const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth.userData);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [succesMessage, setSuccesMessage] = useState(false);
+
+  const firstName = userData?.firstName || "";
+  const lastName = userData?.lastName || "";
+  const email = userData?.email || "";
+  const about = userData?.about || "";
+
+  const initialState: State = {
+    inputValues: {
+      firstName,
+      lastName,
+      email,
+      about,
+    },
+    inputValidities: {
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+      about: undefined,
+    },
+    formIsValid: false,
+  };
 
   const [formState, dispatchFormState] = useReducer(reducer, initialState);
 
@@ -37,6 +50,35 @@ const SettingsScreen: React.FC = () => {
     },
     [dispatchFormState]
   );
+
+  const saveHandler = useCallback(async () => {
+    const updateValues = formState.inputValues;
+    try {
+      setIsLoading(true);
+      await updateSignedInUserData(userData?.userId!, updateValues);
+      dispatch(updateLoggetInUserData({ newData: updateValues }));
+
+      setSuccesMessage(true);
+      setTimeout(() => {
+        setSuccesMessage(false);
+      }, 3000);
+    } catch (error: any) {
+      Alert.alert("An error occurred", error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [formState, dispatch]);
+
+  const hasChanges = () => {
+    const currentValues = formState.inputValues;
+
+    return (
+      currentValues.firstName !== firstName ||
+      currentValues.lastName !== lastName ||
+      currentValues.email !== email ||
+      currentValues.about !== about
+    );
+  };
 
   return (
     <ScreenContainer>
@@ -78,6 +120,7 @@ const SettingsScreen: React.FC = () => {
       />
       <Input
         id={IdEnum.About}
+        initialValue={userData?.about}
         label="About"
         placeholder="About"
         icon="reader-outline"
@@ -87,8 +130,33 @@ const SettingsScreen: React.FC = () => {
         onInputChanged={inputChangedHandler}
         errorText={formState.inputValidities.about}
       />
+      <View style={styles.button}>
+        {succesMessage && <Text>Saved!</Text>}
+        {isLoading ? (
+          <ActivityIndicator
+            size={"small"}
+            color={colors.primary}
+            style={styles.button}
+          />
+        ) : (
+          hasChanges() && (
+            <SubmitButton
+              title="Sign Up"
+              onPress={saveHandler}
+              style={styles.button}
+              disabled={!formState.formIsValid}
+            />
+          )
+        )}
+      </View>
     </ScreenContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  button: {
+    marginTop: 20,
+  },
+});
 
 export default SettingsScreen;

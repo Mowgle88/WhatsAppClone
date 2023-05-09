@@ -9,6 +9,7 @@ export interface AuthState {
     email: string;
     userId: string;
     signUpDate: string;
+    about: string;
   } | null;
   didTryAutoLogin: boolean;
 }
@@ -37,9 +38,17 @@ export const authSlice = createSlice({
       state.userData = null;
       state.didTryAutoLogin = false;
     },
+    updateLoggetInUserData: (state, action) => {
+      state.userData = { ...state.userData, ...action.payload.newData };
+    },
   },
 });
 
-export const { authenticate, setDidTryAutoLogin, logout } = authSlice.actions;
+export const {
+  authenticate,
+  setDidTryAutoLogin,
+  logout,
+  updateLoggetInUserData,
+} = authSlice.actions;
 
 export default authSlice.reducer;
