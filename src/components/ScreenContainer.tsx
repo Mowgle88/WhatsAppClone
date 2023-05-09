@@ -1,12 +1,12 @@
 import React from "react";
 import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 
-interface PageContainerProps {
+interface ScreenContainerProps {
   children: React.ReactNode;
   containerStyle?: StyleProp<ViewStyle>;
 }
 
-const PageContainer: React.FC<PageContainerProps> = ({
+const ScreenContainer: React.FC<ScreenContainerProps> = ({
   children,
   containerStyle,
 }) => {
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PageContainer;
+export default ScreenContainer;

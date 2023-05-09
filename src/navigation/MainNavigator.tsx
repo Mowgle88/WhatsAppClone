@@ -22,6 +22,7 @@ const TabNavigator: React.FC = () => {
     <Tab.Navigator
       screenOptions={{
         headerTitle: "",
+        headerShadowVisible: false,
       }}
     >
       <Tab.Screen
