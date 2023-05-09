@@ -3,4 +3,5 @@ export enum IdEnum {
   LastName = "lastName",
   Email = "email",
   Password = "password",
+  About = "about",
 }

@@ -5,13 +5,15 @@ export type State = {
     firstName?: string;
     lastName?: string;
     email: string;
-    password: string;
+    password?: string;
+    about?: string;
   };
   inputValidities: {
     firstName?: string;
     lastName?: string;
     email: string;
-    password: string;
+    password?: string;
+    about?: string;
   };
   formIsValid: boolean;
 };
