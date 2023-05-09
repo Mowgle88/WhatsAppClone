@@ -8,7 +8,10 @@ import SubmitButton from "../components/SubmitButton";
 import colors from "../constants/colors";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
-import { updateSignedInUserData } from "../utils/actions/authActions";
+import {
+  updateSignedInUserData,
+  userLogout,
+} from "../utils/actions/authActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { updateLoggetInUserData } from "../store/authSlice";
 import { IdEnum } from "../types/types";
@@ -149,6 +152,14 @@ const SettingsScreen: React.FC = () => {
           )
         )}
       </View>
+      <SubmitButton
+        title="Logout"
+        onPress={() => {
+          dispatch(userLogout());
+        }}
+        style={styles.button}
+        color={colors.red}
+      />
     </ScreenContainer>
   );
 };
