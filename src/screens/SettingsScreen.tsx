@@ -15,6 +15,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { updateLoggetInUserData } from "../store/authSlice";
 import { IdEnum } from "../types/types";
+import { ScrollView } from "react-native-gesture-handler";
+import ProfileImage from "../components/ProfileImage";
 
 const SettingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -87,84 +89,91 @@ const SettingsScreen: React.FC = () => {
     <ScreenContainer>
       <ScreenTitle text={"Settings"} />
 
-      <Input
-        id={IdEnum.FirstName}
-        initialValue={userData?.firstName}
-        label="First Name"
-        placeholder="First Name"
-        icon="person-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.firstName}
-      />
-      <Input
-        id={IdEnum.LastName}
-        initialValue={userData?.lastName}
-        label="Last Name"
-        placeholder="Last Name"
-        icon="person-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.lastName}
-      />
-      <Input
-        id={IdEnum.Email}
-        initialValue={userData?.email}
-        label="Email"
-        placeholder="Email"
-        icon="mail-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.email}
-      />
-      <Input
-        id={IdEnum.About}
-        initialValue={userData?.about}
-        label="About"
-        placeholder="About"
-        icon="reader-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        multiline
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.about}
-      />
-      <View style={styles.button}>
-        {succesMessage && <Text>Saved!</Text>}
-        {isLoading ? (
-          <ActivityIndicator
-            size={"small"}
-            color={colors.primary}
-            style={styles.button}
-          />
-        ) : (
-          hasChanges() && (
-            <SubmitButton
-              title="Sign Up"
-              onPress={saveHandler}
+      <ScrollView contentContainerStyle={styles.formContainer}>
+        <ProfileImage size={100} />
+
+        <Input
+          id={IdEnum.FirstName}
+          initialValue={userData?.firstName}
+          label="First Name"
+          placeholder="First Name"
+          icon="person-outline"
+          IconPack={IonIcon}
+          autoCapitalize="none"
+          onInputChanged={inputChangedHandler}
+          errorText={formState.inputValidities.firstName}
+        />
+        <Input
+          id={IdEnum.LastName}
+          initialValue={userData?.lastName}
+          label="Last Name"
+          placeholder="Last Name"
+          icon="person-outline"
+          IconPack={IonIcon}
+          autoCapitalize="none"
+          onInputChanged={inputChangedHandler}
+          errorText={formState.inputValidities.lastName}
+        />
+        <Input
+          id={IdEnum.Email}
+          initialValue={userData?.email}
+          label="Email"
+          placeholder="Email"
+          icon="mail-outline"
+          IconPack={IonIcon}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          onInputChanged={inputChangedHandler}
+          errorText={formState.inputValidities.email}
+        />
+        <Input
+          id={IdEnum.About}
+          initialValue={userData?.about}
+          label="About"
+          placeholder="About"
+          icon="reader-outline"
+          IconPack={IonIcon}
+          autoCapitalize="none"
+          multiline
+          onInputChanged={inputChangedHandler}
+          errorText={formState.inputValidities.about}
+        />
+        <View style={styles.button}>
+          {succesMessage && <Text>Saved!</Text>}
+          {isLoading ? (
+            <ActivityIndicator
+              size={"small"}
+              color={colors.primary}
               style={styles.button}
-              disabled={!formState.formIsValid}
             />
-          )
-        )}
-      </View>
-      <SubmitButton
-        title="Logout"
-        onPress={() => {
-          dispatch(userLogout());
-        }}
-        style={styles.button}
-        color={colors.red}
-      />
+          ) : (
+            hasChanges() && (
+              <SubmitButton
+                title="Sign Up"
+                onPress={saveHandler}
+                style={styles.button}
+                disabled={!formState.formIsValid}
+              />
+            )
+          )}
+        </View>
+        <SubmitButton
+          title="Logout"
+          onPress={() => {
+            dispatch(userLogout());
+          }}
+          style={styles.button}
+          color={colors.red}
+        />
+      </ScrollView>
     </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
+  formContainer: {
+    alignItems: "center",
+  },
   button: {
     marginTop: 20,
   },
