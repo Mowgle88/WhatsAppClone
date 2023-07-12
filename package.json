@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest",
-    "fix:eslint": "eslint \"./src/**/*.{ts,tsx}\" --fix"
+    "fix:eslint": "eslint \"./src/**/*.{ts,tsx}\" --fix",
+    "postinstall": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.18.1",
@@ -64,7 +65,8 @@
     "metro-react-native-babel-preset": "0.72.3",
     "pre-commit": "^1.2.2",
     "prettier": "^2.8.4",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "pod-install": "0.1.38"
   },
   "reactNativePermissionsIOS": [
     "Camera",
