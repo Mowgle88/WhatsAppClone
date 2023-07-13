@@ -7,6 +7,7 @@ export type State = {
     email?: string;
     password?: string;
     about?: string;
+    profilePicture?: string;
   };
   inputValidities: {
     firstName?: string;
@@ -14,6 +15,7 @@ export type State = {
     email?: string;
     password?: string;
     about?: string;
+    profilePicture?: string;
   };
   formIsValid: boolean;
 };

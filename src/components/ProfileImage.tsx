@@ -1,38 +1,60 @@
 import React, { useState } from "react";
-import RN, { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
+import RN, {
+  ActivityIndicator,
+  Alert,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Image } from "react-native-image-crop-picker";
+import { useDispatch } from "react-redux";
 import colors from "../constants/colors";
 import {
   openCamera,
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
+import { updateSignedInUserData } from "../utils/actions/authActions";
+import { updateLoggetInUserData } from "../store/authSlice";
 // const userImage = require("../assets/images/userImage.jpeg");
 // import userImage from "../assets/images/userImage.jpeg";
 
 interface ProfileImageProps {
   size: number;
-  uri?: string;
+  uri?: string | null;
+  userId: string;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
+  const dispatch = useDispatch();
   // const source = uri ? {uri: uri} : "";
   // const source = uri ? uri : userImage;
   const source = uri ? uri : "";
 
   const [imageUri, setImageUri] = useState(source);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onPressChoose = async () => {
     await showImagePicker(
       { multiple: false, cropping: true },
       async (image: Image) => {
         if (image.path) {
+          setIsLoading(true);
+
           const uploadUri = await uploadImageAsync(image.path);
+
+          setIsLoading(false);
 
           if (!uploadUri) {
             throw new Error("could not upload image");
           }
+
+          const newData = { profilePicture: uploadUri };
+
+          await updateSignedInUserData(userId, newData);
+          dispatch(updateLoggetInUserData({ newData }));
+
           setImageUri(uploadUri);
         }
       }
@@ -42,11 +64,17 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri }) => {
   const onPressNewPhoto = async () => {
     await openCamera({}, async (image: Image) => {
       if (image.path) {
+        setIsLoading(true);
+
         const uploadUri = await uploadImageAsync(image.path);
+
+        setIsLoading(false);
 
         if (!uploadUri) {
           throw new Error("could not upload image");
         }
+
+        await updateSignedInUserData(userId, { profilePicture: uploadUri });
         setImageUri(uploadUri);
       }
     });
@@ -87,12 +115,18 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri }) => {
 
   return (
     <View style={styles.container}>
-      {imageUri ? (
+      {isLoading && (
+        <View style={[styles.loadingContainer, { width: size, height: size }]}>
+          <ActivityIndicator size={"small"} color={colors.red} />
+        </View>
+      )}
+      {imageUri && !isLoading && (
         <RN.Image
           source={{ uri: imageUri }}
           style={[styles.image, { width: size, height: size }]}
         />
-      ) : (
+      )}
+      {!imageUri && !isLoading && (
         <RN.Image
           source={require("../assets/images/userImage.jpeg")}
           // source={userImage}
@@ -131,6 +165,10 @@ const styles = StyleSheet.create({
     borderColor: colors.nearlyWhite,
     borderRadius: 20,
     backgroundColor: colors.lightGrey,
+  },
+  loadingContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 

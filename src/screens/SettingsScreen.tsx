@@ -90,7 +90,11 @@ const SettingsScreen: React.FC = () => {
       <ScreenTitle text={"Settings"} />
 
       <ScrollView contentContainerStyle={styles.formContainer}>
-        <ProfileImage size={100} />
+        <ProfileImage
+          size={100}
+          userId={userData!.userId}
+          uri={userData?.profilePicture}
+        />
 
         <Input
           id={IdEnum.FirstName}

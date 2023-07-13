@@ -10,6 +10,7 @@ export interface AuthState {
     userId: string;
     signUpDate: string;
     about: string;
+    profilePicture: string | null;
   } | null;
   didTryAutoLogin: boolean;
 }
