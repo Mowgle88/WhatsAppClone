@@ -17,7 +17,7 @@ export const validateInput = (id: IdEnum, value: string) => {
     return validatePasword(id, value);
   }
   if (id === IdEnum.About) {
-    return validateLength(id, value, 0, 10, true);
+    return validateLength(id, value, 0, 50, true);
   }
   return "";
 };
