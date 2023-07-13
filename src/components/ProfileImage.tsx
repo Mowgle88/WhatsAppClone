@@ -3,30 +3,51 @@ import RN, { Alert, StyleSheet, TouchableOpacity, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Image } from "react-native-image-crop-picker";
 import colors from "../constants/colors";
-import { openCamera, showImagePicker } from "../utils/imagePickerHelper";
+import {
+  openCamera,
+  showImagePicker,
+  uploadImageAsync,
+} from "../utils/imagePickerHelper";
+// const userImage = require("../assets/images/userImage.jpeg");
+// import userImage from "../assets/images/userImage.jpeg";
 
 interface ProfileImageProps {
   size: number;
+  uri?: string;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ size }) => {
-  const [imageUri, setImageUri] = useState("");
+const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri }) => {
+  // const source = uri ? {uri: uri} : "";
+  // const source = uri ? uri : userImage;
+  const source = uri ? uri : "";
+
+  const [imageUri, setImageUri] = useState(source);
 
   const onPressChoose = async () => {
     await showImagePicker(
       { multiple: false, cropping: true },
-      (image: Image) => {
+      async (image: Image) => {
         if (image.path) {
-          setImageUri(image.path);
+          const uploadUri = await uploadImageAsync(image.path);
+
+          if (!uploadUri) {
+            throw new Error("could not upload image");
+          }
+          setImageUri(uploadUri);
         }
       }
     );
   };
 
   const onPressNewPhoto = async () => {
-    await openCamera({}, (image: Image) => {
+    await openCamera({}, async (image: Image) => {
       if (image.path) {
-        setImageUri(image.path);
+        const uploadUri = await uploadImageAsync(image.path);
+
+        if (!uploadUri) {
+          throw new Error("could not upload image");
+        }
+        setImageUri(uploadUri);
       }
     });
   };
@@ -74,6 +95,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size }) => {
       ) : (
         <RN.Image
           source={require("../assets/images/userImage.jpeg")}
+          // source={userImage}
           style={[styles.image, { width: size, height: size }]}
         />
       )}

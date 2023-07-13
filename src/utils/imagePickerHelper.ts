@@ -1,6 +1,14 @@
 import { Platform } from "react-native";
 import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
+import uuid from "react-native-uuid";
+import {
+  getDownloadURL,
+  getStorage,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
 import requestPermissions from "../permissions/imagePickerPermissions";
+import { getFirebaseApp } from "./firebaseHelper";
 
 const pickerOptions: Options = {
   mediaType: "photo",
@@ -15,7 +23,7 @@ const pickerOptions: Options = {
 
 export const showImagePicker = async (
   options = {},
-  onSuccess = (_source: Image) => {}
+  onSuccess = async (_source: Image) => {}
 ) => {
   try {
     const permission = await requestPermissions("photoLibrary");
@@ -33,7 +41,7 @@ export const showImagePicker = async (
 
 export const openCamera = async (
   options = {},
-  onSuccess = (_source: Image) => {}
+  onSuccess = async (_source: Image) => {}
 ) => {
   try {
     const permission = await requestPermissions("camera");
@@ -47,4 +55,33 @@ export const openCamera = async (
   } catch (err) {
     throw new Error(err as string);
   }
+};
+
+export const uploadImageAsync = async (uri: string) => {
+  const app = getFirebaseApp();
+
+  const blob: any = await new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      resolve(xhr.response);
+    };
+
+    xhr.onerror = function (e) {
+      console.log(e);
+      reject(new TypeError("Network request failes"));
+    };
+
+    xhr.responseType = "blob";
+    xhr.open("GET", uri, true);
+    xhr.send();
+  });
+
+  const pathFolder = "profilePics";
+  const storageRef = ref(getStorage(app), `${pathFolder}/${uuid.v4()}`);
+
+  await uploadBytesResumable(storageRef, blob);
+
+  blob.close();
+
+  return await getDownloadURL(storageRef);
 };
