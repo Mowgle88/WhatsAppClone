@@ -17,8 +17,7 @@ import {
 } from "../utils/imagePickerHelper";
 import { updateSignedInUserData } from "../utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
-// const userImage = require("../assets/images/userImage.jpeg");
-// import userImage from "../assets/images/userImage.jpeg";
+import userImage from "../assets/images/userImage.jpeg";
 
 interface ProfileImageProps {
   size: number;
@@ -28,9 +27,7 @@ interface ProfileImageProps {
 
 const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
   const dispatch = useDispatch();
-  // const source = uri ? {uri: uri} : "";
-  // const source = uri ? uri : userImage;
-  const source = uri ? uri : "";
+  const source = uri ? { uri: uri } : userImage;
 
   const [imageUri, setImageUri] = useState(source);
   const [isLoading, setIsLoading] = useState(false);
@@ -55,7 +52,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
           await updateSignedInUserData(userId, newData);
           dispatch(updateLoggetInUserData({ newData }));
 
-          setImageUri(uploadUri);
+          setImageUri({ uri: uploadUri });
         }
       }
     );
@@ -74,8 +71,12 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
           throw new Error("could not upload image");
         }
 
-        await updateSignedInUserData(userId, { profilePicture: uploadUri });
-        setImageUri(uploadUri);
+        const newData = { profilePicture: uploadUri };
+
+        await updateSignedInUserData(userId, newData);
+        dispatch(updateLoggetInUserData({ newData }));
+
+        setImageUri({ uri: uploadUri });
       }
     });
   };
@@ -109,27 +110,21 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
       }
     );
 
-  const onPressDelete = () => {
-    setImageUri("");
+  const onPressDelete = async () => {
+    await updateSignedInUserData(userId, { profilePicture: "" });
+    dispatch(updateLoggetInUserData({ newData: { profilePicture: "" } }));
+    setImageUri(userImage);
   };
 
   return (
     <View style={styles.container}>
-      {isLoading && (
+      {isLoading ? (
         <View style={[styles.loadingContainer, { width: size, height: size }]}>
-          <ActivityIndicator size={"small"} color={colors.red} />
+          <ActivityIndicator size={"small"} color={colors.primary} />
         </View>
-      )}
-      {imageUri && !isLoading && (
+      ) : (
         <RN.Image
-          source={{ uri: imageUri }}
-          style={[styles.image, { width: size, height: size }]}
-        />
-      )}
-      {!imageUri && !isLoading && (
-        <RN.Image
-          source={require("../assets/images/userImage.jpeg")}
-          // source={userImage}
+          source={imageUri}
           style={[styles.image, { width: size, height: size }]}
         />
       )}
