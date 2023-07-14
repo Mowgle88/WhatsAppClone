@@ -5,5 +5,5 @@ export default {
   grey: "#7f8c8d",
   textColor: "#1c1e21",
   primary: "#32d4Be",
-  red: "#FF0000",
+  red: "#e74c3c",
 };

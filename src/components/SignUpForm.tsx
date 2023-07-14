@@ -46,8 +46,8 @@ const SignUpForm: React.FC = () => {
       const action = signUp(
         formState.inputValues.firstName!,
         formState.inputValues.lastName!,
-        formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.email!,
+        formState.inputValues.password!
       );
       await dispatch(action);
     } catch (error: any) {

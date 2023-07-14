@@ -40,8 +40,8 @@ const SignInForm: React.FC = () => {
     try {
       setIsLoading(true);
       const action = signIn(
-        formState.inputValues.email,
-        formState.inputValues.password
+        formState.inputValues.email!,
+        formState.inputValues.password!
       );
       await dispatch(action);
     } catch (error: any) {

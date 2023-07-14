@@ -10,7 +10,8 @@ interface IConstraints {
   email?: boolean;
   length?: {
     minimum: number;
-    message: string;
+    maximum?: number;
+    message?: string;
   };
 }
 
@@ -55,6 +56,30 @@ export const validatePasword = (id: string, value: string) => {
     constraints.length = {
       minimum: 6,
       message: "must be at least 6 characters",
+    };
+  }
+
+  const validationResult: {
+    [key: string]: string[];
+  } = validate({ [id]: value }, { [id]: constraints });
+
+  return validationResult?.[id][0];
+};
+
+export const validateLength = (
+  id: string,
+  value: string,
+  minLength: number,
+  maxLength: number,
+  allowEmpty: boolean
+) => {
+  const constraints: IConstraints = {
+    presence: { allowEmpty },
+  };
+  if (!allowEmpty || value) {
+    constraints.length = {
+      minimum: minLength ? minLength : 0,
+      maximum: maxLength ? maxLength : 0,
     };
   }
 

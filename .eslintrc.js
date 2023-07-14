@@ -23,6 +23,8 @@ module.exports = {
     "import/no-unresolved": 0,
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": ["error"],
+    "import/no-named-as-default-member": 0,
+    "import/named": 0,
   },
   settings: {
     "import/resolver": {
