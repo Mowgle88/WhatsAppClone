@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import colors from "../constants/colors";
-import PageContainer from "../components/PageContainer";
+import ScreenContainer from "../components/ScreenContainer";
 import SignUpForm from "../components/SignUpForm";
 import SignInForm from "../components/SignInForm";
 import { ScrollView } from "react-native-gesture-handler";
@@ -19,7 +19,7 @@ const AuthScreen: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   return (
     <SafeAreaView style={styles.container}>
-      <PageContainer>
+      <ScreenContainer>
         <ScrollView showsVerticalScrollIndicator={false}>
           <KeyboardAvoidingView
             style={styles.keyboardAvoidingView}
@@ -44,7 +44,7 @@ const AuthScreen: React.FC = () => {
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </ScrollView>
-      </PageContainer>
+      </ScreenContainer>
     </SafeAreaView>
   );
 };

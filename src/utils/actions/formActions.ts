@@ -3,6 +3,7 @@ import {
   validateString,
   validateEmail,
   validatePasword,
+  validateLength,
 } from "../validationConstraints";
 
 export const validateInput = (id: IdEnum, value: string) => {
@@ -14,6 +15,9 @@ export const validateInput = (id: IdEnum, value: string) => {
   }
   if (id === IdEnum.Password) {
     return validatePasword(id, value);
+  }
+  if (id === IdEnum.About) {
+    return validateLength(id, value, 0, 50, true);
   }
   return "";
 };
