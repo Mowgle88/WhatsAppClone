@@ -1,12 +1,13 @@
 import React, { useCallback, useReducer, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
 import Input from "./Input";
 import SubmitButton from "./SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
-import { signIn } from "../utils/actions/authActions";
+import { signIn, signInWithGoogle } from "../utils/actions/authActions";
 import { useAppDispatch } from "../store/hooks";
 import colors from "../constants/colors";
 
@@ -50,6 +51,17 @@ const SignInForm: React.FC = () => {
     }
   }, [dispatch, formState]);
 
+  const signinWithGoogleHandler = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      const action = signInWithGoogle();
+      await dispatch(action);
+    } catch (error: any) {
+      Alert.alert("An error occurred", error.message);
+      setIsLoading(false);
+    }
+  }, [dispatch]);
+
   return (
     <>
       <Input
@@ -88,6 +100,12 @@ const SignInForm: React.FC = () => {
           disabled={!formState.formIsValid}
         />
       )}
+      <GoogleSigninButton
+        style={styles.googleButton}
+        size={GoogleSigninButton.Size.Standard}
+        color={GoogleSigninButton.Color.Dark}
+        onPress={signinWithGoogleHandler}
+      />
     </>
   );
 };
@@ -95,6 +113,10 @@ const SignInForm: React.FC = () => {
 const styles = StyleSheet.create({
   button: {
     marginTop: 20,
+  },
+  googleButton: {
+    marginTop: 20,
+    alignSelf: "center",
   },
 });
 
