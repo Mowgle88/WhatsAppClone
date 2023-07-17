@@ -3,7 +3,13 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithCredential,
 } from "firebase/auth";
+import {
+  GoogleSignin,
+  statusCodes,
+} from "@react-native-google-signin/google-signin";
 // import {
 //   initializeAuth,
 //   getReactNativePersistence,
@@ -16,7 +22,70 @@ import { getUserData } from "./userActions";
 import type { AppDispatch } from "../../store/store";
 import { State } from "../redusers/formReducer";
 
-let timer: number;
+let timer: ReturnType<typeof setTimeout> | number;
+
+GoogleSignin.configure({
+  webClientId:
+    "580708244205-rfmbmspl3fkj0o1cbprnl1l2lkiipqlj.apps.googleusercontent.com",
+});
+
+export const signInWithGoogle = () => {
+  return async (dispatch: AppDispatch) => {
+    const app = getFirebaseApp();
+    const auth = getAuth(app);
+
+    try {
+      const isSigned = await GoogleSignin.isSignedIn();
+      if (isSigned) await GoogleSignin.signOut();
+
+      await GoogleSignin.hasPlayServices();
+      const { idToken } = await GoogleSignin.signIn();
+
+      const googleCredentials = GoogleAuthProvider.credential(idToken);
+      const { user } = await signInWithCredential(auth, googleCredentials);
+      const tokenResult = await user.getIdTokenResult();
+      const { token, expirationTime } = tokenResult;
+
+      let userData = await getUserData(user.uid);
+      const firstName = user.displayName!.split(" ");
+
+      if (!userData) {
+        userData = await createUser(
+          firstName[0],
+          firstName[1],
+          user.email!,
+          user.uid,
+          user.photoURL!
+        );
+      }
+
+      const expiryDate = new Date(expirationTime);
+
+      dispatch(authenticate({ token, userData }));
+      saveDataToStorage(idToken!, user.uid, expiryDate);
+
+      logoutOnTokenExpiration(expiryDate, dispatch);
+    } catch (error: unknown) {
+      console.log(error);
+      if (error instanceof FirebaseError) {
+        const errorCode = error.code;
+
+        let message = "Something went wrong.";
+
+        if (errorCode === statusCodes.SIGN_IN_CANCELLED) {
+          message = "SIGN_IN_CANCELLED";
+        } else if (errorCode === statusCodes.IN_PROGRESS) {
+          message = "IN_PROGRESS";
+        } else if (errorCode === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+          message = "PLAY_SERVICES_NOT_AVAILABLE";
+        } else {
+          message = error.message;
+        }
+        throw new Error(message);
+      }
+    }
+  };
+};
 
 export const signUp = (
   firstName: string,
@@ -118,7 +187,7 @@ const logoutOnTokenExpiration = (expiryDate: Date, dispatch: AppDispatch) => {
 export const userLogout = () => {
   return async (dispatch: any) => {
     AsyncStorage.clear();
-    clearTimeout(timer);
+    clearTimeout(timer as number);
     dispatch(logout());
   };
 };
@@ -136,7 +205,8 @@ const createUser = async (
   firstName: string,
   lastName: string,
   email: string,
-  userId: string
+  userId: string,
+  profilePicture: string = ""
 ) => {
   const fullName = `${firstName} ${lastName}`.toLowerCase();
   const userData = {
@@ -145,6 +215,7 @@ const createUser = async (
     fullName,
     email,
     userId,
+    profilePicture,
     signUpDate: new Date().toISOString(),
   };
 
