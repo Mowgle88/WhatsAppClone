@@ -19,6 +19,7 @@ import commonStyles from "../constants/commonStyles";
 import { searchUsers } from "../utils/actions/userActions";
 import UserDataItem from "../components/UserDataItem";
 import { IUserData } from "../types/types";
+import { useAppSelector } from "../store/hooks";
 
 interface IUsers {
   [key: string]: IUserData;
@@ -26,6 +27,8 @@ interface IUsers {
 
 const NewChatScreen = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
+
+  const authorizedUserData = useAppSelector((state) => state.auth.userData);
 
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<IUsers | null>(null);
@@ -55,10 +58,11 @@ const NewChatScreen = () => {
 
       setIsLoading(true);
 
-      const userResult = await searchUsers(searchTerm);
-      setUsers(userResult);
+      const usersResult = await searchUsers(searchTerm);
+      delete usersResult[authorizedUserData?.userId!];
+      setUsers(usersResult);
 
-      if (!Object.keys(userResult).length) {
+      if (!Object.keys(usersResult).length) {
         setIsNoResultFound(true);
       } else {
         setIsNoResultFound(false);
@@ -93,7 +97,6 @@ const NewChatScreen = () => {
           renderItem={(itemData) => {
             const userId = itemData.item;
             const userData = users[userId];
-            console.log(userData);
             return <UserDataItem userData={userData} />;
           }}
         />
