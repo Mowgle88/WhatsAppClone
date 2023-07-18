@@ -1,22 +1,27 @@
-import React from "react";
-import { HeaderButton } from "react-navigation-header-buttons";
+import React, { ComponentType } from "react";
+import { ColorValue, ViewStyle } from "react-native";
+import {
+  HeaderButton,
+  HeaderButtonProps,
+} from "react-navigation-header-buttons";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
-import { ColorValue } from "react-native";
 
-interface CustomHeaderButtonProps {
-  color?: ColorValue;
-}
+type IconComponentType =
+  | ComponentType<{
+      name: string;
+      style?: ViewStyle;
+      color?: ColorValue | undefined;
+      size?: number | undefined;
+    }>
+  | undefined;
 
-const CustomHeaderButton: React.FC<CustomHeaderButtonProps> = ({
-  color,
-  ...props
-}) => {
+const CustomHeaderButton: React.FC<HeaderButtonProps> = (props) => {
   return (
     <HeaderButton
-      IconComponent={IonIcon}
+      IconComponent={IonIcon as IconComponentType}
       iconSize={23}
-      color={color ?? colors.blue}
+      color={props.color ?? colors.blue}
       {...props}
     />
   );
