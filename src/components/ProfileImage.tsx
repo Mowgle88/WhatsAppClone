@@ -23,9 +23,15 @@ interface ProfileImageProps {
   size: number;
   uri?: string | null;
   userId: string;
+  isShowEditButton?: boolean;
 }
 
-const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
+const ProfileImage: React.FC<ProfileImageProps> = ({
+  size,
+  uri,
+  userId,
+  isShowEditButton = true,
+}) => {
   const dispatch = useDispatch();
   const source = uri ? { uri: uri } : userImage;
 
@@ -128,9 +134,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({ size, uri, userId }) => {
           style={[styles.image, { width: size, height: size }]}
         />
       )}
-      <TouchableOpacity onPress={renderAlert} style={styles.editIcon}>
-        <FontAwesome name="pencil" size={16} color="black" />
-      </TouchableOpacity>
+      {isShowEditButton && !isLoading && (
+        <TouchableOpacity onPress={renderAlert} style={styles.editIcon}>
+          <FontAwesome name="pencil" size={16} color="black" />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
