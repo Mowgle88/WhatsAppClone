@@ -1,5 +1,5 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import ChatListScreen from "../screens/ChatListScreen";
@@ -7,8 +7,9 @@ import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
 import ChatScreen from "../screens/ChatScreen";
 import { RootStackParamList, TabParamList } from "./types";
+import NewChatScreen from "../screens/NewChatScreen";
 
-const Stack = createStackNavigator<RootStackParamList>();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
 
 const TabNavigator: React.FC = () => {
@@ -46,29 +47,38 @@ const TabNavigator: React.FC = () => {
 const MainNavigator: React.FC = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Home"
-        component={TabNavigator}
-        options={{
-          headerShown: false,
+      <Stack.Group>
+        <Stack.Screen
+          name="Home"
+          component={TabNavigator}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="ChatScreen"
+          component={ChatScreen}
+          options={{
+            headerTitle: "",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="ChatSettings"
+          component={ChatSettingsScreen}
+          options={{
+            headerTitle: "Settings",
+            headerBackTitle: "Back",
+          }}
+        />
+      </Stack.Group>
+      <Stack.Group
+        screenOptions={{
+          presentation: "containedModal",
         }}
-      />
-      <Stack.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={{
-          headerTitle: "",
-          headerBackTitle: "Back",
-        }}
-      />
-      <Stack.Screen
-        name="ChatSettings"
-        component={ChatSettingsScreen}
-        options={{
-          headerTitle: "Settings",
-          headerBackTitle: "Back",
-        }}
-      />
+      >
+        <Stack.Screen name="NewChat" component={NewChatScreen} />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

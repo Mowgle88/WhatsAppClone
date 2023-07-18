@@ -4,6 +4,7 @@ export type RootStackParamList = {
   Home: TabParamList;
   ChatSettings: undefined;
   ChatScreen: undefined;
+  NewChat: undefined;
 };
 
 export type TabParamList = {
