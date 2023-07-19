@@ -6,11 +6,12 @@ import colors from "../constants/colors";
 
 interface UserDataProps {
   userData: IUserData;
+  onPress: () => void;
 }
 
-const UserDataItem: React.FC<UserDataProps> = ({ userData }) => {
+const UserDataItem: React.FC<UserDataProps> = ({ userData, onPress }) => {
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
         <ProfileImage
           size={48}

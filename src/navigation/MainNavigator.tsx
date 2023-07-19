@@ -56,7 +56,7 @@ const MainNavigator: React.FC = () => {
           }}
         />
         <Stack.Screen
-          name="ChatScreen"
+          name="Chat"
           component={ChatScreen}
           options={{
             headerTitle: "",

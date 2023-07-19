@@ -1,12 +1,20 @@
 import React, { useEffect } from "react";
 import { Button, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { RootScreenNavigationProps } from "../navigation/types";
+import {
+  RootScreenNavigationProps,
+  ChatListScreenRouteProp,
+} from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import { useAppSelector } from "../store/hooks";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
+  const route = useRoute<ChatListScreenRouteProp>();
+  const selectedUser = route?.params?.selectedUserId;
+
+  const authorizedUserData = useAppSelector((state) => state.auth.userData);
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,6 +34,14 @@ const ChatListScreen: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    if (!selectedUser) {
+      return;
+    }
+    const chatUsers = [selectedUser, authorizedUserData!.userId];
+    navigation.navigate("Chat", { users: chatUsers });
+  }, [route?.params]);
+
   return (
     <View style={styles.container}>
       <Text>Chat List Screen</Text>
@@ -33,7 +49,7 @@ const ChatListScreen: React.FC = () => {
       <Button
         title="Go to Chat Screen"
         onPress={() => {
-          navigation.navigate("ChatScreen");
+          navigation.navigate("Chat");
         }}
       />
     </View>

@@ -11,7 +11,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { RootScreenNavigationProps } from "../navigation/types";
+import { ChatScreenNavigationProps } from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
@@ -26,7 +26,7 @@ interface IUsers {
 }
 
 const NewChatScreen = () => {
-  const navigation = useNavigation<RootScreenNavigationProps>();
+  const navigation = useNavigation<ChatScreenNavigationProps>();
 
   const authorizedUserData = useAppSelector((state) => state.auth.userData);
 
@@ -74,6 +74,12 @@ const NewChatScreen = () => {
     return () => clearTimeout(delaySearch);
   }, [searchTerm]);
 
+  const userPressed = (userId: string) => {
+    navigation.navigate("ChatList", {
+      selectedUserId: userId,
+    });
+  };
+
   return (
     <ScreenContainer>
       <View style={styles.searchContainer}>
@@ -97,7 +103,14 @@ const NewChatScreen = () => {
           renderItem={(itemData) => {
             const userId = itemData.item;
             const userData = users[userId];
-            return <UserDataItem userData={userData} />;
+            return (
+              <UserDataItem
+                userData={userData}
+                onPress={() => {
+                  userPressed(userId);
+                }}
+              />
+            );
           }}
         />
       )}
