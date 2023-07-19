@@ -12,12 +12,14 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import ScreenContainer from "../components/ScreenContainer";
+import Bubble from "../components/Bubble";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
 } from "../navigation/types";
+import { BubbleEnum, IUserData } from "../types/types";
 import { useAppSelector } from "../store/hooks";
-import { IUserData } from "../types/types";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -58,7 +60,16 @@ const ChatScreen: React.FC = () => {
           source={require("../assets/images/droplet.jpeg")}
           resizeMode="cover"
           style={styles.backgroundImage}
-        />
+        >
+          <ScreenContainer containerStyle={styles.screenContainer}>
+            {chatData && (
+              <Bubble
+                type={BubbleEnum.System}
+                text={"This is a new chat. Say hi."}
+              />
+            )}
+          </ScreenContainer>
+        </ImageBackground>
         <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.button} onPress={() => {}}>
             <Icon name="add-outline" size={24} color={colors.blue} />
@@ -91,6 +102,9 @@ const ChatScreen: React.FC = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  screenContainer: {
+    backgroundColor: "transparent",
   },
   backgroundImage: {
     flex: 1,

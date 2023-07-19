@@ -20,3 +20,9 @@ export interface IUserData {
 export interface IUsers {
   [key: string]: IUserData;
 }
+
+export enum BubbleEnum {
+  System = "system",
+  AuthorizedUser = "authorizedUser",
+  User = "user",
+}
