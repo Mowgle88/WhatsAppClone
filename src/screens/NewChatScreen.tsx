@@ -18,17 +18,15 @@ import ScreenContainer from "../components/ScreenContainer";
 import commonStyles from "../constants/commonStyles";
 import { searchUsers } from "../utils/actions/userActions";
 import UserDataItem from "../components/UserDataItem";
-import { IUserData } from "../types/types";
-import { useAppSelector } from "../store/hooks";
-
-interface IUsers {
-  [key: string]: IUserData;
-}
+import { IUsers } from "../types/types";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setStoredUsers } from "../store/userSlice";
 
 const NewChatScreen = () => {
   const navigation = useNavigation<ChatScreenNavigationProps>();
 
   const authorizedUserData = useAppSelector((state) => state.auth.userData);
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<IUsers | null>(null);
@@ -66,6 +64,8 @@ const NewChatScreen = () => {
         setIsNoResultFound(true);
       } else {
         setIsNoResultFound(false);
+
+        dispatch(setStoredUsers({ newUsers: usersResult }));
       }
 
       setIsLoading(false);

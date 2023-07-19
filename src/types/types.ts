@@ -16,3 +16,7 @@ export interface IUserData {
   profilePicture: string;
   signUpDate: string;
 }
+
+export interface IUsers {
+  [key: string]: IUserData;
+}

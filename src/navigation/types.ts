@@ -8,7 +8,13 @@ import type {
 
 export type RootStackParamList = {
   Home: NavigatorScreenParams<TabParamList>;
-  Chat: { users: string[] } | undefined;
+  Chat:
+    | {
+        newChatData: {
+          users: string[];
+        };
+      }
+    | undefined;
   ChatSettings: undefined;
   NewChat: undefined;
 };
@@ -24,6 +30,8 @@ export type RootScreenNavigationProps = NativeStackNavigationProp<
 >;
 
 export type ChatListScreenRouteProp = RouteProp<TabParamList, "ChatList">;
+
+export type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 
 export type ChatScreenNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, "ChatList">,

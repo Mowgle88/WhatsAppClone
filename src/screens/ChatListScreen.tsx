@@ -39,7 +39,14 @@ const ChatListScreen: React.FC = () => {
       return;
     }
     const chatUsers = [selectedUser, authorizedUserData!.userId];
-    navigation.navigate("Chat", { users: chatUsers });
+
+    const navigationProps = {
+      newChatData: {
+        users: chatUsers,
+      },
+    };
+
+    navigation.navigate("Chat", navigationProps);
   }, [route?.params]);
 
   return (
