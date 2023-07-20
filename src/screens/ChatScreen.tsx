@@ -20,6 +20,7 @@ import {
 } from "../navigation/types";
 import { BubbleEnum, IUserData } from "../types/types";
 import { useAppSelector } from "../store/hooks";
+import { createChat } from "../utils/actions/chatActions";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -30,6 +31,7 @@ const ChatScreen: React.FC = () => {
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
   const [messageText, setMessageText] = useState("");
+  const [chatId, setChatId] = useState(route?.params?.chatId);
 
   const getChatTitleFromName = () => {
     const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
@@ -45,9 +47,15 @@ const ChatScreen: React.FC = () => {
     });
   }, []);
 
-  const sendMassage = useCallback(() => {
+  const sendMassage = useCallback(async () => {
+    try {
+      if (!chatId) {
+        const id = await createChat(userData!.userId, chatData!);
+        id && setChatId(id);
+      }
+    } catch (error) {}
     setMessageText("");
-  }, [messageText]);
+  }, [messageText, chatId]);
 
   return (
     <SafeAreaView style={styles.container}>
