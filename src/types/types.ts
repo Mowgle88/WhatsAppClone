@@ -26,3 +26,16 @@ export enum BubbleEnum {
   AuthorizedUser = "authorizedUser",
   User = "user",
 }
+
+export interface IChatsData {
+  [key: string]: IChatData;
+}
+
+export interface IChatData {
+  createdAt: string;
+  createdBy: string;
+  key: string;
+  updatedAt: string;
+  updatedBy: string;
+  users: string[];
+}
