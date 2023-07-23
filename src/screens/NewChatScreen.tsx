@@ -11,21 +11,22 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useNavigation } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { RootScreenNavigationProps } from "../navigation/types";
+import { ChatScreenNavigationProps } from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import commonStyles from "../constants/commonStyles";
 import { searchUsers } from "../utils/actions/userActions";
 import UserDataItem from "../components/UserDataItem";
-import { IUserData } from "../types/types";
-
-interface IUsers {
-  [key: string]: IUserData;
-}
+import { IUsers } from "../types/types";
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { setStoredUsers } from "../store/userSlice";
 
 const NewChatScreen = () => {
-  const navigation = useNavigation<RootScreenNavigationProps>();
+  const navigation = useNavigation<ChatScreenNavigationProps>();
+
+  const authorizedUserData = useAppSelector((state) => state.auth.userData);
+  const dispatch = useAppDispatch();
 
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<IUsers | null>(null);
@@ -55,13 +56,16 @@ const NewChatScreen = () => {
 
       setIsLoading(true);
 
-      const userResult = await searchUsers(searchTerm);
-      setUsers(userResult);
+      const usersResult = await searchUsers(searchTerm);
+      delete usersResult[authorizedUserData?.userId!];
+      setUsers(usersResult);
 
-      if (!Object.keys(userResult).length) {
+      if (!Object.keys(usersResult).length) {
         setIsNoResultFound(true);
       } else {
         setIsNoResultFound(false);
+
+        dispatch(setStoredUsers({ newUsers: usersResult }));
       }
 
       setIsLoading(false);
@@ -69,6 +73,12 @@ const NewChatScreen = () => {
 
     return () => clearTimeout(delaySearch);
   }, [searchTerm]);
+
+  const userPressed = (userId: string) => {
+    navigation.navigate("ChatList", {
+      selectedUserId: userId,
+    });
+  };
 
   return (
     <ScreenContainer>
@@ -93,8 +103,14 @@ const NewChatScreen = () => {
           renderItem={(itemData) => {
             const userId = itemData.item;
             const userData = users[userId];
-            console.log(userData);
-            return <UserDataItem userData={userData} />;
+            return (
+              <UserDataItem
+                userData={userData}
+                onPress={() => {
+                  userPressed(userId);
+                }}
+              />
+            );
           }}
         />
       )}
