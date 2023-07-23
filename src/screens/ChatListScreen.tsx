@@ -1,12 +1,32 @@
-import React, { useEffect } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useMemo } from "react";
+import { FlatList } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { RootScreenNavigationProps } from "../navigation/types";
+import {
+  RootScreenNavigationProps,
+  ChatListScreenRouteProp,
+} from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import { useAppSelector } from "../store/hooks";
+import UserDataItem from "../components/UserDataItem";
+import ScreenContainer from "../components/ScreenContainer";
+import ScreenTitle from "../components/ScreenTitle";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
+  const route = useRoute<ChatListScreenRouteProp>();
+  const selectedUser = route?.params?.selectedUserId;
+
+  const authorizedUserData = useAppSelector((state) => state.auth.userData);
+  const storedUsers = useAppSelector((state) => state.users.storedUsers);
+  const userChats = useAppSelector((state) => state.chats.chatsData);
+  const userChatsList = useMemo(
+    () =>
+      Object.values(userChats).sort(
+        (a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt)
+      ),
+    [userChats]
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -26,26 +46,50 @@ const ChatListScreen: React.FC = () => {
     });
   }, []);
 
-  return (
-    <View style={styles.container}>
-      <Text>Chat List Screen</Text>
+  useEffect(() => {
+    if (!selectedUser) {
+      return;
+    }
+    const chatUsers = [selectedUser, authorizedUserData!.userId];
 
-      <Button
-        title="Go to Chat Screen"
-        onPress={() => {
-          navigation.navigate("ChatScreen");
+    const navigationProps = {
+      newChatData: {
+        users: chatUsers,
+      },
+    };
+
+    navigation.navigate("Chat", navigationProps);
+  }, [route?.params]);
+
+  return (
+    <ScreenContainer>
+      <ScreenTitle text={"Chats"} />
+      <FlatList
+        data={userChatsList}
+        renderItem={(itemData) => {
+          const chatData = itemData.item;
+          const chatId = chatData.key;
+
+          const otherUserId = chatData.users.find(
+            (uid) => uid !== authorizedUserData!.userId
+          );
+          const otherUser = storedUsers[otherUserId!];
+
+          return (
+            otherUser && (
+              <UserDataItem
+                userData={otherUser}
+                lastMessage="This will be a message..."
+                onPress={(): void => {
+                  navigation.navigate("Chat", { chatId });
+                }}
+              />
+            )
+          );
         }}
       />
-    </View>
+    </ScreenContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default ChatListScreen;
