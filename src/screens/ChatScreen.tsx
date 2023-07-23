@@ -36,17 +36,14 @@ const ChatScreen: React.FC = () => {
   const chatData =
     (chatId && storedChats[chatId]) || route?.params?.newChatData;
 
-  const getChatTitleFromName = () => {
+  useEffect(() => {
     const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
     const otherUserData: IUserData = storedUsers[`${otherUserId}`];
-    return (
-      otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`
-    );
-  };
+    const headerTitle =
+      otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`;
 
-  useEffect(() => {
     navigation.setOptions({
-      headerTitle: getChatTitleFromName(),
+      headerTitle: headerTitle,
     });
   }, []);
 
