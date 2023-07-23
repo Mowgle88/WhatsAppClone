@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Button, StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useMemo } from "react";
+import { FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import {
@@ -8,6 +8,9 @@ import {
 } from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { useAppSelector } from "../store/hooks";
+import UserDataItem from "../components/UserDataItem";
+import ScreenContainer from "../components/ScreenContainer";
+import ScreenTitle from "../components/ScreenTitle";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -15,6 +18,15 @@ const ChatListScreen: React.FC = () => {
   const selectedUser = route?.params?.selectedUserId;
 
   const authorizedUserData = useAppSelector((state) => state.auth.userData);
+  const storedUsers = useAppSelector((state) => state.users.storedUsers);
+  const userChats = useAppSelector((state) => state.chats.chatsData);
+  const userChatsList = useMemo(
+    () =>
+      Object.values(userChats).sort(
+        (a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt)
+      ),
+    [userChats]
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -50,25 +62,31 @@ const ChatListScreen: React.FC = () => {
   }, [route?.params]);
 
   return (
-    <View style={styles.container}>
-      <Text>Chat List Screen</Text>
+    <ScreenContainer>
+      <ScreenTitle text={"Chats"} />
+      <FlatList
+        data={userChatsList}
+        renderItem={(itemData) => {
+          const chatData = itemData.item;
 
-      <Button
-        title="Go to Chat Screen"
-        onPress={() => {
-          navigation.navigate("Chat");
+          const otherUserId = chatData.users.find(
+            (uid) => uid !== authorizedUserData!.userId
+          );
+          const otherUser = storedUsers[otherUserId!];
+
+          return (
+            otherUser && (
+              <UserDataItem
+                userData={otherUser}
+                lastMessage="This will be a message..."
+                onPress={function (): void {}}
+              />
+            )
+          );
         }}
       />
-    </View>
+    </ScreenContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-});
 
 export default ChatListScreen;

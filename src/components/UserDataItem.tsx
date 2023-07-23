@@ -6,10 +6,15 @@ import colors from "../constants/colors";
 
 interface UserDataProps {
   userData: IUserData;
+  lastMessage?: string;
   onPress: () => void;
 }
 
-const UserDataItem: React.FC<UserDataProps> = ({ userData, onPress }) => {
+const UserDataItem: React.FC<UserDataProps> = ({
+  userData,
+  onPress,
+  lastMessage = "",
+}) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
@@ -23,7 +28,9 @@ const UserDataItem: React.FC<UserDataProps> = ({ userData, onPress }) => {
           <Text numberOfLines={1} style={styles.title}>
             {`${userData.firstName} ${userData.lastName}`}
           </Text>
-          <Text style={styles.subtitle}>{userData.about}</Text>
+          <Text style={styles.subtitle}>
+            {lastMessage ? lastMessage : userData.about}
+          </Text>
         </View>
       </View>
     </TouchableWithoutFeedback>
