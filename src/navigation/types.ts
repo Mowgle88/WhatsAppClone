@@ -8,14 +8,12 @@ import type {
 
 export type RootStackParamList = {
   Home: NavigatorScreenParams<TabParamList>;
-  Chat:
-    | {
-        newChatData: {
-          users: string[];
-        };
-        chatId?: string;
-      }
-    | undefined;
+  Chat: {
+    newChatData?: {
+      users: string[];
+    };
+    chatId?: string;
+  };
   ChatSettings: undefined;
   NewChat: undefined;
 };

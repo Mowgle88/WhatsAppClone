@@ -68,6 +68,7 @@ const ChatListScreen: React.FC = () => {
         data={userChatsList}
         renderItem={(itemData) => {
           const chatData = itemData.item;
+          const chatId = chatData.key;
 
           const otherUserId = chatData.users.find(
             (uid) => uid !== authorizedUserData!.userId
@@ -79,7 +80,9 @@ const ChatListScreen: React.FC = () => {
               <UserDataItem
                 userData={otherUser}
                 lastMessage="This will be a message..."
-                onPress={function (): void {}}
+                onPress={(): void => {
+                  navigation.navigate("Chat", { chatId });
+                }}
               />
             )
           );

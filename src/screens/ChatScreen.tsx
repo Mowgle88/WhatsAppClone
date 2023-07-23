@@ -25,13 +25,16 @@ import { createChat } from "../utils/actions/chatActions";
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
   const route = useRoute<ChatScreenRouteProp>();
-  const chatData = route?.params?.newChatData;
 
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
+  const storedChats = useAppSelector((state) => state.chats.chatsData);
 
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(route?.params?.chatId);
+
+  const chatData =
+    (chatId && storedChats[chatId]) || route?.params?.newChatData;
 
   const getChatTitleFromName = () => {
     const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
