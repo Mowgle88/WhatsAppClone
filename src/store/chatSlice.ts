@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IChatsData } from "../types/types";
+import { IChatData, IObjectData } from "../types/types";
 
 export interface ChatState {
-  chatsData: IChatsData;
+  chatsData: IObjectData<IChatData>;
 }
 
 const initialState: ChatState = {

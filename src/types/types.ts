@@ -27,8 +27,8 @@ export enum BubbleEnum {
   User = "user",
 }
 
-export interface IChatsData {
-  [key: string]: IChatData;
+export interface IObjectData<T> {
+  [key: string]: T;
 }
 
 export interface IChatData {
@@ -38,4 +38,11 @@ export interface IChatData {
   updatedAt: string;
   updatedBy: string;
   users: string[];
+  latestMessageText?: string;
+}
+
+export interface IChatMessagesData {
+  sentAt: string;
+  sentBy: string;
+  text: string;
 }

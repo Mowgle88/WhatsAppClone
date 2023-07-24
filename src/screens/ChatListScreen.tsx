@@ -79,7 +79,7 @@ const ChatListScreen: React.FC = () => {
             otherUser && (
               <UserDataItem
                 userData={otherUser}
-                lastMessage="This will be a message..."
+                lastMessage={chatData.latestMessageText || "New chat"}
                 onPress={(): void => {
                   navigation.navigate("Chat", { chatId });
                 }}

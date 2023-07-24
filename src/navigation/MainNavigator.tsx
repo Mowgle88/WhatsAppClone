@@ -13,7 +13,8 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getFirebaseApp } from "../utils/firebaseHelper";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
-import { IChatData, IChatsData } from "../types/types";
+import { setChatMessages } from "../store/messagesSlice";
+import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
 import { ActivityIndicator, View } from "react-native";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
@@ -112,7 +113,7 @@ const MainNavigator: React.FC = () => {
       const chatIdsData = querySnapshot.val() || {};
       const chatIds = Object.values(chatIdsData);
 
-      const chatsData: IChatsData = {};
+      const chatsData: IObjectData<IChatData> = {};
       let chatsFoundCount = 0;
 
       for (let i = 0; i < chatIds.length; i++) {
@@ -147,6 +148,15 @@ const MainNavigator: React.FC = () => {
               setIsLoading(false);
             }
           }
+        });
+
+        const messagesRef = child(dbRef, `messages/${chatId}`);
+        refs.push(messagesRef);
+
+        onValue(messagesRef, (messagesSnaphot) => {
+          const messagesData: IObjectData<IChatMessagesData> =
+            messagesSnaphot.val();
+          dispatch(setChatMessages({ chatId, messagesData }));
         });
 
         if (chatsFoundCount === 0) {
