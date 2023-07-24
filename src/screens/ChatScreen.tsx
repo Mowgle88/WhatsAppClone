@@ -20,7 +20,7 @@ import {
 } from "../navigation/types";
 import { BubbleEnum, IUserData } from "../types/types";
 import { useAppSelector } from "../store/hooks";
-import { createChat } from "../utils/actions/chatActions";
+import { createChat, sendTextMesage } from "../utils/actions/chatActions";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -53,7 +53,11 @@ const ChatScreen: React.FC = () => {
         const id = await createChat(userData!.userId, chatData!);
         id && setChatId(id);
       }
-    } catch (error) {}
+
+      sendTextMesage(chatId!, userData!.userId, messageText);
+    } catch (error) {
+      console.log(error);
+    }
     setMessageText("");
   }, [messageText, chatId]);
 
