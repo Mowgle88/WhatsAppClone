@@ -19,6 +19,11 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
       bubbleStyle.alignItems = "center";
       bubbleStyle.margin = 10;
       break;
+    case BubbleEnum.Error:
+      textStyle.color = "white";
+      bubbleStyle.backgroundColor = colors.red;
+      bubbleStyle.margin = 10;
+      break;
 
     default:
       break;

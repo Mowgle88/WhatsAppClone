@@ -32,6 +32,7 @@ const ChatScreen: React.FC = () => {
 
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(route?.params?.chatId);
+  const [errorBannerText, setErrorBannerText] = useState("");
 
   const chatData =
     (chatId && storedChats[chatId]) || route?.params?.newChatData;
@@ -54,11 +55,16 @@ const ChatScreen: React.FC = () => {
         id && setChatId(id);
       }
 
-      sendTextMesage(chatId!, userData!.userId, messageText);
+      await sendTextMesage(chatId!, userData!.userId, messageText);
+
+      setMessageText("");
     } catch (error) {
       console.log(error);
+      setErrorBannerText("Message faild to send.");
+      setTimeout(() => {
+        setErrorBannerText("");
+      }, 3000);
     }
-    setMessageText("");
   }, [messageText, chatId]);
 
   return (
@@ -74,11 +80,14 @@ const ChatScreen: React.FC = () => {
           style={styles.backgroundImage}
         >
           <ScreenContainer containerStyle={styles.screenContainer}>
-            {chatData && (
+            {!chatId && (
               <Bubble
                 type={BubbleEnum.System}
                 text={"This is a new chat. Say hi."}
               />
+            )}
+            {errorBannerText && (
+              <Bubble type={BubbleEnum.Error} text={errorBannerText} />
             )}
           </ScreenContainer>
         </ImageBackground>

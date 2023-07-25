@@ -23,6 +23,7 @@ export interface IUsers {
 
 export enum BubbleEnum {
   System = "system",
+  Error = "error",
   AuthorizedUser = "authorizedUser",
   User = "user",
 }
