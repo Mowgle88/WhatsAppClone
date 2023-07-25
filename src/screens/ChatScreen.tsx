@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   ImageBackground,
   StyleSheet,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
+  FlatList,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
@@ -29,10 +30,25 @@ const ChatScreen: React.FC = () => {
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
+  const chatMesages = useAppSelector((state) => state.messages.messagesData);
 
   const [messageText, setMessageText] = useState("");
-  const [chatId, setChatId] = useState(route?.params?.chatId);
+  const [chatId, setChatId] = useState(route?.params?.chatId ?? "");
   const [errorBannerText, setErrorBannerText] = useState("");
+
+  const userChatMessages = useMemo(() => {
+    if (!chatId) return [];
+    const chatMessagesData = chatMesages[chatId];
+
+    if (!chatMessagesData) return [];
+
+    const messageList = [];
+    for (const key in chatMessagesData) {
+      const message = chatMessagesData[key];
+      messageList.push({ key, ...message });
+    }
+    return messageList.reverse();
+  }, [chatMesages]);
 
   const chatData =
     (chatId && storedChats[chatId]) || route?.params?.newChatData;
@@ -50,12 +66,13 @@ const ChatScreen: React.FC = () => {
 
   const sendMassage = useCallback(async () => {
     try {
-      if (!chatId) {
-        const id = await createChat(userData!.userId, chatData!);
-        id && setChatId(id);
+      let id = chatId;
+      if (!id) {
+        id = (await createChat(userData!.userId, chatData!)) as string;
+        setChatId(id);
       }
 
-      await sendTextMesage(chatId!, userData!.userId, messageText);
+      await sendTextMesage(id, userData!.userId, messageText);
 
       setMessageText("");
     } catch (error) {
@@ -88,6 +105,22 @@ const ChatScreen: React.FC = () => {
             )}
             {errorBannerText && (
               <Bubble type={BubbleEnum.Error} text={errorBannerText} />
+            )}
+            {chatId && (
+              <FlatList
+                data={userChatMessages}
+                keyExtractor={(item) => item.key}
+                renderItem={(itemData) => {
+                  const message = itemData.item;
+                  const isOwnMessage = message.sentBy === userData?.userId;
+                  const messageType = isOwnMessage
+                    ? BubbleEnum.OwnMessage
+                    : BubbleEnum.NotOwnMessage;
+
+                  return <Bubble type={messageType} text={message.text} />;
+                }}
+                inverted
+              />
             )}
           </ScreenContainer>
         </ImageBackground>

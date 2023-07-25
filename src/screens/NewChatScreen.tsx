@@ -100,6 +100,7 @@ const NewChatScreen = () => {
       {!isLoading && !isNoResultFound && users && (
         <FlatList
           data={Object.keys(users)}
+          keyExtractor={(item) => item}
           renderItem={(itemData) => {
             const userId = itemData.item;
             const userData = users[userId];

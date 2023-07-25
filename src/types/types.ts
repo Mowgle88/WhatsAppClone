@@ -24,8 +24,8 @@ export interface IUsers {
 export enum BubbleEnum {
   System = "system",
   Error = "error",
-  AuthorizedUser = "authorizedUser",
-  User = "user",
+  OwnMessage = "ownMessage",
+  NotOwnMessage = "notOwnMessage",
 }
 
 export interface IObjectData<T> {
@@ -46,4 +46,5 @@ export interface IChatMessagesData {
   sentAt: string;
   sentBy: string;
   text: string;
+  key?: string;
 }

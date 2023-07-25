@@ -9,4 +9,5 @@ export default {
   red: "#e74c3c",
   palebeige: "#E2DACC",
   beige: "#FEF5C3",
+  lightGreen: "#E7FED6",
 };

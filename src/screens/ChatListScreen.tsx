@@ -66,6 +66,7 @@ const ChatListScreen: React.FC = () => {
       <ScreenTitle text={"Chats"} />
       <FlatList
         data={userChatsList}
+        keyExtractor={(item) => item.key}
         renderItem={(itemData) => {
           const chatData = itemData.item;
           const chatId = chatData.key;

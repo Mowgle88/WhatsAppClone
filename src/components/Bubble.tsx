@@ -11,6 +11,7 @@ interface BubbleProps {
 const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
   const bubbleStyle: ViewStyle = { ...styles.container };
   const textStyle: TextStyle = { ...styles.text };
+  const wrapperStyle: ViewStyle = { ...styles.wrapper };
 
   switch (type) {
     case BubbleEnum.System:
@@ -24,13 +25,23 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
       bubbleStyle.backgroundColor = colors.red;
       bubbleStyle.margin = 10;
       break;
+    case BubbleEnum.OwnMessage:
+      wrapperStyle.justifyContent = "flex-end";
+      bubbleStyle.backgroundColor = colors.lightGreen;
+      bubbleStyle.maxWidth = "90%";
+      break;
+    case BubbleEnum.NotOwnMessage:
+      wrapperStyle.justifyContent = "flex-start";
+      bubbleStyle.backgroundColor = colors.blue;
+      bubbleStyle.maxWidth = "90%";
+      break;
 
     default:
       break;
   }
 
   return (
-    <View style={styles.wrapper}>
+    <View style={wrapperStyle}>
       <View style={bubbleStyle}>
         <Text style={textStyle}>{text}</Text>
       </View>
