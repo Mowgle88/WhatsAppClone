@@ -147,7 +147,7 @@ const NewChatScreen = () => {
 
 const styles = StyleSheet.create({
   searchContainer: {
-    height: 30,
+    height: 36,
     marginVertical: 8,
     paddingHorizontal: 8,
     paddingVertical: 4,
@@ -157,6 +157,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   searchBox: {
+    padding: 0,
     marginLeft: 8,
     fontSize: 16,
     width: "100%",
