@@ -7,8 +7,6 @@ import {
   ViewStyle,
   TouchableWithoutFeedback,
 } from "react-native";
-import colors from "../constants/colors";
-import { BubbleEnum } from "../types/types";
 import {
   Menu,
   MenuOption,
@@ -16,6 +14,9 @@ import {
   MenuTrigger,
 } from "react-native-popup-menu";
 import uuid from "react-native-uuid";
+import Clipboard from "@react-native-clipboard/clipboard";
+import colors from "../constants/colors";
+import { BubbleEnum } from "../types/types";
 
 interface BubbleProps {
   text: string;
@@ -61,6 +62,10 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
       break;
   }
 
+  const copyToClipboard = async (copiedText: string) => {
+    Clipboard.setString(copiedText);
+  };
+
   return (
     <View style={wrapperStyle}>
       <TouchableWithoutFeedback
@@ -78,7 +83,10 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
             <MenuTrigger />
 
             <MenuOptions>
-              <MenuOption text="Option 1" />
+              <MenuOption
+                text="Copy to Clipboard"
+                onSelect={() => copyToClipboard(text)}
+              />
               <MenuOption text="Option 2" />
               <MenuOption text="Option 3" />
             </MenuOptions>
