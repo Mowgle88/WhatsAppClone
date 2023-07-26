@@ -15,6 +15,8 @@ import {
 } from "react-native-popup-menu";
 import uuid from "react-native-uuid";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { IconProps } from "react-native-vector-icons/Icon";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { BubbleEnum } from "../types/types";
 
@@ -22,6 +24,31 @@ interface BubbleProps {
   text: string;
   type: BubbleEnum;
 }
+
+interface MenuItemProps {
+  text: string;
+  IconPack?: React.ComponentClass<IconProps, any>;
+  icon: string;
+  onSelect: () => void;
+}
+
+const MenuItem: React.FC<MenuItemProps> = ({
+  text,
+  IconPack,
+  onSelect,
+  icon,
+}) => {
+  const Icon = IconPack ?? Ionicons;
+
+  return (
+    <MenuOption onSelect={onSelect}>
+      <View style={styles.menuItemContainer}>
+        <Text style={styles.menuText}>{text}</Text>
+        <Icon name={icon} size={18} style={styles.icon} />
+      </View>
+    </MenuOption>
+  );
+};
 
 const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
   const bubbleStyle: ViewStyle = { ...styles.container };
@@ -83,12 +110,16 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
             <MenuTrigger />
 
             <MenuOptions>
-              <MenuOption
+              <MenuItem
                 text="Copy to Clipboard"
+                icon="copy-outline"
                 onSelect={() => copyToClipboard(text)}
               />
-              <MenuOption text="Option 2" />
-              <MenuOption text="Option 3" />
+              <MenuItem
+                text="Star message"
+                icon="star-outline"
+                onSelect={() => copyToClipboard(text)}
+              />
             </MenuOptions>
           </Menu>
         </View>
@@ -118,5 +149,19 @@ const styles = StyleSheet.create({
   },
   touchable: {
     width: "100%",
+  },
+  menuItemContainer: {
+    flexDirection: "row",
+    padding: 4,
+  },
+  menuText: {
+    flex: 1,
+    fontFamily: "Alkatra-Regular",
+    letterSpacing: 0.3,
+    fontSize: 16,
+  },
+  icon: {
+    color: colors.blue,
+    alignSelf: "center",
   },
 });
