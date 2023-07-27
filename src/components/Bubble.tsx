@@ -19,10 +19,14 @@ import { IconProps } from "react-native-vector-icons/Icon";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { BubbleEnum } from "../types/types";
+import { starMessage } from "../utils/actions/chatActions";
 
 interface BubbleProps {
   text: string;
   type: BubbleEnum;
+  messageId?: string;
+  userId?: string;
+  chatId?: string;
 }
 
 interface MenuItemProps {
@@ -50,7 +54,13 @@ const MenuItem: React.FC<MenuItemProps> = ({
   );
 };
 
-const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
+const Bubble: React.FC<BubbleProps> = ({
+  text,
+  type,
+  messageId,
+  userId,
+  chatId,
+}) => {
   const bubbleStyle: ViewStyle = { ...styles.container };
   const textStyle: TextStyle = { ...styles.text };
   const wrapperStyle: ViewStyle = { ...styles.wrapper };
@@ -118,7 +128,7 @@ const Bubble: React.FC<BubbleProps> = ({ text, type }) => {
               <MenuItem
                 text="Star message"
                 icon="star-outline"
-                onSelect={() => copyToClipboard(text)}
+                onSelect={() => starMessage(messageId!, chatId!, userId!)}
               />
             </MenuOptions>
           </Menu>
