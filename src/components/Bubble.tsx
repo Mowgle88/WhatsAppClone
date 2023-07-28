@@ -20,6 +20,8 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { BubbleEnum } from "../types/types";
 import { starMessage } from "../utils/actions/chatActions";
+import { useAppSelector } from "../store/hooks";
+import { formatAmPm } from "../utils/redusers/dateFormatting";
 
 interface BubbleProps {
   text: string;
@@ -27,6 +29,7 @@ interface BubbleProps {
   messageId?: string;
   userId?: string;
   chatId?: string;
+  date?: string;
 }
 
 interface MenuItemProps {
@@ -60,7 +63,12 @@ const Bubble: React.FC<BubbleProps> = ({
   messageId,
   userId,
   chatId,
+  date,
 }) => {
+  const starredMessages = useAppSelector(
+    (state) => state.messages.starredMesages[chatId!] ?? {}
+  );
+  console.log(starredMessages);
   const bubbleStyle: ViewStyle = { ...styles.container };
   const textStyle: TextStyle = { ...styles.text };
   const wrapperStyle: ViewStyle = { ...styles.wrapper };
@@ -68,7 +76,9 @@ const Bubble: React.FC<BubbleProps> = ({
   const menuRef = useRef<any>(null);
   const id = useRef(uuid.v4());
 
-  let hasNenu = false;
+  let hasMenu = false;
+  let isUserMessage = false;
+  const dateString = date ? formatAmPm(date) : "";
 
   switch (type) {
     case BubbleEnum.System:
@@ -86,13 +96,15 @@ const Bubble: React.FC<BubbleProps> = ({
       wrapperStyle.justifyContent = "flex-end";
       bubbleStyle.backgroundColor = colors.lightGreen;
       bubbleStyle.maxWidth = "90%";
-      hasNenu = true;
+      hasMenu = true;
+      isUserMessage = true;
       break;
     case BubbleEnum.NotOwnMessage:
       wrapperStyle.justifyContent = "flex-start";
-      bubbleStyle.backgroundColor = colors.blue;
+      bubbleStyle.backgroundColor = colors.nearlyWhite;
       bubbleStyle.maxWidth = "90%";
-      hasNenu = true;
+      hasMenu = true;
+      isUserMessage = true;
       break;
 
     default:
@@ -103,18 +115,33 @@ const Bubble: React.FC<BubbleProps> = ({
     Clipboard.setString(copiedText);
   };
 
+  const isStarred = isUserMessage && starredMessages[messageId!] !== undefined;
+
   return (
     <View style={wrapperStyle}>
       <TouchableWithoutFeedback
         style={styles.touchable}
         onLongPress={() => {
-          if (hasNenu) {
+          if (hasMenu) {
             menuRef.current!.props.ctx.menuActions.openMenu(id.current);
           }
         }}
       >
         <View style={bubbleStyle}>
           <Text style={textStyle}>{text}</Text>
+          {dateString && (
+            <View style={styles.timeContainer}>
+              {isStarred && (
+                <Ionicons
+                  name="star"
+                  size={14}
+                  color={colors.textColor}
+                  style={styles.star}
+                />
+              )}
+              <Text style={styles.time}>{dateString}</Text>
+            </View>
+          )}
 
           <Menu name={id.current as string} ref={menuRef}>
             <MenuTrigger />
@@ -126,8 +153,8 @@ const Bubble: React.FC<BubbleProps> = ({
                 onSelect={() => copyToClipboard(text)}
               />
               <MenuItem
-                text="Star message"
-                icon="star-outline"
+                text={`${isStarred ? "Unstar" : "Star"} message`}
+                icon={isStarred ? "star-outline" : "star"}
                 onSelect={() => starMessage(messageId!, chatId!, userId!)}
               />
             </MenuOptions>
@@ -172,6 +199,20 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: colors.blue,
+    alignSelf: "center",
+  },
+  timeContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+  },
+  time: {
+    fontFamily: "Caveat-Bold",
+    letterSpacing: 0.3,
+    color: colors.grey,
+    fontSize: 14,
+  },
+  star: {
+    marginHorizontal: 4,
     alignSelf: "center",
   },
 });

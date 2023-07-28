@@ -48,3 +48,9 @@ export interface IChatMessagesData {
   text: string;
   key?: string;
 }
+
+export interface IStarredMessage {
+  chatId: string;
+  messageId: string;
+  starredAt: string;
+}

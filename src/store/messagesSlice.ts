@@ -1,12 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IObjectData, IChatMessagesData } from "../types/types";
+import {
+  IObjectData,
+  IChatMessagesData,
+  IStarredMessage,
+} from "../types/types";
 
 export interface MessagesState {
   messagesData: IObjectData<IObjectData<IChatMessagesData>>;
+  starredMesages: IObjectData<IObjectData<IStarredMessage>>;
 }
 
 const initialState: MessagesState = {
   messagesData: {},
+  starredMesages: {},
 };
 
 export const messagesSlice = createSlice({
@@ -22,9 +28,26 @@ export const messagesSlice = createSlice({
 
       state.messagesData = existingMessages;
     },
+    setStarredMessages: (state, action) => {
+      const { starredMessages } = action.payload;
+      state.starredMesages = { ...starredMessages };
+    },
+    addStarreMessage: (state, action) => {
+      const { starredMessageData } = action.payload;
+      state.starredMesages[starredMessageData.messageId] = starredMessageData;
+    },
+    removeStarreMessage: (state, action) => {
+      const { messageId } = action.payload;
+      delete state.starredMesages[messageId];
+    },
   },
 });
 
-export const { setChatMessages } = messagesSlice.actions;
+export const {
+  setChatMessages,
+  setStarredMessages,
+  addStarreMessage,
+  removeStarreMessage,
+} = messagesSlice.actions;
 
 export default messagesSlice.reducer;

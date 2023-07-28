@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { getFirebaseApp } from "../utils/firebaseHelper";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
-import { setChatMessages } from "../store/messagesSlice";
+import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
 import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
 import { ActivityIndicator, View } from "react-native";
 import colors from "../constants/colors";
@@ -163,6 +163,17 @@ const MainNavigator: React.FC = () => {
           setIsLoading(false);
         }
       }
+    });
+
+    const userStarredMessageRef = child(
+      dbRef,
+      `userStarredMessages/${userData?.userId}`
+    );
+    refs.push(userStarredMessageRef);
+
+    onValue(userStarredMessageRef, (querySnapshot) => {
+      const starredMessages = querySnapshot.val() ?? {};
+      dispatch(setStarredMessages({ starredMessages }));
     });
 
     return () => {
