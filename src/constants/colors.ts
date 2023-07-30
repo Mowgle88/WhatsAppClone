@@ -10,4 +10,5 @@ export default {
   palebeige: "#E2DACC",
   beige: "#FEF5C3",
   lightGreen: "#E7FED6",
+  system: "#65644A",
 };

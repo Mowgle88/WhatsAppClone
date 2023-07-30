@@ -26,6 +26,7 @@ export enum BubbleEnum {
   Error = "error",
   OwnMessage = "ownMessage",
   NotOwnMessage = "notOwnMessage",
+  Reply = "reply",
 }
 
 export interface IObjectData<T> {
@@ -47,6 +48,7 @@ export interface IChatMessagesData {
   sentBy: string;
   text: string;
   key?: string;
+  replyTo?: string;
 }
 
 export interface IStarredMessage {

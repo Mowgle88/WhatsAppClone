@@ -15,11 +15,12 @@ import colors from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import ScreenContainer from "../components/ScreenContainer";
 import Bubble from "../components/Bubble";
+import ReplyTo from "../components/ReplyTo";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
 } from "../navigation/types";
-import { BubbleEnum, IUserData } from "../types/types";
+import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
 import { useAppSelector } from "../store/hooks";
 import { createChat, sendTextMesage } from "../utils/actions/chatActions";
 
@@ -35,6 +36,7 @@ const ChatScreen: React.FC = () => {
   const [messageText, setMessageText] = useState("");
   const [chatId, setChatId] = useState(route?.params?.chatId ?? "");
   const [errorBannerText, setErrorBannerText] = useState("");
+  const [replyingTo, setReplyingTo] = useState<IChatMessagesData | null>(null);
 
   const userChatMessages = useMemo(() => {
     if (!chatId) return [];
@@ -72,9 +74,15 @@ const ChatScreen: React.FC = () => {
         setChatId(id);
       }
 
-      await sendTextMesage(id, userData!.userId, messageText);
+      await sendTextMesage(
+        id,
+        userData!.userId,
+        messageText,
+        replyingTo && replyingTo.key
+      );
 
       setMessageText("");
+      setReplyingTo(null);
     } catch (error) {
       console.log(error);
       setErrorBannerText("Message faild to send.");
@@ -117,6 +125,12 @@ const ChatScreen: React.FC = () => {
                     ? BubbleEnum.OwnMessage
                     : BubbleEnum.NotOwnMessage;
 
+                  const repliedTo = userChatMessages.find(
+                    (i) => i.key === message.replyTo
+                  );
+                  const repliedToUser =
+                    repliedTo && storedUsers[repliedTo.sentBy];
+
                   return (
                     <Bubble
                       type={messageType}
@@ -125,6 +139,11 @@ const ChatScreen: React.FC = () => {
                       userId={userData?.userId!}
                       chatId={chatId}
                       date={message.sentAt}
+                      setReply={() => {
+                        setReplyingTo(message);
+                      }}
+                      replyingTo={repliedTo}
+                      replyingToUser={repliedToUser}
                     />
                   );
                 }}
@@ -132,6 +151,15 @@ const ChatScreen: React.FC = () => {
               />
             )}
           </ScreenContainer>
+          {replyingTo && (
+            <ReplyTo
+              text={replyingTo.text}
+              user={storedUsers[replyingTo.sentBy]}
+              onCancel={() => {
+                setReplyingTo(null);
+              }}
+            />
+          )}
         </ImageBackground>
         <View style={styles.inputContainer}>
           <TouchableOpacity style={styles.button} onPress={() => {}}>

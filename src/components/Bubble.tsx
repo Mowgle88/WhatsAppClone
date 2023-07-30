@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useMemo, useRef } from "react";
 import {
   StyleSheet,
   Text,
@@ -18,7 +18,7 @@ import Clipboard from "@react-native-clipboard/clipboard";
 import { IconProps } from "react-native-vector-icons/Icon";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
-import { BubbleEnum } from "../types/types";
+import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
 import { starMessage } from "../utils/actions/chatActions";
 import { useAppSelector } from "../store/hooks";
 import { formatAmPm } from "../utils/redusers/dateFormatting";
@@ -30,6 +30,10 @@ interface BubbleProps {
   userId?: string;
   chatId?: string;
   date?: string;
+  setReply?: () => void;
+  replyingToUser?: IUserData;
+  replyingTo?: IChatMessagesData;
+  name?: string;
 }
 
 interface MenuItemProps {
@@ -64,11 +68,20 @@ const Bubble: React.FC<BubbleProps> = ({
   userId,
   chatId,
   date,
+  setReply,
+  replyingToUser,
+  replyingTo,
+  name,
 }) => {
   const starredMessages = useAppSelector(
-    (state) => state.messages.starredMesages[chatId!] ?? {}
+    (state) => state.messages.starredMesages
   );
-  console.log(starredMessages);
+
+  const chatStarredMessages = useMemo(() => {
+    if (!chatId) return {};
+    return starredMessages[chatId];
+  }, [starredMessages]);
+
   const bubbleStyle: ViewStyle = { ...styles.container };
   const textStyle: TextStyle = { ...styles.text };
   const wrapperStyle: ViewStyle = { ...styles.wrapper };
@@ -82,7 +95,7 @@ const Bubble: React.FC<BubbleProps> = ({
 
   switch (type) {
     case BubbleEnum.System:
-      textStyle.color = "#65644A";
+      textStyle.color = colors.system;
       bubbleStyle.backgroundColor = colors.beige;
       bubbleStyle.alignItems = "center";
       bubbleStyle.margin = 10;
@@ -106,6 +119,9 @@ const Bubble: React.FC<BubbleProps> = ({
       hasMenu = true;
       isUserMessage = true;
       break;
+    case BubbleEnum.Reply:
+      bubbleStyle.backgroundColor = colors.nearlyWhite;
+      break;
 
     default:
       break;
@@ -115,7 +131,8 @@ const Bubble: React.FC<BubbleProps> = ({
     Clipboard.setString(copiedText);
   };
 
-  const isStarred = isUserMessage && starredMessages[messageId!] !== undefined;
+  const isStarred =
+    isUserMessage && chatStarredMessages?.[messageId!] !== undefined;
 
   return (
     <View style={wrapperStyle}>
@@ -128,6 +145,14 @@ const Bubble: React.FC<BubbleProps> = ({
         }}
       >
         <View style={bubbleStyle}>
+          {name && <Text style={styles.name}>{name}</Text>}
+          {replyingToUser && (
+            <Bubble
+              type={BubbleEnum.Reply}
+              text={replyingTo!.text}
+              name={`${replyingToUser.firstName} ${replyingToUser.lastName}`}
+            />
+          )}
           <Text style={textStyle}>{text}</Text>
           {dateString && (
             <View style={styles.timeContainer}>
@@ -157,6 +182,11 @@ const Bubble: React.FC<BubbleProps> = ({
                 icon={isStarred ? "star-outline" : "star"}
                 onSelect={() => starMessage(messageId!, chatId!, userId!)}
               />
+              <MenuItem
+                text="Reply"
+                icon="arrow-undo-outline"
+                onSelect={setReply!}
+              />
             </MenuOptions>
           </Menu>
         </View>
@@ -164,8 +194,6 @@ const Bubble: React.FC<BubbleProps> = ({
     </View>
   );
 };
-
-export default Bubble;
 
 const styles = StyleSheet.create({
   wrapper: {
@@ -215,4 +243,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 4,
     alignSelf: "center",
   },
+  name: {
+    color: colors.blue,
+    fontFamily: "Alkatra-Medium",
+    letterSpacing: 0.3,
+  },
 });
+
+export default Bubble;

@@ -9,6 +9,7 @@ import {
   update,
 } from "firebase/database";
 import { getFirebaseApp } from "../firebaseHelper";
+import { IChatMessagesData } from "../../types/types";
 
 export const createChat = async (
   loggedInUserId: string,
@@ -40,17 +41,22 @@ export const createChat = async (
 export const sendTextMesage = async (
   chatId: string,
   senderId: string,
-  messageText: string
+  messageText: string,
+  replyTo?: string | null
 ) => {
   const app = getFirebaseApp();
   const dbRef = ref(getDatabase(app));
   const messagesRef = child(dbRef, `messages/${chatId}`);
 
-  const messageData = {
+  const messageData: IChatMessagesData = {
     sentBy: senderId,
     sentAt: new Date().toISOString(),
     text: messageText,
   };
+
+  if (replyTo) {
+    messageData.replyTo = replyTo;
+  }
 
   await push(messagesRef, messageData);
 
