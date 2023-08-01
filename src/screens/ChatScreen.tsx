@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import RN, {
   ImageBackground,
   StyleSheet,
@@ -40,6 +46,8 @@ const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
   const route = useRoute<ChatScreenRouteProp>();
 
+  const flatList = useRef<any>();
+
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
@@ -63,7 +71,7 @@ const ChatScreen: React.FC = () => {
       const message = chatMessagesData[key];
       messageList.push({ key, ...message });
     }
-    return messageList.reverse();
+    return messageList;
   }, [chatMesages]);
 
   const chatData =
@@ -172,7 +180,7 @@ const ChatScreen: React.FC = () => {
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
-        keyboardVerticalOffset={100}
+        keyboardVerticalOffset={120}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={styles.container}
       >
@@ -193,6 +201,15 @@ const ChatScreen: React.FC = () => {
             )}
             {chatId && (
               <FlatList
+                contentContainerStyle={styles.listViewContainer}
+                ref={(ref) => (flatList.current = ref)}
+                onContentSizeChange={() =>
+                  flatList.current.scrollToEnd({ animated: false })
+                }
+                onLayout={() =>
+                  flatList.current.scrollToEnd({ animated: false })
+                }
+                showsVerticalScrollIndicator={false}
                 data={userChatMessages}
                 keyExtractor={(item) => item.key}
                 renderItem={(itemData) => {
@@ -225,7 +242,6 @@ const ChatScreen: React.FC = () => {
                     />
                   );
                 }}
-                inverted
               />
             )}
           </ScreenContainer>
@@ -307,6 +323,10 @@ const styles = StyleSheet.create({
   },
   screenContainer: {
     backgroundColor: "transparent",
+  },
+  listViewContainer: {
+    minHeight: "100%",
+    justifyContent: "flex-end",
   },
   backgroundImage: {
     flex: 1,
