@@ -6,6 +6,7 @@ import {
   View,
   ViewStyle,
   TouchableWithoutFeedback,
+  Image,
 } from "react-native";
 import {
   Menu,
@@ -34,6 +35,7 @@ interface BubbleProps {
   replyingToUser?: IUserData;
   replyingTo?: IChatMessagesData;
   name?: string;
+  imageUrl?: string;
 }
 
 interface MenuItemProps {
@@ -72,6 +74,7 @@ const Bubble: React.FC<BubbleProps> = ({
   replyingToUser,
   replyingTo,
   name,
+  imageUrl,
 }) => {
   const starredMessages = useAppSelector(
     (state) => state.messages.starredMesages
@@ -153,7 +156,10 @@ const Bubble: React.FC<BubbleProps> = ({
               name={`${replyingToUser.firstName} ${replyingToUser.lastName}`}
             />
           )}
-          <Text style={textStyle}>{text}</Text>
+          {imageUrl && (
+            <Image source={{ uri: imageUrl }} style={styles.image} />
+          )}
+          {text && <Text style={textStyle}>{text}</Text>}
           {dateString && (
             <View style={styles.timeContainer}>
               {isStarred && (
@@ -247,6 +253,11 @@ const styles = StyleSheet.create({
     color: colors.blue,
     fontFamily: "Alkatra-Medium",
     letterSpacing: 0.3,
+  },
+  image: {
+    width: 300,
+    height: 300,
+    marginBottom: 5,
   },
 });
 

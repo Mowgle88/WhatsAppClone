@@ -123,8 +123,6 @@ const ChatScreen: React.FC = () => {
 
       const uploadUri = await uploadImageAsync(tempImageUrl, true);
 
-      console.log(uploadUri);
-
       if (!uploadUri) {
         throw new Error("could not upload image");
       }
@@ -137,6 +135,7 @@ const ChatScreen: React.FC = () => {
       );
 
       setIsLoading(false);
+      setReplyingTo(null);
       setTempImageUrl("");
     } catch (error) {
       console.log(error);
@@ -196,6 +195,7 @@ const ChatScreen: React.FC = () => {
                       }}
                       replyingTo={repliedTo}
                       replyingToUser={repliedToUser}
+                      imageUrl={message.imageUrl}
                     />
                   );
                 }}
