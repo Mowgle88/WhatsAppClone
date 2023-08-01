@@ -30,7 +30,11 @@ import {
   sendImage,
   sendTextMessage,
 } from "../utils/actions/chatActions";
-import { showImagePicker, uploadImageAsync } from "../utils/imagePickerHelper";
+import {
+  openCamera,
+  showImagePicker,
+  uploadImageAsync,
+} from "../utils/imagePickerHelper";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -105,6 +109,21 @@ const ChatScreen: React.FC = () => {
   const pickImage = useCallback(async () => {
     try {
       await showImagePicker(
+        { multiple: false, cropping: true },
+        async (image: Image) => {
+          if (image.path) {
+            setTempImageUrl(image.path);
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [tempImageUrl]);
+
+  const takePhoto = useCallback(async () => {
+    try {
+      await openCamera(
         { multiple: false, cropping: true },
         async (image: Image) => {
           if (image.path) {
@@ -239,7 +258,7 @@ const ChatScreen: React.FC = () => {
             </TouchableOpacity>
           )}
           {!messageText && (
-            <TouchableOpacity style={styles.button} onPress={() => {}}>
+            <TouchableOpacity style={styles.button} onPress={takePhoto}>
               <Icon name="camera-outline" size={24} color={colors.blue} />
             </TouchableOpacity>
           )}
