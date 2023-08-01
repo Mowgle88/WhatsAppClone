@@ -54,6 +54,7 @@ const ChatScreen: React.FC = () => {
   const chatMesages = useAppSelector((state) => state.messages.messagesData);
 
   const [messageText, setMessageText] = useState("");
+  const [imageDescription, setImageDescription] = useState("");
   const [chatId, setChatId] = useState(route?.params?.chatId ?? "");
   const [errorBannerText, setErrorBannerText] = useState("");
   const [replyingTo, setReplyingTo] = useState<IChatMessagesData | null>(null);
@@ -164,18 +165,19 @@ const ChatScreen: React.FC = () => {
         id,
         userData!.userId,
         uploadUri,
+        imageDescription,
         replyingTo && replyingTo.key
       );
 
       setIsLoading(false);
       setReplyingTo(null);
-
+      setImageDescription("");
       setTimeout(() => setTempImageUrl(""), 500);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
     }
-  }, [isLoading, tempImageUrl]);
+  }, [isLoading, tempImageUrl, imageDescription]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -303,10 +305,18 @@ const ChatScreen: React.FC = () => {
                   <ActivityIndicator size="large" color={colors.primary} />
                 )}
                 {!isLoading && tempImageUrl && (
-                  <RN.Image
-                    source={{ uri: tempImageUrl }}
-                    style={styles.image}
-                  />
+                  <>
+                    <RN.Image
+                      source={{ uri: tempImageUrl }}
+                      style={styles.image}
+                    />
+                    <TextInput
+                      placeholder="add a description"
+                      value={imageDescription}
+                      onChangeText={(text) => setImageDescription(text)}
+                      style={styles.imageInput}
+                    />
+                  </>
                 )}
               </View>
             }
@@ -363,6 +373,13 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 200,
+  },
+  imageInput: {
+    borderWidth: 1,
+    borderColor: colors.lightGrey,
+    paddingVertical: Platform.OS === "android" ? 0 : 4,
+    marginTop: 16,
+    paddingHorizontal: 12,
   },
 });
 

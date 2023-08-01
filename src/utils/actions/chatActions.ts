@@ -86,9 +86,10 @@ export const sendImage = async (
   chatId: string,
   senderId: string,
   imageUrl: string,
+  messageText?: string,
   replyTo?: string | null
 ) => {
-  await sendMessage(chatId, senderId, "", imageUrl, replyTo!);
+  await sendMessage(chatId, senderId, messageText, imageUrl, replyTo!);
 };
 
 export const starMessage = async (
