@@ -121,6 +121,12 @@ const ChatScreen: React.FC = () => {
     try {
       setIsLoading(true);
 
+      let id = chatId;
+      if (!id) {
+        id = (await createChat(userData!.userId, chatData!)) as string;
+        setChatId(id);
+      }
+
       const uploadUri = await uploadImageAsync(tempImageUrl, true);
 
       if (!uploadUri) {
@@ -128,7 +134,7 @@ const ChatScreen: React.FC = () => {
       }
 
       await sendImage(
-        chatId,
+        id,
         userData!.userId,
         uploadUri,
         replyingTo && replyingTo.key
@@ -136,7 +142,8 @@ const ChatScreen: React.FC = () => {
 
       setIsLoading(false);
       setReplyingTo(null);
-      setTempImageUrl("");
+
+      setTimeout(() => setTempImageUrl(""), 500);
     } catch (error) {
       console.log(error);
       setIsLoading(false);
