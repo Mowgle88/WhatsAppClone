@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import {
+import RN, {
   ImageBackground,
   StyleSheet,
   View,
@@ -9,10 +9,13 @@ import {
   KeyboardAvoidingView,
   Platform,
   FlatList,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import colors from "../constants/colors";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { Image } from "react-native-image-crop-picker";
+import AwesomeAlert from "react-native-awesome-alerts";
+import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import Bubble from "../components/Bubble";
 import ReplyTo from "../components/ReplyTo";
@@ -22,7 +25,12 @@ import {
 } from "../navigation/types";
 import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
 import { useAppSelector } from "../store/hooks";
-import { createChat, sendTextMesage } from "../utils/actions/chatActions";
+import {
+  createChat,
+  sendImage,
+  sendTextMessage,
+} from "../utils/actions/chatActions";
+import { showImagePicker, uploadImageAsync } from "../utils/imagePickerHelper";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -37,6 +45,8 @@ const ChatScreen: React.FC = () => {
   const [chatId, setChatId] = useState(route?.params?.chatId ?? "");
   const [errorBannerText, setErrorBannerText] = useState("");
   const [replyingTo, setReplyingTo] = useState<IChatMessagesData | null>(null);
+  const [tempImageUrl, setTempImageUrl] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const userChatMessages = useMemo(() => {
     if (!chatId) return [];
@@ -74,7 +84,7 @@ const ChatScreen: React.FC = () => {
         setChatId(id);
       }
 
-      await sendTextMesage(
+      await sendTextMessage(
         id,
         userData!.userId,
         messageText,
@@ -91,6 +101,48 @@ const ChatScreen: React.FC = () => {
       }, 3000);
     }
   }, [messageText, chatId]);
+
+  const pickImage = useCallback(async () => {
+    try {
+      await showImagePicker(
+        { multiple: false, cropping: true },
+        async (image: Image) => {
+          if (image.path) {
+            setTempImageUrl(image.path);
+          }
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  }, [tempImageUrl]);
+
+  const uploadImage = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      const uploadUri = await uploadImageAsync(tempImageUrl, true);
+
+      console.log(uploadUri);
+
+      if (!uploadUri) {
+        throw new Error("could not upload image");
+      }
+
+      await sendImage(
+        chatId,
+        userData!.userId,
+        uploadUri,
+        replyingTo && replyingTo.key
+      );
+
+      setIsLoading(false);
+      setTempImageUrl("");
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false);
+    }
+  }, [isLoading, tempImageUrl]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -162,7 +214,7 @@ const ChatScreen: React.FC = () => {
           )}
         </ImageBackground>
         <View style={styles.inputContainer}>
-          <TouchableOpacity style={styles.button} onPress={() => {}}>
+          <TouchableOpacity style={styles.button} onPress={pickImage}>
             <Icon name="add-outline" size={24} color={colors.blue} />
           </TouchableOpacity>
           <TextInput
@@ -184,6 +236,39 @@ const ChatScreen: React.FC = () => {
               <Icon name="camera-outline" size={24} color={colors.blue} />
             </TouchableOpacity>
           )}
+          <AwesomeAlert
+            show={!!tempImageUrl}
+            title="Send image"
+            closeOnTouchOutside={true}
+            closeOnHardwareBackPress={false}
+            showCancelButton={true}
+            showConfirmButton={true}
+            cancelText="Cancel"
+            confirmText="Send image"
+            confirmButtonColor={colors.primary}
+            cancelButtonColor={colors.red}
+            titleStyle={styles.popupTitle}
+            onCancelPressed={() => {
+              setTempImageUrl("");
+            }}
+            onConfirmPressed={uploadImage}
+            onDismiss={() => {
+              setTempImageUrl("");
+            }}
+            customView={
+              <View>
+                {isLoading && (
+                  <ActivityIndicator size="large" color={colors.primary} />
+                )}
+                {!isLoading && tempImageUrl && (
+                  <RN.Image
+                    source={{ uri: tempImageUrl }}
+                    style={styles.image}
+                  />
+                )}
+              </View>
+            }
+          />
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
@@ -223,6 +308,15 @@ const styles = StyleSheet.create({
     borderColor: colors.lightGrey,
     marginHorizontal: 16,
     paddingHorizontal: 12,
+  },
+  popupTitle: {
+    fontFamily: "Alkatra-Medium",
+    letterSpacing: 0.3,
+    color: colors.textColor,
+  },
+  image: {
+    width: 200,
+    height: 200,
   },
 });
 

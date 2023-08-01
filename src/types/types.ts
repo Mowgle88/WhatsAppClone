@@ -49,6 +49,7 @@ export interface IChatMessagesData {
   text: string;
   key?: string;
   replyTo?: string;
+  imageUrl?: string;
 }
 
 export interface IStarredMessage {
