@@ -2,18 +2,16 @@ import {
   child,
   endAt,
   get,
-  getDatabase,
   orderByChild,
   query,
-  ref,
   startAt,
 } from "firebase/database";
-import { getFirebaseApp } from "../firebaseHelper";
+import { getDbRef } from "../firebaseHelper";
 
 export const getUserData = async (userId: string) => {
   try {
-    const app = getFirebaseApp();
-    const dbRef = ref(getDatabase(app));
+    const dbRef = getDbRef();
+
     const userRef = child(dbRef, `users/${userId}`);
     const snapshot = await get(userRef);
     return snapshot.val();
@@ -24,8 +22,7 @@ export const searchUsers = async (queryText: string) => {
   const searchTerm = queryText.toLowerCase();
 
   try {
-    const app = getFirebaseApp();
-    const dbRef = ref(getDatabase(app));
+    const dbRef = getDbRef();
     const userRef = child(dbRef, `users`);
 
     const queryRef = query(

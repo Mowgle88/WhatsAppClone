@@ -23,12 +23,14 @@ export interface IUsers {
 
 export enum BubbleEnum {
   System = "system",
-  AuthorizedUser = "authorizedUser",
-  User = "user",
+  Error = "error",
+  OwnMessage = "ownMessage",
+  NotOwnMessage = "notOwnMessage",
+  Reply = "reply",
 }
 
-export interface IChatsData {
-  [key: string]: IChatData;
+export interface IObjectData<T> {
+  [key: string]: T;
 }
 
 export interface IChatData {
@@ -38,4 +40,28 @@ export interface IChatData {
   updatedAt: string;
   updatedBy: string;
   users: string[];
+  latestMessageText?: string;
+}
+
+export interface IChatMessagesData {
+  sentAt: string;
+  sentBy: string;
+  text: string;
+  key?: string;
+  replyTo?: string;
+  imageUrl?: string;
+}
+
+export interface IStarredMessage {
+  chatId: string;
+  messageId: string;
+  starredAt: string;
+}
+
+export interface ISendedData {
+  chatId: string;
+  senderId: string;
+  imageUrl?: string;
+  messageText?: string;
+  replyTo?: string | null;
 }
