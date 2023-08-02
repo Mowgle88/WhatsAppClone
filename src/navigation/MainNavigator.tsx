@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
-import { child, get, getDatabase, off, onValue, ref } from "firebase/database";
+import { child, get, off, onValue } from "firebase/database";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
@@ -10,7 +10,7 @@ import ChatScreen from "../screens/ChatScreen";
 import { RootStackParamList, TabParamList } from "./types";
 import NewChatScreen from "../screens/NewChatScreen";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getFirebaseApp } from "../utils/firebaseHelper";
+import { getDbRef } from "../utils/firebaseHelper";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
 import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
@@ -104,8 +104,8 @@ const MainNavigator: React.FC = () => {
   useEffect(() => {
     console.log("Subscribing to firebase listening");
 
-    const app = getFirebaseApp();
-    const dbRef = ref(getDatabase(app));
+    const dbRef = getDbRef();
+
     const userChatsRef = child(dbRef, `userChats/${userData?.userId}`);
     const refs = [userChatsRef];
 

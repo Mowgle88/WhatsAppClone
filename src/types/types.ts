@@ -57,3 +57,11 @@ export interface IStarredMessage {
   messageId: string;
   starredAt: string;
 }
+
+export interface ISendedData {
+  chatId: string;
+  senderId: string;
+  imageUrl?: string;
+  messageText?: string;
+  replyTo?: string | null;
+}

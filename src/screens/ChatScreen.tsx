@@ -29,7 +29,12 @@ import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
 } from "../navigation/types";
-import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
+import {
+  BubbleEnum,
+  IChatMessagesData,
+  ISendedData,
+  IUserData,
+} from "../types/types";
 import { useAppSelector } from "../store/hooks";
 import {
   createChat,
@@ -97,12 +102,14 @@ const ChatScreen: React.FC = () => {
         setChatId(id);
       }
 
-      await sendTextMessage(
-        id,
-        userData!.userId,
-        messageText,
-        replyingTo && replyingTo.key
-      );
+      const sendedData: ISendedData = {
+        chatId: id,
+        senderId: userData!.userId,
+        messageText: messageText,
+        replyTo: replyingTo && replyingTo.key,
+      };
+
+      await sendTextMessage(sendedData);
 
       setMessageText("");
       setReplyingTo(null);
@@ -161,13 +168,15 @@ const ChatScreen: React.FC = () => {
         throw new Error("could not upload image");
       }
 
-      await sendImage(
-        id,
-        userData!.userId,
-        uploadUri,
-        imageDescription,
-        replyingTo && replyingTo.key
-      );
+      const sendedData: ISendedData = {
+        chatId: id,
+        senderId: userData!.userId,
+        imageUrl: uploadUri,
+        messageText: imageDescription,
+        replyTo: replyingTo && replyingTo.key,
+      };
+
+      await sendImage(sendedData);
 
       setIsLoading(false);
       setReplyingTo(null);

@@ -1,15 +1,6 @@
-import {
-  child,
-  get,
-  getDatabase,
-  push,
-  ref,
-  remove,
-  set,
-  update,
-} from "firebase/database";
-import { getFirebaseApp } from "../firebaseHelper";
-import { IChatMessagesData } from "../../types/types";
+import { child, get, push, remove, set, update } from "firebase/database";
+import { getDbRef } from "../firebaseHelper";
+import { IChatMessagesData, ISendedData } from "../../types/types";
 
 export const createChat = async (
   loggedInUserId: string,
@@ -25,8 +16,7 @@ export const createChat = async (
     updatedAt: new Date().toISOString(),
   };
 
-  const app = getFirebaseApp();
-  const dbRef = ref(getDatabase(app));
+  const dbRef = getDbRef();
   const newChat = await push(child(dbRef, "chats"), newChatData);
 
   const chatUsers = newChatData.users;
@@ -45,8 +35,7 @@ const sendMessage = async (
   imageUrl?: string,
   replyTo?: string | null
 ) => {
-  const app = getFirebaseApp();
-  const dbRef = ref(getDatabase(app));
+  const dbRef = getDbRef();
   const messagesRef = child(dbRef, `messages/${chatId}`);
 
   const messageData: IChatMessagesData = {
@@ -73,22 +62,22 @@ const sendMessage = async (
   });
 };
 
-export const sendTextMessage = async (
-  chatId: string,
-  senderId: string,
-  messageText: string,
-  replyTo?: string | null
-) => {
+export const sendTextMessage = async ({
+  chatId,
+  senderId,
+  messageText,
+  replyTo,
+}: ISendedData) => {
   await sendMessage(chatId, senderId, messageText, "", replyTo!);
 };
 
-export const sendImage = async (
-  chatId: string,
-  senderId: string,
-  imageUrl: string,
-  messageText?: string,
-  replyTo?: string | null
-) => {
+export const sendImage = async ({
+  chatId,
+  senderId,
+  imageUrl,
+  messageText,
+  replyTo,
+}: ISendedData) => {
   await sendMessage(chatId, senderId, messageText, imageUrl, replyTo!);
 };
 
@@ -98,8 +87,8 @@ export const starMessage = async (
   userId: string
 ) => {
   try {
-    const app = getFirebaseApp();
-    const dbRef = ref(getDatabase(app));
+    const dbRef = getDbRef();
+
     const childRef = child(
       dbRef,
       `userStarredMessages/${userId}/${chatId}/${messageId}`
