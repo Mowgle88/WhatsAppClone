@@ -66,6 +66,7 @@ const ChatListScreen: React.FC = () => {
       <ScreenTitle text={"Chats"} />
       <FlatList
         data={userChatsList}
+        keyExtractor={(item) => item.key}
         renderItem={(itemData) => {
           const chatData = itemData.item;
           const chatId = chatData.key;
@@ -79,7 +80,7 @@ const ChatListScreen: React.FC = () => {
             otherUser && (
               <UserDataItem
                 userData={otherUser}
-                lastMessage="This will be a message..."
+                lastMessage={chatData.latestMessageText || "New chat"}
                 onPress={(): void => {
                   navigation.navigate("Chat", { chatId });
                 }}

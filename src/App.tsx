@@ -4,6 +4,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
 import AppNavigator from "./navigation/AppNavigator";
 import { Provider } from "react-redux";
+import { MenuProvider } from "react-native-popup-menu";
 import { store } from "./store/store";
 
 LogBox.ignoreLogs([
@@ -18,7 +19,9 @@ export default function App() {
   return (
     <Provider store={store}>
       <SafeAreaProvider style={styles.container}>
-        <AppNavigator />
+        <MenuProvider>
+          <AppNavigator />
+        </MenuProvider>
       </SafeAreaProvider>
     </Provider>
   );
