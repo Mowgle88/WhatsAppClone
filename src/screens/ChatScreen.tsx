@@ -181,10 +181,14 @@ const ChatScreen: React.FC = () => {
       setIsLoading(false);
       setReplyingTo(null);
       setImageDescription("");
-      setTimeout(() => setTempImageUrl(""), 500);
+      setTempImageUrl("");
     } catch (error) {
       console.log(error);
       setIsLoading(false);
+      setErrorBannerText("Message faild to send.");
+      setTimeout(() => {
+        setErrorBannerText("");
+      }, 3000);
     }
   }, [isLoading, tempImageUrl, imageDescription]);
 
@@ -289,47 +293,49 @@ const ChatScreen: React.FC = () => {
               <Icon name="camera-outline" size={24} color={colors.blue} />
             </TouchableOpacity>
           )}
-          <AwesomeAlert
-            show={!!tempImageUrl}
-            title="Send image"
-            closeOnTouchOutside={true}
-            closeOnHardwareBackPress={false}
-            showCancelButton={true}
-            showConfirmButton={true}
-            cancelText="Cancel"
-            confirmText="Send image"
-            confirmButtonColor={colors.primary}
-            cancelButtonColor={colors.red}
-            titleStyle={styles.popupTitle}
-            onCancelPressed={() => {
-              setTempImageUrl("");
-            }}
-            onConfirmPressed={uploadImage}
-            onDismiss={() => {
-              setTempImageUrl("");
-            }}
-            customView={
-              <View>
-                {isLoading && (
-                  <ActivityIndicator size="large" color={colors.primary} />
-                )}
-                {!isLoading && tempImageUrl && (
-                  <>
-                    <RN.Image
-                      source={{ uri: tempImageUrl }}
-                      style={styles.image}
-                    />
-                    <TextInput
-                      placeholder="add a description"
-                      value={imageDescription}
-                      onChangeText={(text) => setImageDescription(text)}
-                      style={styles.imageInput}
-                    />
-                  </>
-                )}
-              </View>
-            }
-          />
+          {tempImageUrl && (
+            <AwesomeAlert
+              show={!!tempImageUrl}
+              title="Send image"
+              closeOnTouchOutside={true}
+              closeOnHardwareBackPress={false}
+              showCancelButton={true}
+              showConfirmButton={true}
+              cancelText="Cancel"
+              confirmText="Send image"
+              confirmButtonColor={colors.primary}
+              cancelButtonColor={colors.red}
+              titleStyle={styles.popupTitle}
+              onCancelPressed={() => {
+                setTempImageUrl("");
+              }}
+              onConfirmPressed={uploadImage}
+              onDismiss={() => {
+                setTempImageUrl("");
+              }}
+              customView={
+                <View>
+                  {isLoading && (
+                    <ActivityIndicator size="large" color={colors.primary} />
+                  )}
+                  {!isLoading && tempImageUrl && (
+                    <>
+                      <RN.Image
+                        source={{ uri: tempImageUrl }}
+                        style={styles.image}
+                      />
+                      <TextInput
+                        placeholder="add a description"
+                        value={imageDescription}
+                        onChangeText={(text) => setImageDescription(text)}
+                        style={styles.imageInput}
+                      />
+                    </>
+                  )}
+                </View>
+              }
+            />
+          )}
         </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
