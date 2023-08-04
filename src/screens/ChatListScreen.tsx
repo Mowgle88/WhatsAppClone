@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo } from "react";
-import { FlatList } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import {
@@ -11,6 +17,7 @@ import { useAppSelector } from "../store/hooks";
 import UserDataItem from "../components/UserDataItem";
 import ScreenContainer from "../components/ScreenContainer";
 import ScreenTitle from "../components/ScreenTitle";
+import colors from "../constants/colors";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -64,6 +71,15 @@ const ChatListScreen: React.FC = () => {
   return (
     <ScreenContainer>
       <ScreenTitle text={"Chats"} />
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("NewChat", { isGroupChat: true });
+          }}
+        >
+          <Text style={styles.newGroupText}>New group</Text>
+        </TouchableOpacity>
+      </View>
       <FlatList
         data={userChatsList}
         keyExtractor={(item) => item.key}
@@ -92,5 +108,12 @@ const ChatListScreen: React.FC = () => {
     </ScreenContainer>
   );
 };
+
+const styles = StyleSheet.create({
+  newGroupText: {
+    color: colors.blue,
+    fontSize: 17,
+  },
+});
 
 export default ChatListScreen;

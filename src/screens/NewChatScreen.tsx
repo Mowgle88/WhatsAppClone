@@ -8,10 +8,13 @@ import {
   View,
 } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-import { ChatScreenNavigationProps } from "../navigation/types";
+import {
+  ChatScreenNavigationProps,
+  NewChatScreenRouteProp,
+} from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
@@ -24,6 +27,7 @@ import { setStoredUsers } from "../store/userSlice";
 
 const NewChatScreen = () => {
   const navigation = useNavigation<ChatScreenNavigationProps>();
+  const route = useRoute<NewChatScreenRouteProp>();
 
   const authorizedUserData = useAppSelector((state) => state.auth.userData);
   const dispatch = useAppDispatch();
@@ -32,6 +36,10 @@ const NewChatScreen = () => {
   const [users, setUsers] = useState<IUsers | null>(null);
   const [isNoResultFound, setIsNoResultFound] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [chatName, setChatName] = useState("");
+
+  const isGroupChat = route?.params?.isGroupChat;
+  const isGroupChatDisabled = !chatName;
 
   useEffect(() => {
     navigation.setOptions({
@@ -42,9 +50,23 @@ const NewChatScreen = () => {
           </HeaderButtons>
         );
       },
-      headerTitle: "New Chat",
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            {isGroupChat && (
+              <Item
+                title="Create"
+                disabled={isGroupChatDisabled}
+                color={isGroupChatDisabled ? colors.lightGrey : undefined}
+                onPress={() => {}}
+              />
+            )}
+          </HeaderButtons>
+        );
+      },
+      headerTitle: isGroupChat ? "Add participants" : "New Chat",
     });
-  }, []);
+  }, [chatName]);
 
   useEffect(() => {
     const delaySearch = setTimeout(async () => {
@@ -82,6 +104,20 @@ const NewChatScreen = () => {
 
   return (
     <ScreenContainer>
+      {isGroupChat && (
+        <View style={styles.chatNameContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.textBox}
+              placeholder="Enter a name for your chat"
+              autoCorrect={false}
+              autoComplete="off"
+              value={chatName}
+              onChangeText={(text) => setChatName(text)}
+            />
+          </View>
+        </View>
+      )}
       <View style={styles.searchContainer}>
         <FontAwesome name="search" size={15} color={colors.lightGrey} />
         <TextInput
@@ -167,6 +203,23 @@ const styles = StyleSheet.create({
   },
   noResultText: {
     color: colors.textColor,
+    fontFamily: "Alkatra-Regular",
+    letterSpacing: 0.3,
+  },
+  chatNameContainer: {
+    paddingVertical: 10,
+  },
+  inputContainer: {
+    width: "100%",
+    paddingHorizontal: 12,
+    paddingVertical: 16,
+    backgroundColor: colors.nearlyWhite,
+    flexDirection: "row",
+    borderRadius: 4,
+  },
+  textBox: {
+    color: colors.textColor,
+    width: "100%",
     fontFamily: "Alkatra-Regular",
     letterSpacing: 0.3,
   },
