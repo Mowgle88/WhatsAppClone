@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -40,6 +40,8 @@ const NewChatScreen = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [chatName, setChatName] = useState("");
   const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
+
+  const selectedUsersFlatList = useRef<any>();
 
   const isGroupChat = route?.params?.isGroupChat;
   const isGroupChatDisabled = !selectedUsers.length || !chatName;
@@ -150,6 +152,10 @@ const NewChatScreen = () => {
               }}
               keyExtractor={(item) => item}
               horizontal
+              ref={(ref) => (selectedUsersFlatList.current = ref)}
+              onContentSizeChange={() =>
+                selectedUsersFlatList.current.scrollToEnd()
+              }
               style={styles.selectedUserList}
             />
           </View>
