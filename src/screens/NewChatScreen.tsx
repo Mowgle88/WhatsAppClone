@@ -24,22 +24,25 @@ import UserDataItem from "../components/UserDataItem";
 import { IUsers } from "../types/types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setStoredUsers } from "../store/userSlice";
+import ProfileImage from "../components/ProfileImage";
 
 const NewChatScreen = () => {
   const navigation = useNavigation<ChatScreenNavigationProps>();
   const route = useRoute<NewChatScreenRouteProp>();
 
-  const authorizedUserData = useAppSelector((state) => state.auth.userData);
   const dispatch = useAppDispatch();
+  const authorizedUserData = useAppSelector((state) => state.auth.userData);
+  const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
   const [isLoading, setIsLoading] = useState(false);
   const [users, setUsers] = useState<IUsers | null>(null);
   const [isNoResultFound, setIsNoResultFound] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [chatName, setChatName] = useState("");
+  const [selectedUsers, setSelectedUsers] = useState<string[]>([]);
 
   const isGroupChat = route?.params?.isGroupChat;
-  const isGroupChatDisabled = !chatName;
+  const isGroupChatDisabled = !selectedUsers.length || !chatName;
 
   useEffect(() => {
     navigation.setOptions({
@@ -66,7 +69,7 @@ const NewChatScreen = () => {
       },
       headerTitle: isGroupChat ? "Add participants" : "New Chat",
     });
-  }, [chatName]);
+  }, [chatName, selectedUsers]);
 
   useEffect(() => {
     const delaySearch = setTimeout(async () => {
@@ -97,26 +100,60 @@ const NewChatScreen = () => {
   }, [searchTerm]);
 
   const userPressed = (userId: string) => {
-    navigation.navigate("ChatList", {
-      selectedUserId: userId,
-    });
+    if (isGroupChat) {
+      const newSelectedUsers = selectedUsers.includes(userId)
+        ? selectedUsers.filter((id) => id !== userId)
+        : selectedUsers.concat(userId);
+
+      setSelectedUsers(newSelectedUsers);
+    } else {
+      navigation.navigate("ChatList", {
+        selectedUserId: userId,
+      });
+    }
   };
 
   return (
     <ScreenContainer>
       {isGroupChat && (
-        <View style={styles.chatNameContainer}>
-          <View style={styles.inputContainer}>
-            <TextInput
-              style={styles.textBox}
-              placeholder="Enter a name for your chat"
-              autoCorrect={false}
-              autoComplete="off"
-              value={chatName}
-              onChangeText={(text) => setChatName(text)}
+        <>
+          <View style={styles.chatNameContainer}>
+            <View style={styles.inputContainer}>
+              <TextInput
+                style={styles.textBox}
+                placeholder="Enter a name for your chat"
+                autoCorrect={false}
+                autoComplete="off"
+                value={chatName}
+                onChangeText={(text) => setChatName(text)}
+              />
+            </View>
+          </View>
+
+          <View>
+            <FlatList
+              data={selectedUsers}
+              renderItem={(itemData) => {
+                const userId = itemData.item;
+                const userData = storedUsers?.[userId];
+                return (
+                  <ProfileImage
+                    size={40}
+                    uri={userData?.profilePicture}
+                    userId={userId}
+                    onPress={() => {
+                      userPressed(userId);
+                    }}
+                    style={styles.selectedUserStyle}
+                  />
+                );
+              }}
+              keyExtractor={(item) => item}
+              horizontal
+              style={styles.selectedUserList}
             />
           </View>
-        </View>
+        </>
       )}
       <View style={styles.searchContainer}>
         <FontAwesome name="search" size={15} color={colors.lightGrey} />
@@ -146,6 +183,8 @@ const NewChatScreen = () => {
                 onPress={() => {
                   userPressed(userId);
                 }}
+                type={isGroupChat ? "checkbox" : ""}
+                isChecked={selectedUsers.includes(userId)}
               />
             );
           }}
@@ -222,6 +261,12 @@ const styles = StyleSheet.create({
     width: "100%",
     fontFamily: "Alkatra-Regular",
     letterSpacing: 0.3,
+  },
+  selectedUserList: {
+    paddingVertical: 4,
+  },
+  selectedUserStyle: {
+    marginRight: 8,
   },
 });
 

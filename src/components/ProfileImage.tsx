@@ -5,6 +5,7 @@ import RN, {
   StyleSheet,
   TouchableOpacity,
   View,
+  ViewStyle,
 } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Image } from "react-native-image-crop-picker";
@@ -24,6 +25,8 @@ interface ProfileImageProps {
   uri?: string | null;
   userId: string;
   isShowEditButton?: boolean;
+  onPress?: () => void;
+  style?: ViewStyle;
 }
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
@@ -31,6 +34,8 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   uri,
   userId,
   isShowEditButton = true,
+  onPress,
+  style,
 }) => {
   const dispatch = useDispatch();
   const source = uri ? { uri: uri } : userImage;
@@ -123,7 +128,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       {isLoading ? (
         <View style={[styles.loadingContainer, { width: size, height: size }]}>
           <ActivityIndicator size={"small"} color={colors.primary} />
@@ -135,8 +140,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
         />
       )}
       {isShowEditButton && !isLoading && (
-        <TouchableOpacity onPress={renderAlert} style={styles.editIcon}>
-          <FontAwesome name="pencil" size={16} color="black" />
+        <TouchableOpacity
+          onPress={onPress || renderAlert}
+          style={[styles.editIcon, onPress && styles.removeIcon]}
+        >
+          <FontAwesome name="remove" size={onPress ? 12 : 16} color="black" />
         </TouchableOpacity>
       )}
     </View>
@@ -172,6 +180,9 @@ const styles = StyleSheet.create({
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",
+  },
+  removeIcon: {
+    padding: 2,
   },
 });
 
