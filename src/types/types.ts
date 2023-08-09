@@ -41,6 +41,8 @@ export interface IChatData {
   updatedBy: string;
   users: string[];
   latestMessageText?: string;
+  isGroupChat?: boolean;
+  chatName?: string;
 }
 
 export interface IChatMessagesData {

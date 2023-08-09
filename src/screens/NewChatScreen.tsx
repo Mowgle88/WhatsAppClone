@@ -10,7 +10,6 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-
 import {
   ChatScreenNavigationProps,
   NewChatScreenRouteProp,
@@ -63,7 +62,12 @@ const NewChatScreen = () => {
                 title="Create"
                 disabled={isGroupChatDisabled}
                 color={isGroupChatDisabled ? colors.lightGrey : undefined}
-                onPress={() => {}}
+                onPress={() => {
+                  navigation.navigate("ChatList", {
+                    selectedUsers,
+                    chatName,
+                  });
+                }}
               />
             )}
           </HeaderButtons>

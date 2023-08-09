@@ -90,7 +90,7 @@ const ChatScreen: React.FC = () => {
       otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`;
 
     navigation.setOptions({
-      headerTitle: headerTitle,
+      headerTitle: chatData!.chatName ?? headerTitle,
     });
   }, []);
 
@@ -240,6 +240,10 @@ const ChatScreen: React.FC = () => {
                   const repliedToUser =
                     repliedTo && storedUsers[repliedTo.sentBy];
 
+                  const sender = message.sentBy && storedUsers[message.sentBy];
+                  const name =
+                    sender && `${sender.firstName} ${sender.lastName}`;
+
                   return (
                     <Bubble
                       type={messageType}
@@ -248,6 +252,11 @@ const ChatScreen: React.FC = () => {
                       userId={userData?.userId!}
                       chatId={chatId}
                       date={message.sentAt}
+                      name={
+                        !chatData?.isGroupChat || isOwnMessage
+                          ? undefined
+                          : name
+                      }
                       setReply={() => {
                         setReplyingTo(message);
                       }}

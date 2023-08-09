@@ -11,6 +11,7 @@ import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import {
   RootScreenNavigationProps,
   ChatListScreenRouteProp,
+  RootStackParamList,
 } from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { useAppSelector } from "../store/hooks";
@@ -23,6 +24,8 @@ const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
   const route = useRoute<ChatListScreenRouteProp>();
   const selectedUser = route?.params?.selectedUserId;
+  const selectedUserList = route?.params?.selectedUsers || [];
+  const chatName = route?.params?.chatName || "";
 
   const authorizedUserData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
@@ -54,16 +57,35 @@ const ChatListScreen: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!selectedUser) {
+    if (!selectedUser && !selectedUserList) {
       return;
     }
-    const chatUsers = [selectedUser, authorizedUserData!.userId];
 
-    const navigationProps = {
-      newChatData: {
-        users: chatUsers,
-      },
-    };
+    let chatData;
+    let navigationProps: RootStackParamList["Chat"];
+
+    if (selectedUser) {
+      chatData = userChatsList.find(
+        (cd) => !cd.isGroupChat && cd.users.includes(selectedUser)
+      );
+    }
+
+    if (chatData) {
+      navigationProps = { chatId: chatData.key };
+    } else {
+      const chatUsers = selectedUserList || [selectedUser];
+      if (!chatUsers.includes(authorizedUserData!.userId)) {
+        chatUsers.push(authorizedUserData!.userId);
+      }
+
+      navigationProps = {
+        newChatData: {
+          users: chatUsers,
+          isGroupChat: selectedUserList !== undefined,
+          chatName,
+        },
+      };
+    }
 
     navigation.navigate("Chat", navigationProps);
   }, [route?.params]);
@@ -86,6 +108,7 @@ const ChatListScreen: React.FC = () => {
         renderItem={(itemData) => {
           const chatData = itemData.item;
           const chatId = chatData.key;
+          const isGroupChat = chatData.isGroupChat;
 
           const otherUserId = chatData.users.find(
             (uid) => uid !== authorizedUserData!.userId
@@ -95,6 +118,7 @@ const ChatListScreen: React.FC = () => {
           return (
             otherUser && (
               <UserDataItem
+                title={isGroupChat ? chatData.chatName : ""}
                 userData={otherUser}
                 lastMessage={chatData.latestMessageText || "New chat"}
                 onPress={(): void => {

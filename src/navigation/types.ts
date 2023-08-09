@@ -11,6 +11,8 @@ export type RootStackParamList = {
   Chat: {
     newChatData?: {
       users: string[];
+      isGroupChat: boolean;
+      chatName: string;
     };
     chatId?: string;
   };
@@ -23,7 +25,11 @@ export type RootStackParamList = {
 };
 
 export type TabParamList = {
-  ChatList: { selectedUserId: string };
+  ChatList: {
+    selectedUserId?: string;
+    selectedUsers?: string[];
+    chatName?: string;
+  };
   Settings: undefined;
 };
 

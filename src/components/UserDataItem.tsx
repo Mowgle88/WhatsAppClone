@@ -6,6 +6,7 @@ import ProfileImage from "./ProfileImage";
 import colors from "../constants/colors";
 
 interface UserDataProps {
+  title?: string;
   userData: IUserData;
   lastMessage?: string;
   onPress: () => void;
@@ -14,6 +15,7 @@ interface UserDataProps {
 }
 
 const UserDataItem: React.FC<UserDataProps> = ({
+  title = "",
   userData,
   onPress,
   lastMessage = "",
@@ -31,7 +33,7 @@ const UserDataItem: React.FC<UserDataProps> = ({
         />
         <View style={styles.textContainer}>
           <Text numberOfLines={1} style={styles.title}>
-            {`${userData.firstName} ${userData.lastName}`}
+            {title || `${userData.firstName} ${userData.lastName}`}
           </Text>
           <Text style={styles.subtitle}>
             {lastMessage ? lastMessage : userData.about}
