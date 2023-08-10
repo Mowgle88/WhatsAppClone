@@ -44,3 +44,15 @@ export const searchUsers = async (queryText: string) => {
     throw error;
   }
 };
+
+export const getUserChats = async (userId: string) => {
+  try {
+    const dbRef = getDbRef();
+
+    const userRef = child(dbRef, `userChats/${userId}`);
+    const snapshot = await get(userRef);
+    return snapshot.val();
+  } catch (error) {
+    console.log(error);
+  }
+};

@@ -92,7 +92,7 @@ const ChatScreen: React.FC = () => {
       otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`;
 
     navigation.setOptions({
-      headerTitle: chatData!.chatName ?? headerTitle,
+      headerTitle: chatData?.chatName ?? headerTitle,
       headerRight: () => {
         return (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
@@ -101,7 +101,15 @@ const ChatScreen: React.FC = () => {
                 title="Chat settings"
                 iconName="settings-outline"
                 color={colors.textColor}
-                onPress={() => {}}
+                onPress={() =>
+                  chatData?.isGroupChat
+                    ? undefined
+                    : navigation.navigate("Contact", {
+                        uid: chatData?.users.find(
+                          (uid) => uid !== userData!.userId
+                        )!,
+                      })
+                }
               />
             )}
           </HeaderButtons>

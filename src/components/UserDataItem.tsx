@@ -46,6 +46,18 @@ const UserDataItem: React.FC<UserDataProps> = ({
             <Ionicons name="checkmark" size={18} color={colors.nearlyWhite} />
           </View>
         )}
+
+        {type === "link" && (
+          <View
+            style={[styles.iconContainer, isChecked && styles.checkedStyle]}
+          >
+            <Ionicons
+              name="chevron-forward-outline"
+              size={18}
+              color={colors.grey}
+            />
+          </View>
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

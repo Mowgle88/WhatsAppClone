@@ -18,6 +18,7 @@ import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
 import { ActivityIndicator, View } from "react-native";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
+import ContactScreen from "../screens/ContactScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -78,6 +79,14 @@ const StackNavigator: React.FC = () => {
           component={ChatSettingsScreen}
           options={{
             headerTitle: "Settings",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="Contact"
+          component={ContactScreen}
+          options={{
+            headerTitle: "Contact info",
             headerBackTitle: "Back",
           }}
         />

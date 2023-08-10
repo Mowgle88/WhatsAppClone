@@ -118,6 +118,7 @@ const ChatListScreen: React.FC = () => {
           return (
             otherUser && (
               <UserDataItem
+                key={otherUser.userId}
                 title={isGroupChat ? chatData.chatName : ""}
                 userData={otherUser}
                 lastMessage={chatData.latestMessageText || "New chat"}

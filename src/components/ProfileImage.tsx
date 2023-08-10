@@ -144,7 +144,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
           onPress={onPress || renderAlert}
           style={[styles.editIcon, onPress && styles.removeIcon]}
         >
-          <FontAwesome name="remove" size={onPress ? 12 : 16} color="black" />
+          <FontAwesome
+            name={onPress ? "remove" : "pencil"}
+            size={onPress ? 12 : 16}
+            color="black"
+          />
         </TouchableOpacity>
       )}
     </View>
