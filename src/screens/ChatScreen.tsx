@@ -46,6 +46,8 @@ import {
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import CustomHeaderButton from "../components/CustomHeaderButton";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -91,6 +93,20 @@ const ChatScreen: React.FC = () => {
 
     navigation.setOptions({
       headerTitle: chatData!.chatName ?? headerTitle,
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            {chatId && (
+              <Item
+                title="Chat settings"
+                iconName="settings-outline"
+                color={colors.textColor}
+                onPress={() => {}}
+              />
+            )}
+          </HeaderButtons>
+        );
+      },
     });
   }, []);
 
