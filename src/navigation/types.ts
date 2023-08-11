@@ -16,7 +16,9 @@ export type RootStackParamList = {
     };
     chatId?: string;
   };
-  ChatSettings: undefined;
+  ChatSettings: {
+    chatId: string;
+  };
   NewChat:
     | {
         isGroupChat: boolean;
@@ -45,6 +47,10 @@ export type ChatListScreenRouteProp = RouteProp<TabParamList, "ChatList">;
 export type ChatScreenRouteProp = RouteProp<RootStackParamList, "Chat">;
 export type NewChatScreenRouteProp = RouteProp<RootStackParamList, "NewChat">;
 export type ContactScreenRouteProp = RouteProp<RootStackParamList, "Contact">;
+export type ChatSettingsScreenRouteProp = RouteProp<
+  RootStackParamList,
+  "ChatSettings"
+>;
 
 export type ChatScreenNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, "ChatList">,

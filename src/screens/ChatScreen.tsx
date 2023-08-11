@@ -103,7 +103,7 @@ const ChatScreen: React.FC = () => {
                 color={colors.textColor}
                 onPress={() =>
                   chatData?.isGroupChat
-                    ? undefined
+                    ? navigation.navigate("ChatSettings", { chatId })
                     : navigation.navigate("Contact", {
                         uid: chatData?.users.find(
                           (uid) => uid !== userData!.userId
