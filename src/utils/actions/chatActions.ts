@@ -111,3 +111,18 @@ export const starMessage = async (
     console.log(error);
   }
 };
+
+export const updateChatData = async (
+  chatId: string,
+  userId: string,
+  chatData: { chatImage: string }
+) => {
+  const dbRef = getDbRef();
+  const chatRef = child(dbRef, `chats/${chatId}`);
+
+  await update(chatRef, {
+    ...chatData,
+    updatedAt: new Date().toISOString(),
+    updatedBy: userId,
+  });
+};

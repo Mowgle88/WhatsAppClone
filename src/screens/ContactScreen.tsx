@@ -70,7 +70,9 @@ const ContactScreen = () => {
               <UserDataItem
                 key={chatData.key}
                 title={chatData.chatName}
-                image={isGroupChat ? "" : userData.profilePicture}
+                image={
+                  isGroupChat ? chatData.chatImage! : userData.profilePicture
+                }
                 userData={userData}
                 lastMessage={chatData.latestMessageText || "New chat"}
                 type="link"

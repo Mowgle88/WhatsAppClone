@@ -19,11 +19,13 @@ import {
 import { updateSignedInUserData } from "../utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
 import userImage from "../assets/images/userImage.jpeg";
+import { updateChatData } from "../utils/actions/chatActions";
 
 interface ProfileImageProps {
   size: number;
   uri?: string | null;
   userId: string;
+  chatId?: string;
   isShowEditButton?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
@@ -33,6 +35,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   size,
   uri,
   userId,
+  chatId,
   isShowEditButton = true,
   onPress,
   style,
@@ -50,7 +53,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
         if (image.path) {
           setIsLoading(true);
 
-          const uploadUri = await uploadImageAsync(image.path);
+          const uploadUri = await uploadImageAsync(image.path, !!chatId);
 
           setIsLoading(false);
 
@@ -58,10 +61,14 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
             throw new Error("could not upload image");
           }
 
-          const newData = { profilePicture: uploadUri };
+          if (chatId) {
+            await updateChatData(chatId, userId, { chatImage: uploadUri });
+          } else {
+            const newData = { profilePicture: uploadUri };
 
-          await updateSignedInUserData(userId, newData);
-          dispatch(updateLoggetInUserData({ newData }));
+            await updateSignedInUserData(userId, newData);
+            dispatch(updateLoggetInUserData({ newData }));
+          }
 
           setImageUri({ uri: uploadUri });
         }

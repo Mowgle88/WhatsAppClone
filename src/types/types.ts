@@ -43,6 +43,7 @@ export interface IChatData {
   latestMessageText?: string;
   isGroupChat?: boolean;
   chatName?: string;
+  chatImage?: string;
 }
 
 export interface IChatMessagesData {

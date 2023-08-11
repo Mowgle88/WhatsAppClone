@@ -13,12 +13,19 @@ const ChatSettingsScreen: React.FC = () => {
   const chatData = useAppSelector(
     (state) => state.chats?.chatsData[params?.chatId]
   );
+  const userData = useAppSelector((state) => state.auth.userData);
 
   return (
     <ScreenContainer>
       <ScreenTitle text="Chat Settings" />
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <ProfileImage isShowEditButton size={80} />
+        <ProfileImage
+          isShowEditButton
+          size={80}
+          chatId={params?.chatId}
+          userId={userData!.userId}
+          uri={chatData.chatImage}
+        />
         <Text>{chatData.chatName}</Text>
       </ScrollView>
     </ScreenContainer>
