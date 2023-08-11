@@ -121,6 +121,7 @@ const ChatListScreen: React.FC = () => {
                 key={otherUser.userId}
                 title={isGroupChat ? chatData.chatName : ""}
                 userData={otherUser}
+                image={isGroupChat ? "" : otherUser.profilePicture}
                 lastMessage={chatData.latestMessageText || "New chat"}
                 onPress={(): void => {
                   navigation.navigate("Chat", { chatId });

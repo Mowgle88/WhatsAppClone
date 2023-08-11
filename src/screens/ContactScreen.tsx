@@ -64,11 +64,13 @@ const ContactScreen = () => {
           {commonChats.map((cid) => {
             const chatData = storedChats[cid];
             const userData = storedUsers[currentUser.userId];
+            const isGroupChat = chatData.isGroupChat;
 
             return (
               <UserDataItem
                 key={chatData.key}
                 title={chatData.chatName}
+                image={isGroupChat ? "" : userData.profilePicture}
                 userData={userData}
                 lastMessage={chatData.latestMessageText || "New chat"}
                 type="link"

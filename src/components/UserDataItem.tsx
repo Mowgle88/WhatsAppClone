@@ -7,6 +7,7 @@ import colors from "../constants/colors";
 
 interface UserDataProps {
   title?: string;
+  image: string;
   userData: IUserData;
   lastMessage?: string;
   onPress: () => void;
@@ -16,6 +17,7 @@ interface UserDataProps {
 
 const UserDataItem: React.FC<UserDataProps> = ({
   title = "",
+  image,
   userData,
   onPress,
   lastMessage = "",
@@ -28,7 +30,7 @@ const UserDataItem: React.FC<UserDataProps> = ({
         <ProfileImage
           size={48}
           userId={userData.userId}
-          uri={userData.profilePicture}
+          uri={image}
           isShowEditButton={false}
         />
         <View style={styles.textContainer}>
