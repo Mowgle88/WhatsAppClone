@@ -115,7 +115,7 @@ export const starMessage = async (
 export const updateChatData = async (
   chatId: string,
   userId: string,
-  chatData: { chatImage: string }
+  chatData: { chatImage?: string; chatName?: string }
 ) => {
   const dbRef = getDbRef();
   const chatRef = child(dbRef, `chats/${chatId}`);

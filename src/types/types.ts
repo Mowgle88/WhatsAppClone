@@ -4,6 +4,7 @@ export enum IdEnum {
   Email = "email",
   Password = "password",
   About = "about",
+  ChatName = "chatName",
 }
 
 export interface IUserData {

@@ -116,7 +116,7 @@ const ChatScreen: React.FC = () => {
         );
       },
     });
-  }, []);
+  }, [chatData?.chatName]);
 
   const sendMassage = useCallback(async () => {
     try {
