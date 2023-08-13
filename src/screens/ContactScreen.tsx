@@ -12,6 +12,7 @@ import ScreenTitle from "../components/ScreenTitle";
 import { getUserChats } from "../utils/actions/userActions";
 import colors from "../constants/colors";
 import UserDataItem from "../components/UserDataItem";
+import { DataItemTypeEnum } from "../types/types";
 
 const ContactScreen = () => {
   const { params } = useRoute<ContactScreenRouteProp>();
@@ -70,7 +71,7 @@ const ContactScreen = () => {
                 title={chatData.chatName!}
                 subTitle={chatData.latestMessageText!}
                 image={chatData.chatImage!}
-                type="link"
+                type={DataItemTypeEnum.Link}
                 onPress={() => {
                   navigation.push("Chat", { chatId: cid });
                 }}

@@ -20,7 +20,7 @@ import ScreenContainer from "../components/ScreenContainer";
 import commonStyles from "../constants/commonStyles";
 import { searchUsers } from "../utils/actions/userActions";
 import UserDataItem from "../components/UserDataItem";
-import { IUsers } from "../types/types";
+import { DataItemTypeEnum, IUsers } from "../types/types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setStoredUsers } from "../store/userSlice";
 import ProfileImage from "../components/ProfileImage";
@@ -196,7 +196,7 @@ const NewChatScreen = () => {
                 onPress={() => {
                   userPressed(userId);
                 }}
-                type={isGroupChat ? "checkbox" : ""}
+                type={isGroupChat ? DataItemTypeEnum.Checkbox : undefined}
                 isChecked={selectedUsers.includes(userId)}
               />
             );

@@ -7,6 +7,12 @@ export enum IdEnum {
   ChatName = "chatName",
 }
 
+export enum DataItemTypeEnum {
+  Checkbox = "checkbox",
+  Link = "link",
+  Button = "button",
+}
+
 export interface IUserData {
   firstName: string;
   lastName: string;

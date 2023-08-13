@@ -3,13 +3,15 @@ import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import ProfileImage from "./ProfileImage";
 import colors from "../constants/colors";
+import { DataItemTypeEnum } from "../types/types";
 
 interface UserDataProps {
   title: string;
-  subTitle: string;
-  image: string;
+  subTitle?: string;
+  image?: string;
+  icon?: string;
   onPress: () => void;
-  type?: string;
+  type?: DataItemTypeEnum;
   isChecked?: boolean;
 }
 
@@ -17,6 +19,7 @@ const UserDataItem: React.FC<UserDataProps> = ({
   title = "",
   subTitle,
   image,
+  icon = "",
   onPress,
   type,
   isChecked,
@@ -24,16 +27,31 @@ const UserDataItem: React.FC<UserDataProps> = ({
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <ProfileImage size={48} uri={image} isShowEditButton={false} />
+        {!icon && (
+          <ProfileImage size={48} uri={image} isShowEditButton={false} />
+        )}
+        {icon && (
+          <View style={styles.leftIconContainer}>
+            <Ionicons name={icon} size={20} color={colors.blue} />
+          </View>
+        )}
         <View style={styles.textContainer}>
-          <Text numberOfLines={1} style={styles.title}>
+          <Text
+            numberOfLines={1}
+            style={[
+              styles.title,
+              type === DataItemTypeEnum.Button && styles.buttonTitle,
+            ]}
+          >
             {title}
           </Text>
-          <Text numberOfLines={1} style={styles.subtitle}>
-            {subTitle}
-          </Text>
+          {subTitle && (
+            <Text numberOfLines={1} style={styles.subtitle}>
+              {subTitle}
+            </Text>
+          )}
         </View>
-        {type === "checkbox" && (
+        {type === DataItemTypeEnum.Checkbox && (
           <View
             style={[styles.iconContainer, isChecked && styles.checkedStyle]}
           >
@@ -41,7 +59,7 @@ const UserDataItem: React.FC<UserDataProps> = ({
           </View>
         )}
 
-        {type === "link" && (
+        {type === DataItemTypeEnum.Link && (
           <View
             style={[styles.iconContainer, isChecked && styles.checkedStyle]}
           >
@@ -74,6 +92,10 @@ const styles = StyleSheet.create({
     fontFamily: "Alkatra-Medium",
     fontSize: 16,
     letterSpacing: 0.3,
+    color: colors.textColor,
+  },
+  buttonTitle: {
+    color: colors.blue,
   },
   subtitle: {
     fontFamily: "Alkatra-Regular",
@@ -89,6 +111,14 @@ const styles = StyleSheet.create({
   checkedStyle: {
     backgroundColor: colors.primary,
     borderColor: "transparent",
+  },
+  leftIconContainer: {
+    backgroundColor: colors.extraLightGrey,
+    borderRadius: 50,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 

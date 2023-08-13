@@ -5,29 +5,36 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  View,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
-import { ChatSettingsScreenRouteProp } from "../navigation/types";
+import {
+  ChatSettingsScreenRouteProp,
+  RootScreenNavigationProps,
+} from "../navigation/types";
 import { useAppSelector } from "../store/hooks";
 import ScreenContainer from "../components/ScreenContainer";
 import ScreenTitle from "../components/ScreenTitle";
 import ProfileImage from "../components/ProfileImage";
 import Input from "../components/Input";
-import { IdEnum } from "../types/types";
+import UserDataItem from "../components/UserDataItem";
+import SubmitButton from "../components/SubmitButton";
+import { DataItemTypeEnum, IdEnum } from "../types/types";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { updateChatData } from "../utils/actions/chatActions";
 import colors from "../constants/colors";
-import SubmitButton from "../components/SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 
 const ChatSettingsScreen: React.FC = () => {
   const { params } = useRoute<ChatSettingsScreenRouteProp>();
+  const navigation = useNavigation<RootScreenNavigationProps>();
 
   const chatData = useAppSelector(
     (state) => state.chats?.chatsData[params?.chatId]
   );
   const userData = useAppSelector((state) => state.auth.userData);
+  const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
   const [isLoading, setIsLoading] = useState(false);
   const [succesMessage, setSuccesMessage] = useState(false);
@@ -78,7 +85,10 @@ const ChatSettingsScreen: React.FC = () => {
   return (
     <ScreenContainer>
       <ScreenTitle text="Chat Settings" />
-      <ScrollView contentContainerStyle={styles.scrollView}>
+      <ScrollView
+        contentContainerStyle={styles.scrollView}
+        showsVerticalScrollIndicator={false}
+      >
         <ProfileImage
           isShowEditButton
           size={80}
@@ -96,6 +106,37 @@ const ChatSettingsScreen: React.FC = () => {
           onInputChanged={inputChangedHandler}
           errorText={formState.inputValidities.chatName}
         />
+
+        <View style={styles.sectionContainer}>
+          <Text style={styles.heading}>
+            {chatData.users.length} Participants
+          </Text>
+          <UserDataItem
+            title="Add users"
+            icon="person-add-outline"
+            type={DataItemTypeEnum.Button}
+            onPress={() => {}}
+          />
+          {chatData.users.map((uid) => {
+            const currentUser = storedUsers[uid];
+            return (
+              <UserDataItem
+                key={uid}
+                image={currentUser.profilePicture}
+                title={`${currentUser.firstName} ${currentUser.lastName}`}
+                subTitle={currentUser.about}
+                type={
+                  uid !== userData?.userId ? DataItemTypeEnum.Link : undefined
+                }
+                onPress={() => {
+                  uid !== userData?.userId &&
+                    navigation.navigate("Contact", { uid });
+                }}
+              />
+            );
+          })}
+        </View>
+
         {succesMessage && <Text>Saved!</Text>}
         {isLoading ? (
           <ActivityIndicator
@@ -128,6 +169,17 @@ const styles = StyleSheet.create({
   scrollView: {
     justifyContent: "center",
     alignItems: "center",
+    paddingBottom: 24,
+  },
+  sectionContainer: {
+    width: "100%",
+    marginTop: 10,
+  },
+  heading: {
+    marginVertical: 8,
+    color: colors.textColor,
+    fontFamily: "Alkatra-Medium",
+    letterSpacing: 0.3,
   },
 });
 
