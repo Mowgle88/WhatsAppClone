@@ -1,6 +1,12 @@
 import { child, get, push, remove, set, update } from "firebase/database";
 import { getDbRef } from "../firebaseHelper";
-import { IChatMessagesData, ISendedData } from "../../types/types";
+import {
+  IChatData,
+  IChatMessagesData,
+  ISendedData,
+  IUserData,
+} from "../../types/types";
+import { deleteUserChat, getUserChats } from "./userActions";
 
 export const createChat = async (
   loggedInUserId: string,
@@ -115,7 +121,7 @@ export const starMessage = async (
 export const updateChatData = async (
   chatId: string,
   userId: string,
-  chatData: { chatImage?: string; chatName?: string }
+  chatData: Partial<IChatData>
 ) => {
   const dbRef = getDbRef();
   const chatRef = child(dbRef, `chats/${chatId}`);
@@ -125,4 +131,25 @@ export const updateChatData = async (
     updatedAt: new Date().toISOString(),
     updatedBy: userId,
   });
+};
+
+export const removeUserFromChat = async (
+  userLoggedInData: IUserData,
+  userToRemoveData: IUserData,
+  chatData: IChatData
+) => {
+  const userToRemoveId = userToRemoveData.userId;
+  const newUsers = chatData.users.filter((uid) => uid !== userToRemoveId);
+  updateChatData(chatData.key, userLoggedInData.userId, { users: newUsers });
+
+  const userChats = await getUserChats(userToRemoveId);
+
+  for (const key in userChats) {
+    const currentChatId = userChats[key];
+
+    if (currentChatId === chatData.key) {
+      await deleteUserChat(userToRemoveId, key);
+      break;
+    }
+  }
 };

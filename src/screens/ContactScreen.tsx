@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useAppSelector } from "../store/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
@@ -12,7 +12,9 @@ import ScreenTitle from "../components/ScreenTitle";
 import { getUserChats } from "../utils/actions/userActions";
 import colors from "../constants/colors";
 import UserDataItem from "../components/UserDataItem";
-import { DataItemTypeEnum } from "../types/types";
+import { DataItemTypeEnum, IChatData, IUserData } from "../types/types";
+import SubmitButton from "../components/SubmitButton";
+import { removeUserFromChat } from "../utils/actions/chatActions";
 
 const ContactScreen = () => {
   const { params } = useRoute<ContactScreenRouteProp>();
@@ -20,10 +22,14 @@ const ContactScreen = () => {
 
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
+  const userData = useAppSelector((state) => state.auth.userData);
 
   const [commonChats, seCommonChats] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentUser = storedUsers[params.uid];
+  const chatId = params.chatId;
+  const currentChatData = chatId && storedChats[chatId];
 
   useEffect(() => {
     const getCommonUserChats = async () => {
@@ -36,6 +42,23 @@ const ContactScreen = () => {
     };
     getCommonUserChats();
   }, []);
+
+  const removeFromChat = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      await removeUserFromChat(
+        userData as IUserData,
+        currentUser,
+        currentChatData as IChatData
+      );
+      navigation.goBack();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [navigation, isLoading]);
 
   return (
     <ScreenContainer>
@@ -79,6 +102,16 @@ const ContactScreen = () => {
             );
           })}
         </>
+      )}
+
+      {currentChatData && currentChatData.isGroupChat && isLoading ? (
+        <ActivityIndicator size={"small"} color={colors.primary} />
+      ) : (
+        <SubmitButton
+          title="Remove from chat"
+          color={colors.red}
+          onPress={removeFromChat}
+        />
       )}
     </ScreenContainer>
   );

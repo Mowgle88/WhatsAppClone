@@ -30,9 +30,9 @@ const ChatSettingsScreen: React.FC = () => {
   const { params } = useRoute<ChatSettingsScreenRouteProp>();
   const navigation = useNavigation<RootScreenNavigationProps>();
 
-  const chatData = useAppSelector(
-    (state) => state.chats?.chatsData[params?.chatId]
-  );
+  const chatId = params?.chatId;
+
+  const chatData = useAppSelector((state) => state.chats?.chatsData[chatId]);
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
@@ -63,7 +63,7 @@ const ChatSettingsScreen: React.FC = () => {
     const updateValues = formState.inputValues;
     try {
       setIsLoading(true);
-      await updateChatData(params?.chatId, userData!.userId, updateValues);
+      await updateChatData(chatId, userData!.userId, updateValues);
 
       setSuccesMessage(true);
       setTimeout(() => {
@@ -92,7 +92,7 @@ const ChatSettingsScreen: React.FC = () => {
         <ProfileImage
           isShowEditButton
           size={80}
-          chatId={params?.chatId}
+          chatId={chatId}
           userId={userData!.userId}
           uri={chatData.chatImage}
         />
@@ -130,7 +130,7 @@ const ChatSettingsScreen: React.FC = () => {
                 }
                 onPress={() => {
                   uid !== userData?.userId &&
-                    navigation.navigate("Contact", { uid });
+                    navigation.navigate("Contact", { uid, chatId });
                 }}
               />
             );
