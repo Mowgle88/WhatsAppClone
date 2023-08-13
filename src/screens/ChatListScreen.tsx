@@ -123,7 +123,7 @@ const ChatListScreen: React.FC = () => {
             );
             const otherUser = storedUsers[otherUserId!];
 
-            // if (!otherUser) return;
+            if (!otherUser) return null;
 
             title = `${otherUser.firstName} ${otherUser.lastName}`;
             image = otherUser.profilePicture;
