@@ -24,7 +24,7 @@ import { updateChatData } from "../utils/actions/chatActions";
 interface ProfileImageProps {
   size: number;
   uri?: string | null;
-  userId: string;
+  userId?: string;
   chatId?: string;
   isShowEditButton?: boolean;
   onPress?: () => void;
@@ -34,7 +34,7 @@ interface ProfileImageProps {
 const ProfileImage: React.FC<ProfileImageProps> = ({
   size,
   uri,
-  userId,
+  userId = "",
   chatId,
   isShowEditButton = true,
   onPress,

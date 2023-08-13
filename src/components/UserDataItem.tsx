@@ -1,15 +1,13 @@
 import React from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { IUserData } from "../types/types";
 import ProfileImage from "./ProfileImage";
 import colors from "../constants/colors";
 
 interface UserDataProps {
-  title?: string;
+  title: string;
+  subTitle: string;
   image: string;
-  userData: IUserData;
-  lastMessage?: string;
   onPress: () => void;
   type?: string;
   isChecked?: boolean;
@@ -17,28 +15,22 @@ interface UserDataProps {
 
 const UserDataItem: React.FC<UserDataProps> = ({
   title = "",
+  subTitle,
   image,
-  userData,
   onPress,
-  lastMessage = "",
   type,
   isChecked,
 }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        <ProfileImage
-          size={48}
-          userId={userData.userId}
-          uri={image}
-          isShowEditButton={false}
-        />
+        <ProfileImage size={48} uri={image} isShowEditButton={false} />
         <View style={styles.textContainer}>
           <Text numberOfLines={1} style={styles.title}>
-            {title || `${userData.firstName} ${userData.lastName}`}
+            {title}
           </Text>
-          <Text style={styles.subtitle}>
-            {lastMessage ? lastMessage : userData.about}
+          <Text numberOfLines={1} style={styles.subtitle}>
+            {subTitle}
           </Text>
         </View>
         {type === "checkbox" && (

@@ -63,18 +63,13 @@ const ContactScreen = () => {
           </Text>
           {commonChats.map((cid) => {
             const chatData = storedChats[cid];
-            const userData = storedUsers[currentUser.userId];
-            const isGroupChat = chatData.isGroupChat;
 
             return (
               <UserDataItem
                 key={chatData.key}
-                title={chatData.chatName}
-                image={
-                  isGroupChat ? chatData.chatImage! : userData.profilePicture
-                }
-                userData={userData}
-                lastMessage={chatData.latestMessageText || "New chat"}
+                title={chatData.chatName!}
+                subTitle={chatData.latestMessageText!}
+                image={chatData.chatImage!}
                 type="link"
                 onPress={() => {
                   navigation.push("Chat", { chatId: cid });

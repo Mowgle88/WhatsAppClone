@@ -189,7 +189,10 @@ const NewChatScreen = () => {
             const userData = users[userId];
             return (
               <UserDataItem
-                userData={userData}
+                key={userId}
+                title={`${userData.firstName} ${userData.lastName}`}
+                subTitle={userData.about!}
+                image={userData.profilePicture}
                 onPress={() => {
                   userPressed(userId);
                 }}

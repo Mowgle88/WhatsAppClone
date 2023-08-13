@@ -110,26 +110,35 @@ const ChatListScreen: React.FC = () => {
           const chatId = chatData.key;
           const isGroupChat = chatData.isGroupChat;
 
-          const otherUserId = chatData.users.find(
-            (uid) => uid !== authorizedUserData!.userId
-          );
-          const otherUser = storedUsers[otherUserId!];
+          let title = "";
+          const subTitle = chatData.latestMessageText || "New chat";
+          let image = "";
+
+          if (isGroupChat) {
+            title = chatData.chatName!;
+            image = chatData.chatImage!;
+          } else {
+            const otherUserId = chatData.users.find(
+              (uid) => uid !== authorizedUserData!.userId
+            );
+            const otherUser = storedUsers[otherUserId!];
+
+            // if (!otherUser) return;
+
+            title = `${otherUser.firstName} ${otherUser.lastName}`;
+            image = otherUser.profilePicture;
+          }
 
           return (
-            otherUser && (
-              <UserDataItem
-                key={otherUser.userId}
-                title={isGroupChat ? chatData.chatName : ""}
-                userData={otherUser}
-                image={
-                  isGroupChat ? chatData.chatImage! : otherUser.profilePicture
-                }
-                lastMessage={chatData.latestMessageText || "New chat"}
-                onPress={(): void => {
-                  navigation.navigate("Chat", { chatId });
-                }}
-              />
-            )
+            <UserDataItem
+              key={chatId}
+              title={title}
+              subTitle={subTitle}
+              image={image}
+              onPress={(): void => {
+                navigation.navigate("Chat", { chatId });
+              }}
+            />
           );
         }}
       />
