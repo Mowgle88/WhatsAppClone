@@ -135,7 +135,9 @@ const MainNavigator: React.FC = () => {
           chatsFoundCount++;
           const data: IChatData = chatSnapshot.val();
 
-          if (data) {
+          const isUserIncluded = data.users.includes(userData!.userId);
+
+          if (data && isUserIncluded) {
             data.key = chatSnapshot.key!;
 
             data.users.forEach((userId) => {

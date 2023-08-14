@@ -83,9 +83,11 @@ const ChatScreen: React.FC = () => {
   }, [chatMesages]);
 
   const chatData =
-    (chatId && storedChats[chatId]) || route?.params?.newChatData;
+    (chatId && storedChats[chatId]) || route?.params?.newChatData || null;
 
   useEffect(() => {
+    if (!chatData) return;
+
     const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
     const otherUserData: IUserData = storedUsers[`${otherUserId}`];
     const headerTitle =
@@ -116,7 +118,7 @@ const ChatScreen: React.FC = () => {
         );
       },
     });
-  }, [chatData?.chatName]);
+  }, [chatData?.users]);
 
   const sendMassage = useCallback(async () => {
     try {

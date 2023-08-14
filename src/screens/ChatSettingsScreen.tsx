@@ -20,9 +20,12 @@ import ProfileImage from "../components/ProfileImage";
 import Input from "../components/Input";
 import UserDataItem from "../components/UserDataItem";
 import SubmitButton from "../components/SubmitButton";
-import { DataItemTypeEnum, IdEnum } from "../types/types";
+import { DataItemTypeEnum, IUserData, IdEnum } from "../types/types";
 import { State, reducer } from "../utils/redusers/formReducer";
-import { updateChatData } from "../utils/actions/chatActions";
+import {
+  removeUserFromChat,
+  updateChatData,
+} from "../utils/actions/chatActions";
 import colors from "../constants/colors";
 import { validateInput } from "../utils/actions/formActions";
 
@@ -32,7 +35,9 @@ const ChatSettingsScreen: React.FC = () => {
 
   const chatId = params?.chatId;
 
-  const chatData = useAppSelector((state) => state.chats?.chatsData[chatId]);
+  const chatData = useAppSelector(
+    (state) => state.chats?.chatsData[chatId] || {}
+  );
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
@@ -41,7 +46,7 @@ const ChatSettingsScreen: React.FC = () => {
 
   const initialState: State = {
     inputValues: {
-      chatName: chatData.chatName,
+      chatName: chatData?.chatName,
     },
     inputValidities: {
       chatName: undefined,
@@ -81,6 +86,25 @@ const ChatSettingsScreen: React.FC = () => {
 
     return currentValues.chatName !== chatData.chatName;
   };
+
+  const leaveChat = useCallback(async () => {
+    try {
+      setIsLoading(true);
+
+      await removeUserFromChat(
+        userData as IUserData,
+        userData as IUserData,
+        chatData
+      );
+      navigation.popToTop();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [navigation, isLoading]);
+
+  if (!chatData.users) return null;
 
   return (
     <ScreenContainer>
@@ -139,23 +163,26 @@ const ChatSettingsScreen: React.FC = () => {
 
         {succesMessage && <Text>Saved!</Text>}
         {isLoading ? (
-          <ActivityIndicator
-            size={"small"}
-            color={colors.primary}
-            // style={styles.button}
-          />
+          <ActivityIndicator size={"small"} color={colors.primary} />
         ) : (
           hasChanges() && (
             <SubmitButton
               title="Save changes"
               color={colors.primary}
               onPress={saveHandler}
-              // style={styles.button}
               disabled={!formState.formIsValid}
             />
           )
         )}
       </ScrollView>
+      {
+        <SubmitButton
+          title="Leave chat"
+          color={colors.red}
+          onPress={leaveChat}
+          style={styles.leaveChatButton}
+        />
+      }
     </ScreenContainer>
   );
 };
@@ -180,6 +207,9 @@ const styles = StyleSheet.create({
     color: colors.textColor,
     fontFamily: "Alkatra-Medium",
     letterSpacing: 0.3,
+  },
+  leaveChatButton: {
+    marginBottom: 24,
   },
 });
 
