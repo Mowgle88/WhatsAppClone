@@ -254,9 +254,13 @@ const ChatScreen: React.FC = () => {
                 renderItem={(itemData) => {
                   const message = itemData.item;
                   const isOwnMessage = message.sentBy === userData?.userId;
-                  const messageType = isOwnMessage
+                  let messageType = isOwnMessage
                     ? BubbleEnum.OwnMessage
                     : BubbleEnum.NotOwnMessage;
+
+                  if (message.type) {
+                    messageType = BubbleEnum.Info;
+                  }
 
                   const repliedTo = userChatMessages.find(
                     (i) => i.key === message.replyTo

@@ -26,7 +26,7 @@ export type RootStackParamList = {
     | undefined;
   Contact: {
     uid: string;
-    chatId: string;
+    chatId?: string;
   };
 };
 

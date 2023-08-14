@@ -125,7 +125,11 @@ const Bubble: React.FC<BubbleProps> = ({
     case BubbleEnum.Reply:
       bubbleStyle.backgroundColor = colors.nearlyWhite;
       break;
-
+    case BubbleEnum.Info:
+      bubbleStyle.backgroundColor = colors.lightGrey;
+      bubbleStyle.alignItems = "center";
+      textStyle.color = colors.textColor;
+      break;
     default:
       break;
   }
@@ -148,7 +152,9 @@ const Bubble: React.FC<BubbleProps> = ({
         }}
       >
         <View style={bubbleStyle}>
-          {name && <Text style={styles.name}>{name}</Text>}
+          {name && type !== BubbleEnum.Info && (
+            <Text style={styles.name}>{name}</Text>
+          )}
           {replyingToUser && (
             <Bubble
               type={BubbleEnum.Reply}
@@ -160,7 +166,7 @@ const Bubble: React.FC<BubbleProps> = ({
             <Image source={{ uri: imageUrl }} style={styles.image} />
           )}
           {text && <Text style={textStyle}>{text}</Text>}
-          {dateString && (
+          {dateString && type !== BubbleEnum.Info && (
             <View style={styles.timeContainer}>
               {isStarred && (
                 <Ionicons

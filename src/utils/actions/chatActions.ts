@@ -39,7 +39,8 @@ const sendMessage = async (
   senderId: string,
   messageText?: string,
   imageUrl?: string,
-  replyTo?: string | null
+  replyTo?: string | null,
+  type?: string
 ) => {
   const dbRef = getDbRef();
   const messagesRef = child(dbRef, `messages/${chatId}`);
@@ -56,6 +57,10 @@ const sendMessage = async (
 
   if (imageUrl) {
     messageData.imageUrl = imageUrl;
+  }
+
+  if (type) {
+    messageData.type = type;
   }
 
   await push(messagesRef, messageData);
@@ -75,6 +80,14 @@ export const sendTextMessage = async ({
   replyTo,
 }: ISendedData) => {
   await sendMessage(chatId, senderId, messageText, "", replyTo!);
+};
+
+export const sendInfoMessage = async (
+  chatId: string,
+  senderId: string,
+  messageText: string
+) => {
+  await sendMessage(chatId, senderId, messageText, "", null, "info");
 };
 
 export const sendImage = async ({
@@ -140,7 +153,9 @@ export const removeUserFromChat = async (
 ) => {
   const userToRemoveId = userToRemoveData.userId;
   const newUsers = chatData.users.filter((uid) => uid !== userToRemoveId);
-  updateChatData(chatData.key, userLoggedInData.userId, { users: newUsers });
+  await updateChatData(chatData.key, userLoggedInData.userId, {
+    users: newUsers,
+  });
 
   const userChats = await getUserChats(userToRemoveId);
 
@@ -152,4 +167,7 @@ export const removeUserFromChat = async (
       break;
     }
   }
+
+  const messageText = `${userLoggedInData.firstName} removed ${userToRemoveData.firstName} from the chat`;
+  await sendInfoMessage(chatData.key, userLoggedInData.userId, messageText);
 };
