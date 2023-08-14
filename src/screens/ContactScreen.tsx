@@ -104,15 +104,17 @@ const ContactScreen = () => {
         </>
       )}
 
-      {currentChatData && currentChatData.isGroupChat && isLoading ? (
-        <ActivityIndicator size={"small"} color={colors.primary} />
-      ) : (
-        <SubmitButton
-          title="Remove from chat"
-          color={colors.red}
-          onPress={removeFromChat}
-        />
-      )}
+      {currentChatData &&
+        currentChatData.isGroupChat &&
+        (isLoading ? (
+          <ActivityIndicator size={"small"} color={colors.primary} />
+        ) : (
+          <SubmitButton
+            title="Remove from chat"
+            color={colors.red}
+            onPress={removeFromChat}
+          />
+        ))}
     </ScreenContainer>
   );
 };
