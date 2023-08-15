@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RN, {
   ActivityIndicator,
   Alert,
@@ -133,6 +133,10 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     dispatch(updateLoggetInUserData({ newData: { profilePicture: "" } }));
     setImageUri(userImage);
   };
+
+  useEffect(() => {
+    uri && setImageUri({ uri: uri });
+  }, [uri]);
 
   return (
     <View style={[styles.container, style]}>
