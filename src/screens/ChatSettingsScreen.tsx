@@ -141,7 +141,7 @@ const ChatSettingsScreen: React.FC = () => {
             type={DataItemTypeEnum.Button}
             onPress={() => {}}
           />
-          {chatData.users.map((uid) => {
+          {chatData.users.slice(0, 3).map((uid) => {
             const currentUser = storedUsers[uid];
             return (
               <UserDataItem
@@ -159,6 +159,21 @@ const ChatSettingsScreen: React.FC = () => {
               />
             );
           })}
+          {chatData.users.length > 3 && (
+            <UserDataItem
+              type={DataItemTypeEnum.Link}
+              title="View all"
+              hideImage
+              onPress={() => {
+                navigation.navigate("DataList", {
+                  title: "Participants",
+                  data: chatData.users,
+                  type: "users",
+                  chatId: chatId,
+                });
+              }}
+            />
+          )}
         </View>
 
         {succesMessage && <Text>Saved!</Text>}

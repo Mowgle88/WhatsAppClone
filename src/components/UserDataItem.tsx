@@ -13,6 +13,7 @@ interface UserDataProps {
   onPress: () => void;
   type?: DataItemTypeEnum;
   isChecked?: boolean;
+  hideImage?: boolean;
 }
 
 const UserDataItem: React.FC<UserDataProps> = ({
@@ -23,11 +24,12 @@ const UserDataItem: React.FC<UserDataProps> = ({
   onPress,
   type,
   isChecked,
+  hideImage = false,
 }) => {
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={styles.container}>
-        {!icon && (
+        {!icon && !hideImage && (
           <ProfileImage size={48} uri={image} isShowEditButton={false} />
         )}
         {icon && (

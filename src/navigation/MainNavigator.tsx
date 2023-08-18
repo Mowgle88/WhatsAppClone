@@ -19,6 +19,7 @@ import { ActivityIndicator, View } from "react-native";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
 import ContactScreen from "../screens/ContactScreen";
+import DataListScreen from "../screens/DataListScreen";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -88,6 +89,14 @@ const StackNavigator: React.FC = () => {
           component={ContactScreen}
           options={{
             headerTitle: "Contact info",
+            headerBackTitle: "Back",
+          }}
+        />
+        <Stack.Screen
+          name="DataList"
+          component={DataListScreen}
+          options={{
+            headerTitle: "",
             headerBackTitle: "Back",
           }}
         />

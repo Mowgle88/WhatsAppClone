@@ -28,6 +28,12 @@ export type RootStackParamList = {
     uid: string;
     chatId?: string;
   };
+  DataList: {
+    title: string;
+    data: string[];
+    type: string;
+    chatId: string;
+  };
 };
 
 export type TabParamList = {
@@ -52,6 +58,7 @@ export type ChatSettingsScreenRouteProp = RouteProp<
   RootStackParamList,
   "ChatSettings"
 >;
+export type DataListScreenRouteProp = RouteProp<RootStackParamList, "DataList">;
 
 export type ChatScreenNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, "ChatList">,
