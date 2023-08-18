@@ -5,7 +5,7 @@ import ProfileImage from "./ProfileImage";
 import colors from "../constants/colors";
 import { DataItemTypeEnum } from "../types/types";
 
-interface UserDataProps {
+interface DataItemProps {
   title: string;
   subTitle?: string;
   image?: string;
@@ -16,7 +16,7 @@ interface UserDataProps {
   hideImage?: boolean;
 }
 
-const UserDataItem: React.FC<UserDataProps> = ({
+const DataItem: React.FC<DataItemProps> = ({
   title = "",
   subTitle,
   image,
@@ -124,4 +124,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UserDataItem;
+export default DataItem;

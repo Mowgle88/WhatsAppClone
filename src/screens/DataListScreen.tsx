@@ -7,7 +7,7 @@ import {
 } from "../navigation/types";
 import ScreenContainer from "../components/ScreenContainer";
 import { useAppSelector } from "../store/hooks";
-import UserDataItem from "../components/UserDataItem";
+import DataItem from "../components/DataItem";
 import { DataItemTypeEnum } from "../types/types";
 
 const DataListScreen = () => {
@@ -54,7 +54,7 @@ const DataListScreen = () => {
           }
 
           return (
-            <UserDataItem
+            <DataItem
               key={key}
               title={title!}
               subTitle={subTitle}

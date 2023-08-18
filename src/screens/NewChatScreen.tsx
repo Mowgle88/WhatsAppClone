@@ -19,7 +19,7 @@ import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import commonStyles from "../constants/commonStyles";
 import { searchUsers } from "../utils/actions/userActions";
-import UserDataItem from "../components/UserDataItem";
+import DataItem from "../components/DataItem";
 import { DataItemTypeEnum, IUsers } from "../types/types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setStoredUsers } from "../store/userSlice";
@@ -188,7 +188,7 @@ const NewChatScreen = () => {
             const userId = itemData.item;
             const userData = users[userId];
             return (
-              <UserDataItem
+              <DataItem
                 key={userId}
                 title={`${userData.firstName} ${userData.lastName}`}
                 subTitle={userData.about!}

@@ -18,7 +18,7 @@ import ScreenContainer from "../components/ScreenContainer";
 import ScreenTitle from "../components/ScreenTitle";
 import ProfileImage from "../components/ProfileImage";
 import Input from "../components/Input";
-import UserDataItem from "../components/UserDataItem";
+import DataItem from "../components/DataItem";
 import SubmitButton from "../components/SubmitButton";
 import { DataItemTypeEnum, IUserData, IdEnum } from "../types/types";
 import { State, reducer } from "../utils/redusers/formReducer";
@@ -135,7 +135,7 @@ const ChatSettingsScreen: React.FC = () => {
           <Text style={styles.heading}>
             {chatData.users.length} Participants
           </Text>
-          <UserDataItem
+          <DataItem
             title="Add users"
             icon="person-add-outline"
             type={DataItemTypeEnum.Button}
@@ -144,7 +144,7 @@ const ChatSettingsScreen: React.FC = () => {
           {chatData.users.slice(0, 3).map((uid) => {
             const currentUser = storedUsers[uid];
             return (
-              <UserDataItem
+              <DataItem
                 key={uid}
                 image={currentUser.profilePicture}
                 title={`${currentUser.firstName} ${currentUser.lastName}`}
@@ -160,7 +160,7 @@ const ChatSettingsScreen: React.FC = () => {
             );
           })}
           {chatData.users.length > 3 && (
-            <UserDataItem
+            <DataItem
               type={DataItemTypeEnum.Link}
               title="View all"
               hideImage

@@ -15,7 +15,7 @@ import {
 } from "../navigation/types";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import { useAppSelector } from "../store/hooks";
-import UserDataItem from "../components/UserDataItem";
+import DataItem from "../components/DataItem";
 import ScreenContainer from "../components/ScreenContainer";
 import ScreenTitle from "../components/ScreenTitle";
 import colors from "../constants/colors";
@@ -130,7 +130,7 @@ const ChatListScreen: React.FC = () => {
           }
 
           return (
-            <UserDataItem
+            <DataItem
               key={chatId}
               title={title}
               subTitle={subTitle}

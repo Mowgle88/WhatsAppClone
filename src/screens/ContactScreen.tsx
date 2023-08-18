@@ -11,7 +11,7 @@ import ProfileImage from "../components/ProfileImage";
 import ScreenTitle from "../components/ScreenTitle";
 import { getUserChats } from "../utils/actions/userActions";
 import colors from "../constants/colors";
-import UserDataItem from "../components/UserDataItem";
+import DataItem from "../components/DataItem";
 import { DataItemTypeEnum, IChatData, IUserData } from "../types/types";
 import SubmitButton from "../components/SubmitButton";
 import { removeUserFromChat } from "../utils/actions/chatActions";
@@ -89,7 +89,7 @@ const ContactScreen = () => {
             const chatData = storedChats[cid];
 
             return (
-              <UserDataItem
+              <DataItem
                 key={chatData.key}
                 title={chatData.chatName!}
                 subTitle={chatData.latestMessageText!}
