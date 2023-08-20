@@ -6,7 +6,7 @@ import {
   ISendedData,
   IUserData,
 } from "../../types/types";
-import { deleteUserChat, getUserChats } from "./userActions";
+import { addUserChat, deleteUserChat, getUserChats } from "./userActions";
 
 export const createChat = async (
   loggedInUserId: string,
@@ -173,4 +173,27 @@ export const removeUserFromChat = async (
       ? `${userLoggedInData.firstName} left the chat`
       : `${userLoggedInData.firstName} removed ${userToRemoveData.firstName} from the chat`;
   await sendInfoMessage(chatData.key, userLoggedInData.userId, messageText);
+};
+
+export const addUsersToChat = async (
+  userLoggedInData: IUserData,
+  usersToAddData: IUserData[],
+  chatData: IChatData
+) => {
+  const existingUsers = Object.values(chatData.users);
+  const newUsers: string[] = [];
+
+  usersToAddData.forEach((userToAdd) => {
+    const userToAddId = userToAdd.userId;
+    if (existingUsers.includes(userToAddId)) return;
+    newUsers.push(userToAddId);
+
+    addUserChat(userToAddId, chatData.key);
+  });
+
+  if (!newUsers.length) return;
+
+  await updateChatData(chatData.key, userLoggedInData.userId, {
+    users: existingUsers.concat(newUsers),
+  });
 };

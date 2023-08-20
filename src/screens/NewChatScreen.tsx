@@ -43,7 +43,11 @@ const NewChatScreen = () => {
   const selectedUsersFlatList = useRef<any>();
 
   const isGroupChat = route?.params?.isGroupChat;
-  const isGroupChatDisabled = !selectedUsers.length || !chatName;
+  const chatId = route?.params?.chatId;
+  const existingUsers = route?.params?.existingUsers;
+
+  const isNewChat = !chatId;
+  const isGroupChatDisabled = !selectedUsers.length || (isNewChat && !chatName);
 
   useEffect(() => {
     navigation.setOptions({
@@ -59,14 +63,21 @@ const NewChatScreen = () => {
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
             {isGroupChat && (
               <Item
-                title="Create"
+                title={isNewChat ? "Create" : "Add"}
                 disabled={isGroupChatDisabled}
                 color={isGroupChatDisabled ? colors.lightGrey : undefined}
                 onPress={() => {
-                  navigation.navigate("ChatList", {
-                    selectedUsers,
-                    chatName,
-                  });
+                  if (isNewChat) {
+                    navigation.navigate("ChatList", {
+                      selectedUsers,
+                      chatName,
+                    });
+                  } else {
+                    navigation.navigate("ChatSettings", {
+                      selectedUsers,
+                      chatId,
+                    });
+                  }
                 }}
               />
             )}
@@ -89,6 +100,9 @@ const NewChatScreen = () => {
 
       const usersResult = await searchUsers(searchTerm);
       delete usersResult[authorizedUserData?.userId!];
+      existingUsers?.forEach((user) => {
+        delete usersResult[user];
+      });
       setUsers(usersResult);
 
       if (!Object.keys(usersResult).length) {
@@ -121,49 +135,48 @@ const NewChatScreen = () => {
 
   return (
     <ScreenContainer>
-      {isGroupChat && (
-        <>
-          <View style={styles.chatNameContainer}>
-            <View style={styles.inputContainer}>
-              <TextInput
-                style={styles.textBox}
-                placeholder="Enter a name for your chat"
-                autoCorrect={false}
-                autoComplete="off"
-                value={chatName}
-                onChangeText={(text) => setChatName(text)}
-              />
-            </View>
-          </View>
-
-          <View>
-            <FlatList
-              data={selectedUsers}
-              renderItem={(itemData) => {
-                const userId = itemData.item;
-                const userData = storedUsers?.[userId];
-                return (
-                  <ProfileImage
-                    size={40}
-                    uri={userData?.profilePicture}
-                    userId={userId}
-                    onPress={() => {
-                      userPressed(userId);
-                    }}
-                    style={styles.selectedUserStyle}
-                  />
-                );
-              }}
-              keyExtractor={(item) => item}
-              horizontal
-              ref={(ref) => (selectedUsersFlatList.current = ref)}
-              onContentSizeChange={() =>
-                selectedUsersFlatList.current.scrollToEnd()
-              }
-              style={styles.selectedUserList}
+      {isNewChat && isGroupChat && (
+        <View style={styles.chatNameContainer}>
+          <View style={styles.inputContainer}>
+            <TextInput
+              style={styles.textBox}
+              placeholder="Enter a name for your chat"
+              autoCorrect={false}
+              autoComplete="off"
+              value={chatName}
+              onChangeText={(text) => setChatName(text)}
             />
           </View>
-        </>
+        </View>
+      )}
+      {isGroupChat && (
+        <View>
+          <FlatList
+            data={selectedUsers}
+            renderItem={(itemData) => {
+              const userId = itemData.item;
+              const userData = storedUsers?.[userId];
+              return (
+                <ProfileImage
+                  size={40}
+                  uri={userData?.profilePicture}
+                  userId={userId}
+                  onPress={() => {
+                    userPressed(userId);
+                  }}
+                  style={styles.selectedUserStyle}
+                />
+              );
+            }}
+            keyExtractor={(item) => item}
+            horizontal
+            ref={(ref) => (selectedUsersFlatList.current = ref)}
+            onContentSizeChange={() =>
+              selectedUsersFlatList.current.scrollToEnd()
+            }
+            style={styles.selectedUserList}
+          />
+        </View>
       )}
       <View style={styles.searchContainer}>
         <FontAwesome name="search" size={15} color={colors.lightGrey} />

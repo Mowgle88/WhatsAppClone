@@ -3,6 +3,7 @@ import {
   endAt,
   get,
   orderByChild,
+  push,
   query,
   remove,
   startAt,
@@ -63,7 +64,19 @@ export const deleteUserChat = async (userId: string, key: string) => {
     const dbRef = getDbRef();
     const chatRef = child(dbRef, `userChats/${userId}/${key}`);
 
-    remove(chatRef);
+    await remove(chatRef);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const addUserChat = async (userId: string, chatId: string) => {
+  try {
+    const dbRef = getDbRef();
+    const chatRef = child(dbRef, `userChats/${userId}`);
+
+    await push(chatRef, chatId);
   } catch (error) {
     console.log(error);
     throw error;

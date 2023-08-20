@@ -18,10 +18,13 @@ export type RootStackParamList = {
   };
   ChatSettings: {
     chatId: string;
+    selectedUsers?: string[];
   };
   NewChat:
     | {
-        isGroupChat: boolean;
+        isGroupChat?: boolean;
+        existingUsers?: string[];
+        chatId?: string;
       }
     | undefined;
   Contact: {

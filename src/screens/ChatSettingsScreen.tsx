@@ -1,4 +1,4 @@
-import React, { useCallback, useReducer, useState } from "react";
+import React, { useCallback, useEffect, useReducer, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -23,6 +23,7 @@ import SubmitButton from "../components/SubmitButton";
 import { DataItemTypeEnum, IUserData, IdEnum } from "../types/types";
 import { State, reducer } from "../utils/redusers/formReducer";
 import {
+  addUsersToChat,
   removeUserFromChat,
   updateChatData,
 } from "../utils/actions/chatActions";
@@ -34,6 +35,7 @@ const ChatSettingsScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
 
   const chatId = params?.chatId;
+  const selectedUsers = params?.selectedUsers;
 
   const chatData = useAppSelector(
     (state) => state.chats?.chatsData[chatId] || {}
@@ -104,6 +106,23 @@ const ChatSettingsScreen: React.FC = () => {
     }
   }, [navigation, isLoading]);
 
+  useEffect(() => {
+    if (!selectedUsers) {
+      return;
+    }
+    const selectedUserData: IUserData[] = [];
+    selectedUsers.forEach((uid) => {
+      if (uid === userData?.userId) return;
+      if (!storedUsers[uid]) {
+        console.log("No user data found in the data store");
+        return;
+      }
+      selectedUserData.push(storedUsers[uid]);
+    });
+
+    addUsersToChat(userData as IUserData, selectedUserData, chatData);
+  }, [selectedUsers]);
+
   if (!chatData.users) return null;
 
   return (
@@ -139,7 +158,13 @@ const ChatSettingsScreen: React.FC = () => {
             title="Add users"
             icon="person-add-outline"
             type={DataItemTypeEnum.Button}
-            onPress={() => {}}
+            onPress={() => {
+              navigation.navigate("NewChat", {
+                isGroupChat: true,
+                existingUsers: chatData.users,
+                chatId,
+              });
+            }}
           />
           {chatData.users.slice(0, 3).map((uid) => {
             const currentUser = storedUsers[uid];

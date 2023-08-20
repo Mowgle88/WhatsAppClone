@@ -19,8 +19,6 @@ const DataListScreen = () => {
 
   const { title: headerTitle, data, type, chatId } = route?.params;
 
-  console.log(data);
-
   useEffect(() => {
     navigation.setOptions({
       headerTitle,
