@@ -46,6 +46,8 @@ import {
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import CustomHeaderButton from "../components/CustomHeaderButton";
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -81,18 +83,42 @@ const ChatScreen: React.FC = () => {
   }, [chatMesages]);
 
   const chatData =
-    (chatId && storedChats[chatId]) || route?.params?.newChatData;
+    (chatId && storedChats[chatId]) || route?.params?.newChatData || null;
 
   useEffect(() => {
+    if (!chatData) return;
+
     const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
     const otherUserData: IUserData = storedUsers[`${otherUserId}`];
     const headerTitle =
       otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`;
 
     navigation.setOptions({
-      headerTitle: chatData!.chatName ?? headerTitle,
+      headerTitle: chatData?.chatName ?? headerTitle,
+      headerRight: () => {
+        return (
+          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
+            {chatId && (
+              <Item
+                title="Chat settings"
+                iconName="settings-outline"
+                color={colors.textColor}
+                onPress={() =>
+                  chatData?.isGroupChat
+                    ? navigation.navigate("ChatSettings", { chatId })
+                    : navigation.navigate("Contact", {
+                        uid: chatData?.users.find(
+                          (uid) => uid !== userData!.userId
+                        )!,
+                      })
+                }
+              />
+            )}
+          </HeaderButtons>
+        );
+      },
     });
-  }, []);
+  }, [chatData?.users]);
 
   const sendMassage = useCallback(async () => {
     try {
@@ -230,9 +256,13 @@ const ChatScreen: React.FC = () => {
                 renderItem={(itemData) => {
                   const message = itemData.item;
                   const isOwnMessage = message.sentBy === userData?.userId;
-                  const messageType = isOwnMessage
+                  let messageType = isOwnMessage
                     ? BubbleEnum.OwnMessage
                     : BubbleEnum.NotOwnMessage;
+
+                  if (message.type) {
+                    messageType = BubbleEnum.Info;
+                  }
 
                   const repliedTo = userChatMessages.find(
                     (i) => i.key === message.replyTo

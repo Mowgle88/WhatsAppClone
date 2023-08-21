@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import RN, {
   ActivityIndicator,
   Alert,
@@ -19,11 +19,13 @@ import {
 import { updateSignedInUserData } from "../utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
 import userImage from "../assets/images/userImage.jpeg";
+import { updateChatData } from "../utils/actions/chatActions";
 
 interface ProfileImageProps {
   size: number;
   uri?: string | null;
-  userId: string;
+  userId?: string;
+  chatId?: string;
   isShowEditButton?: boolean;
   onPress?: () => void;
   style?: ViewStyle;
@@ -32,7 +34,8 @@ interface ProfileImageProps {
 const ProfileImage: React.FC<ProfileImageProps> = ({
   size,
   uri,
-  userId,
+  userId = "",
+  chatId,
   isShowEditButton = true,
   onPress,
   style,
@@ -50,7 +53,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
         if (image.path) {
           setIsLoading(true);
 
-          const uploadUri = await uploadImageAsync(image.path);
+          const uploadUri = await uploadImageAsync(image.path, !!chatId);
 
           setIsLoading(false);
 
@@ -58,10 +61,14 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
             throw new Error("could not upload image");
           }
 
-          const newData = { profilePicture: uploadUri };
+          if (chatId) {
+            await updateChatData(chatId, userId, { chatImage: uploadUri });
+          } else {
+            const newData = { profilePicture: uploadUri };
 
-          await updateSignedInUserData(userId, newData);
-          dispatch(updateLoggetInUserData({ newData }));
+            await updateSignedInUserData(userId, newData);
+            dispatch(updateLoggetInUserData({ newData }));
+          }
 
           setImageUri({ uri: uploadUri });
         }
@@ -127,6 +134,10 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     setImageUri(userImage);
   };
 
+  useEffect(() => {
+    uri && setImageUri({ uri: uri });
+  }, [uri]);
+
   return (
     <View style={[styles.container, style]}>
       {isLoading ? (
@@ -144,7 +155,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
           onPress={onPress || renderAlert}
           style={[styles.editIcon, onPress && styles.removeIcon]}
         >
-          <FontAwesome name="remove" size={onPress ? 12 : 16} color="black" />
+          <FontAwesome
+            name={onPress ? "remove" : "pencil"}
+            size={onPress ? 12 : 16}
+            color="black"
+          />
         </TouchableOpacity>
       )}
     </View>

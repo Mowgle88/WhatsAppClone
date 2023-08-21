@@ -8,6 +8,7 @@ export type State = {
     password?: string;
     about?: string;
     profilePicture?: string;
+    chatName?: string;
   };
   inputValidities: {
     firstName?: string;
@@ -16,6 +17,7 @@ export type State = {
     password?: string;
     about?: string;
     profilePicture?: string;
+    chatName?: string;
   };
   formIsValid: boolean;
 };
