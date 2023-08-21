@@ -183,17 +183,26 @@ export const addUsersToChat = async (
   const existingUsers = Object.values(chatData.users);
   const newUsers: string[] = [];
 
-  usersToAddData.forEach((userToAdd) => {
+  let userAddedName = "";
+
+  for await (const userToAdd of usersToAddData) {
     const userToAddId = userToAdd.userId;
     if (existingUsers.includes(userToAddId)) return;
     newUsers.push(userToAddId);
 
-    addUserChat(userToAddId, chatData.key);
-  });
+    await addUserChat(userToAddId, chatData.key);
+
+    userAddedName += `${userToAdd.firstName} ${userToAdd.lastName}, `;
+  }
 
   if (!newUsers.length) return;
 
   await updateChatData(chatData.key, userLoggedInData.userId, {
     users: existingUsers.concat(newUsers),
   });
+
+  const messageText = `${userLoggedInData.firstName} ${
+    userLoggedInData.lastName
+  } added ${userAddedName.slice(0, -2)} to the chat`;
+  await sendInfoMessage(chatData.key, userLoggedInData.userId, messageText);
 };
