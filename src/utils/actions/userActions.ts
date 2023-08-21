@@ -3,7 +3,9 @@ import {
   endAt,
   get,
   orderByChild,
+  push,
   query,
+  remove,
   startAt,
 } from "firebase/database";
 import { getDbRef } from "../firebaseHelper";
@@ -39,6 +41,42 @@ export const searchUsers = async (queryText: string) => {
     }
 
     return {};
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const getUserChats = async (userId: string) => {
+  try {
+    const dbRef = getDbRef();
+    const userRef = child(dbRef, `userChats/${userId}`);
+
+    const snapshot = await get(userRef);
+    return snapshot.val();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const deleteUserChat = async (userId: string, key: string) => {
+  try {
+    const dbRef = getDbRef();
+    const chatRef = child(dbRef, `userChats/${userId}/${key}`);
+
+    await remove(chatRef);
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+};
+
+export const addUserChat = async (userId: string, chatId: string) => {
+  try {
+    const dbRef = getDbRef();
+    const chatRef = child(dbRef, `userChats/${userId}`);
+
+    await push(chatRef, chatId);
   } catch (error) {
     console.log(error);
     throw error;

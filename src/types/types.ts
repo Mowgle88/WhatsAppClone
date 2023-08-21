@@ -4,6 +4,13 @@ export enum IdEnum {
   Email = "email",
   Password = "password",
   About = "about",
+  ChatName = "chatName",
+}
+
+export enum DataItemTypeEnum {
+  Checkbox = "checkbox",
+  Link = "link",
+  Button = "button",
 }
 
 export interface IUserData {
@@ -27,6 +34,7 @@ export enum BubbleEnum {
   OwnMessage = "ownMessage",
   NotOwnMessage = "notOwnMessage",
   Reply = "reply",
+  Info = "info",
 }
 
 export interface IObjectData<T> {
@@ -43,6 +51,7 @@ export interface IChatData {
   latestMessageText?: string;
   isGroupChat?: boolean;
   chatName?: string;
+  chatImage?: string;
 }
 
 export interface IChatMessagesData {
@@ -52,6 +61,7 @@ export interface IChatMessagesData {
   key?: string;
   replyTo?: string;
   imageUrl?: string;
+  type?: string;
 }
 
 export interface IStarredMessage {
