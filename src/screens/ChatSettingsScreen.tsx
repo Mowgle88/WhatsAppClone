@@ -192,7 +192,6 @@ const ChatSettingsScreen: React.FC = () => {
               onPress={() => {
                 navigation.navigate("DataList", {
                   title: "Participants",
-                  data: chatData.users,
                   type: "users",
                   chatId: chatId,
                 });

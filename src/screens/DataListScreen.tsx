@@ -14,10 +14,13 @@ const DataListScreen = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
   const route = useRoute<DataListScreenRouteProp>();
 
+  const { title: headerTitle, type, chatId } = route?.params;
+
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const userData = useAppSelector((state) => state.auth.userData);
-
-  const { title: headerTitle, data, type, chatId } = route?.params;
+  const chatData = useAppSelector(
+    (state) => state.chats?.chatsData[chatId] || {}
+  );
 
   useEffect(() => {
     navigation.setOptions({
@@ -28,7 +31,7 @@ const DataListScreen = () => {
   return (
     <ScreenContainer>
       <FlatList
-        data={data}
+        data={chatData.users}
         keyExtractor={(item) => item}
         renderItem={(itemData) => {
           let key, onPress, image, title, subTitle, itemType;
