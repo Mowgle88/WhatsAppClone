@@ -48,7 +48,10 @@ const DataItem: React.FC<DataItemProps> = ({
             {title}
           </Text>
           {subTitle && (
-            <Text numberOfLines={1} style={styles.subtitle}>
+            <Text
+              numberOfLines={type === DataItemTypeEnum.StarredMessage ? 0 : 1}
+              style={styles.subtitle}
+            >
               {subTitle}
             </Text>
           )}
