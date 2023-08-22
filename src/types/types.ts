@@ -11,6 +11,7 @@ export enum DataItemTypeEnum {
   Checkbox = "checkbox",
   Link = "link",
   Button = "button",
+  StarredMessage = "starredMessage",
 }
 
 export interface IUserData {

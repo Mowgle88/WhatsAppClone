@@ -33,7 +33,6 @@ export type RootStackParamList = {
   };
   DataList: {
     title: string;
-    // data: string[];
     type: string;
     chatId: string;
   };

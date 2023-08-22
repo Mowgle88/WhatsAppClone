@@ -213,6 +213,19 @@ const ChatSettingsScreen: React.FC = () => {
             />
           )
         )}
+        <DataItem
+          type={DataItemTypeEnum.Link}
+          title="Starred messages"
+          hideImage
+          icon="star-outline"
+          onPress={() => {
+            navigation.navigate("DataList", {
+              title: "Starred messages",
+              type: "messages",
+              chatId: chatId,
+            });
+          }}
+        />
       </ScrollView>
       {
         <SubmitButton
