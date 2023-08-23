@@ -88,13 +88,13 @@ const ChatScreen: React.FC = () => {
   useEffect(() => {
     if (!chatData) return;
 
-    const otherUserId = chatData?.users.find((uid) => uid !== userData!.userId);
-    const otherUserData: IUserData = storedUsers[`${otherUserId}`];
+    const otherUserId = chatData.users.find((uid) => uid !== userData!.userId);
+    const otherUserData: IUserData = storedUsers[otherUserId!];
     const headerTitle =
       otherUserData && `${otherUserData.firstName} ${otherUserData.lastName}`;
 
     navigation.setOptions({
-      headerTitle: chatData?.chatName ?? headerTitle,
+      headerTitle: chatData?.chatName || headerTitle,
       headerRight: () => {
         return (
           <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
@@ -110,6 +110,7 @@ const ChatScreen: React.FC = () => {
                         uid: chatData?.users.find(
                           (uid) => uid !== userData!.userId
                         )!,
+                        chatId,
                       })
                 }
               />

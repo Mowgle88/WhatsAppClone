@@ -14,10 +14,10 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setStoredUsers: (state, action) => {
-      const newUsers: IUsers = action.payload.newUsers;
+      const users: IUsers = action.payload.users;
       const existingUsers: IUsers = state.storedUsers;
 
-      const usersArray: IUserData[] = Object.values(newUsers);
+      const usersArray: IUserData[] = Object.values(users);
 
       for (let user of usersArray) {
         existingUsers[user.userId] = user;

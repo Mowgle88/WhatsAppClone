@@ -1,4 +1,10 @@
-import React, { useCallback, useEffect, useReducer, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import {
   ActivityIndicator,
   Alert,
@@ -42,6 +48,14 @@ const ChatSettingsScreen: React.FC = () => {
   );
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
+  const starredMessages = useAppSelector(
+    (state) => state.messages.starredMesages
+  );
+
+  const chatStarredMessages = useMemo(() => {
+    if (!chatId) return null;
+    return starredMessages[chatId] || null;
+  }, [starredMessages]);
 
   const [isLoading, setIsLoading] = useState(false);
   const [succesMessage, setSuccesMessage] = useState(false);
@@ -213,19 +227,21 @@ const ChatSettingsScreen: React.FC = () => {
             />
           )
         )}
-        <DataItem
-          type={DataItemTypeEnum.Link}
-          title="Starred messages"
-          hideImage
-          icon="star-outline"
-          onPress={() => {
-            navigation.navigate("DataList", {
-              title: "Starred messages",
-              type: "messages",
-              chatId: chatId,
-            });
-          }}
-        />
+        {chatStarredMessages && (
+          <DataItem
+            type={DataItemTypeEnum.Link}
+            title="Starred messages"
+            hideImage
+            icon="star-outline"
+            onPress={() => {
+              navigation.navigate("DataList", {
+                title: "Starred messages",
+                type: "messages",
+                chatId: chatId,
+              });
+            }}
+          />
+        )}
       </ScrollView>
       {
         <SubmitButton
