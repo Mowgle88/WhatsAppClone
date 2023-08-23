@@ -7,9 +7,7 @@ import { Provider } from "react-redux";
 import { MenuProvider } from "react-native-popup-menu";
 import { store } from "./store/store";
 
-LogBox.ignoreLogs([
-  "Warning: Async Storage has been extracted from react-native core",
-]);
+LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
 
 export default function App() {
   useEffect(() => {

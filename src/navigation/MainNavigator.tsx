@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
-import { child, get, off, onValue } from "firebase/database";
+import { child, off, onValue } from "firebase/database";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
@@ -116,7 +116,6 @@ const MainNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const userData = useAppSelector((state) => state.auth.userData);
-  const storedUsers = useAppSelector((state) => state.users.storedUsers);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -150,13 +149,11 @@ const MainNavigator: React.FC = () => {
             data.key = chatSnapshot.key!;
 
             data.users.forEach((userId) => {
-              if (storedUsers[userId]) return;
-
               const userRef = child(dbRef, `users/${userId}`);
 
-              get(userRef).then((userSnapshot) => {
+              onValue(userRef, (userSnapshot) => {
                 const userSnapshotData = userSnapshot.val();
-                dispatch(setStoredUsers({ newUsers: { userSnapshotData } }));
+                dispatch(setStoredUsers({ users: { userSnapshotData } }));
               });
 
               refs.push(userRef);

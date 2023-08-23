@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useAppSelector } from "../store/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -23,13 +23,21 @@ const ContactScreen = () => {
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
   const userData = useAppSelector((state) => state.auth.userData);
+  const starredMessages = useAppSelector(
+    (state) => state.messages.starredMesages
+  );
 
   const [commonChats, seCommonChats] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const currentUser = storedUsers[params.uid];
-  const chatId = params.chatId;
+  const chatId = params?.chatId;
   const currentChatData = chatId && storedChats[chatId];
+
+  const chatStarredMessages = useMemo(() => {
+    if (!chatId) return null;
+    return starredMessages[chatId] || null;
+  }, [starredMessages]);
 
   useEffect(() => {
     const getCommonUserChats = async () => {
@@ -85,15 +93,15 @@ const ContactScreen = () => {
             {commonChats.length} {commonChats.length === 1 ? "Group" : "Groups"}{" "}
             in common
           </Text>
-          {commonChats.map((cid) => {
+          {commonChats.map((cid, index) => {
             const chatData = storedChats[cid];
 
             return (
               <DataItem
-                key={chatData.key}
-                title={chatData.chatName!}
-                subTitle={chatData.latestMessageText!}
-                image={chatData.chatImage!}
+                key={`${chatData?.key}-${index}`}
+                title={chatData?.chatName!}
+                subTitle={chatData?.latestMessageText!}
+                image={chatData?.chatImage!}
                 type={DataItemTypeEnum.Link}
                 onPress={() => {
                   navigation.push("Chat", { chatId: cid });
@@ -102,6 +110,22 @@ const ContactScreen = () => {
             );
           })}
         </>
+      )}
+
+      {chatStarredMessages && (
+        <DataItem
+          type={DataItemTypeEnum.Link}
+          title="Starred messages"
+          hideImage
+          icon="star-outline"
+          onPress={() => {
+            navigation.navigate("DataList", {
+              title: "Starred messages",
+              type: "messages",
+              chatId: chatId!,
+            });
+          }}
+        />
       )}
 
       {currentChatData &&

@@ -73,7 +73,10 @@ const ChatListScreen: React.FC = () => {
     if (chatData) {
       navigationProps = { chatId: chatData.key };
     } else {
-      const chatUsers = selectedUserList || [selectedUser];
+      const chatUsers = selectedUserList.length
+        ? selectedUserList
+        : [selectedUser!];
+
       if (!chatUsers.includes(authorizedUserData!.userId)) {
         chatUsers.push(authorizedUserData!.userId);
       }
@@ -81,7 +84,7 @@ const ChatListScreen: React.FC = () => {
       navigationProps = {
         newChatData: {
           users: chatUsers,
-          isGroupChat: selectedUserList !== undefined,
+          isGroupChat: !!selectedUserList.length,
           chatName,
         },
       };

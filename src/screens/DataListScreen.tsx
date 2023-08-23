@@ -28,7 +28,7 @@ const DataListScreen = () => {
 
   const chatStarredMessages = useMemo(() => {
     if (!chatId) return {};
-    return starredMessages[chatId];
+    return starredMessages[chatId] || {};
   }, [starredMessages]);
 
   const flatListData =

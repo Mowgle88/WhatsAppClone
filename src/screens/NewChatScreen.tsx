@@ -110,7 +110,7 @@ const NewChatScreen = () => {
       } else {
         setIsNoResultFound(false);
 
-        dispatch(setStoredUsers({ newUsers: usersResult }));
+        dispatch(setStoredUsers({ users: usersResult }));
       }
 
       setIsLoading(false);
