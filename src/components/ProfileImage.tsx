@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import RN, {
   ActivityIndicator,
-  Alert,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -10,6 +9,7 @@ import RN, {
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Image } from "react-native-image-crop-picker";
 import { useDispatch } from "react-redux";
+import { ActionSheetRef } from "react-native-actions-sheet";
 import colors from "../constants/colors";
 import {
   openCamera,
@@ -20,6 +20,7 @@ import { updateSignedInUserData } from "../utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
 import userImage from "../assets/images/userImage.jpeg";
 import { updateChatData } from "../utils/actions/chatActions";
+import BottomActionsSheet from "./BottomActionsSheet";
 
 interface ProfileImageProps {
   size: number;
@@ -30,6 +31,24 @@ interface ProfileImageProps {
   onPress?: () => void;
   style?: ViewStyle;
 }
+
+const buttons = [
+  {
+    id: "gallery",
+    icon: "image-outline",
+    label: "Select from gallery",
+  },
+  {
+    id: "camera",
+    icon: "camera-outline",
+    label: "Take new photo",
+  },
+  {
+    id: "remove",
+    icon: "trash-outline",
+    label: "Remove",
+  },
+];
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
   size,
@@ -45,6 +64,26 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
 
   const [imageUri, setImageUri] = useState(source);
   const [isLoading, setIsLoading] = useState(false);
+
+  const actionSheetRef = useRef<ActionSheetRef>(null);
+
+  const selectAction = async (id: string) => {
+    switch (id) {
+      case "gallery":
+        await onPressChoose();
+        break;
+      case "camera":
+        await onPressNewPhoto();
+        break;
+      case "remove":
+        await onPressDelete();
+        break;
+
+      default:
+        break;
+    }
+    actionSheetRef.current?.hide();
+  };
 
   const onPressChoose = async () => {
     await showImagePicker(
@@ -99,35 +138,6 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
     });
   };
 
-  const renderAlert = () =>
-    Alert.alert(
-      "Upload Image",
-      "Choose an option",
-      [
-        {
-          text: "Upload from gallery",
-          onPress: onPressChoose,
-        },
-        {
-          text: "Take new photo",
-          onPress: onPressNewPhoto,
-        },
-        {
-          text: "Remove",
-          onPress: onPressDelete,
-          style: "destructive",
-        },
-        {
-          text: "Cancel",
-          onPress: () => {},
-          style: "cancel",
-        },
-      ],
-      {
-        cancelable: true,
-      }
-    );
-
   const onPressDelete = async () => {
     await updateSignedInUserData(userId, { profilePicture: "" });
     dispatch(updateLoggetInUserData({ newData: { profilePicture: "" } }));
@@ -139,30 +149,44 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   }, [uri]);
 
   return (
-    <View style={[styles.container, style]}>
-      {isLoading ? (
-        <View style={[styles.loadingContainer, { width: size, height: size }]}>
-          <ActivityIndicator size={"small"} color={colors.primary} />
-        </View>
-      ) : (
-        <RN.Image
-          source={imageUri}
-          style={[styles.image, { width: size, height: size }]}
-        />
-      )}
-      {isShowEditButton && !isLoading && (
-        <TouchableOpacity
-          onPress={onPress || renderAlert}
-          style={[styles.editIcon, onPress && styles.removeIcon]}
-        >
-          <FontAwesome
-            name={onPress ? "remove" : "pencil"}
-            size={onPress ? 12 : 16}
-            color="black"
+    <>
+      <View style={[styles.container, style]}>
+        {isLoading ? (
+          <View
+            style={[styles.loadingContainer, { width: size, height: size }]}
+          >
+            <ActivityIndicator size={"small"} color={colors.primary} />
+          </View>
+        ) : (
+          <RN.Image
+            source={imageUri}
+            style={[styles.image, { width: size, height: size }]}
           />
-        </TouchableOpacity>
-      )}
-    </View>
+        )}
+        {isShowEditButton && !isLoading && (
+          <TouchableOpacity
+            onPress={
+              onPress ||
+              (() => {
+                actionSheetRef.current?.show();
+              })
+            }
+            style={[styles.editIcon, onPress && styles.removeIcon]}
+          >
+            <FontAwesome
+              name={onPress ? "remove" : "pencil"}
+              size={onPress ? 12 : 16}
+              color="black"
+            />
+          </TouchableOpacity>
+        )}
+      </View>
+      <BottomActionsSheet
+        ref={actionSheetRef}
+        data={buttons}
+        onPress={selectAction}
+      />
+    </>
   );
 };
 
