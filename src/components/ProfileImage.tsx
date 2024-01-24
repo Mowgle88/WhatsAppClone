@@ -183,7 +183,11 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
       </View>
       <BottomActionsSheet
         ref={actionSheetRef}
-        data={buttons}
+        data={
+          imageUri !== userImage
+            ? buttons
+            : buttons.filter((btn) => btn.id !== "remove")
+        }
         onPress={selectAction}
       />
     </>
