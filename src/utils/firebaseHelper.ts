@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getDatabase, ref } from "firebase/database";
 
 export const getFirebaseApp = () => {
   // TODO: Add SDKs for Firebase products that you want to use
@@ -18,4 +19,9 @@ export const getFirebaseApp = () => {
 
   // Initialize Firebase
   return initializeApp(firebaseConfig);
+};
+
+export const getDbRef = () => {
+  const app = getFirebaseApp();
+  return ref(getDatabase(app));
 };

@@ -17,7 +17,10 @@ export const validateInput = (id: IdEnum, value: string) => {
     return validatePasword(id, value);
   }
   if (id === IdEnum.About) {
-    return validateLength(id, value, 0, 50, true);
+    return validateLength(id, value, 0, 150, true);
+  }
+  if (id === IdEnum.ChatName) {
+    return validateLength(id, value, 3, 50, false);
   }
   return "";
 };
