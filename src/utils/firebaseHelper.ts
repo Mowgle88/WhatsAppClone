@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getDatabase, ref } from "firebase/database";
+import { FIREBASE_API_KEY } from "@env";
 
 export const getFirebaseApp = () => {
   // TODO: Add SDKs for Firebase products that you want to use
@@ -8,7 +9,7 @@ export const getFirebaseApp = () => {
   // Your web app's Firebase configuration
   // For Firebase JS SDK v7.20.0 and later, measurementId is optional
   const firebaseConfig = {
-    apiKey: "AIzaSyAr_A4vYnhTlhZMtJ4wrYLqoRcOGwDuwXc",
+    apiKey: FIREBASE_API_KEY,
     authDomain: "whatsapp-c2023.firebaseapp.com",
     projectId: "whatsapp-c2023",
     storageBucket: "whatsapp-c2023.appspot.com",
