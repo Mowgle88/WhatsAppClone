@@ -65,7 +65,11 @@ const SettingsScreen: React.FC = () => {
   );
 
   const saveHandler = useCallback(async () => {
-    const updateValues = formState.inputValues;
+    const updateValues = {
+      ...formState.inputValues,
+      fullName:
+        `${formState.inputValues.firstName} ${formState.inputValues.lastName}`.toLowerCase(),
+    };
     try {
       setIsLoading(true);
       await updateSignedInUserData(userData?.userId!, updateValues);
@@ -76,6 +80,7 @@ const SettingsScreen: React.FC = () => {
         setSuccesMessage(false);
       }, 3000);
     } catch (error: any) {
+      console.log(error);
       Alert.alert("An error occurred", error.message);
     } finally {
       setIsLoading(false);
