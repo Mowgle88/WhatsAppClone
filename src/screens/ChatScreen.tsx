@@ -79,7 +79,10 @@ const ChatScreen: React.FC = () => {
       const message = chatMessagesData[key];
       messageList.push({ key, ...message });
     }
-    return messageList;
+
+    return messageList.sort(
+      (prev, next) => +new Date(prev.sentAt) - +new Date(next.sentAt)
+    );
   }, [chatMesages]);
 
   const chatData =
