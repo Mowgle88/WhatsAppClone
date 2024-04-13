@@ -22,6 +22,8 @@
 		D6297CEF4D3B48BEB6A739D9 /* Caveat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 407A40552B8A46CDBEE96216 /* Caveat-Regular.ttf */; };
 		E260E06AADF822C369C3A7BB /* Pods_WhatsAppClone.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF5321BC095528CEA608287D /* Pods_WhatsAppClone.framework */; };
 		E6EF0F6B7D634E0CA40CB039 /* Alkatra-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C70E7BBC0205482EB3EBB010 /* Alkatra-Regular.ttf */; };
+		EA70A3DC9CAEBC67B9B602FA /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C67C552F0FD36BEF9F9E3A3 /* ExpoModulesProvider.swift */; };
+		FD2C27EDF9FA2B401DF5721E /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBC3D8133FB860109A233CED /* ExpoModulesProvider.swift */; };
 		FED7790E9126FA52E26E7A97 /* Pods_WhatsAppClone_WhatsAppCloneTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47775C148A28B64E10329166 /* Pods_WhatsAppClone_WhatsAppCloneTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +54,7 @@
 		4FEEFA0AD3E941EC8A960BCB /* Caveat-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Caveat-Medium.ttf"; path = "../src/assets/fonts/Caveat-Medium.ttf"; sourceTree = "<group>"; };
 		5709B34CF0A7D63546082F79 /* Pods-WhatsAppClone.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatsAppClone.release.xcconfig"; path = "Target Support Files/Pods-WhatsAppClone/Pods-WhatsAppClone.release.xcconfig"; sourceTree = "<group>"; };
 		5B7EB9410499542E8C5724F5 /* Pods-WhatsAppClone-WhatsAppCloneTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatsAppClone-WhatsAppCloneTests.debug.xcconfig"; path = "Target Support Files/Pods-WhatsAppClone-WhatsAppCloneTests/Pods-WhatsAppClone-WhatsAppCloneTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6C67C552F0FD36BEF9F9E3A3 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-WhatsAppClone/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = WhatsAppClone/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-WhatsAppClone-WhatsAppCloneTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-WhatsAppClone-WhatsAppCloneTests.release.xcconfig"; path = "Target Support Files/Pods-WhatsAppClone-WhatsAppCloneTests/Pods-WhatsAppClone-WhatsAppCloneTests.release.xcconfig"; sourceTree = "<group>"; };
 		8B16EA002BB76CF800AF4AAC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -64,6 +67,7 @@
 		8BE50CB029DA2AA9000597F0 /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
 		8BE50CB129DA2AB0000597F0 /* FontAwesome5_Solid.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; name = FontAwesome5_Solid.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Solid.ttf"; sourceTree = "<group>"; };
 		A167BB174C7C4B0D9AFC5591 /* Alkatra-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Alkatra-Medium.ttf"; path = "../src/assets/fonts/Alkatra-Medium.ttf"; sourceTree = "<group>"; };
+		BBC3D8133FB860109A233CED /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-WhatsAppClone-WhatsAppCloneTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		BF5321BC095528CEA608287D /* Pods_WhatsAppClone.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_WhatsAppClone.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C70E7BBC0205482EB3EBB010 /* Alkatra-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Alkatra-Regular.ttf"; path = "../src/assets/fonts/Alkatra-Regular.ttf"; sourceTree = "<group>"; };
 		D2D3318723154F969E9AF930 /* Caveat-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Caveat-Bold.ttf"; path = "../src/assets/fonts/Caveat-Bold.ttf"; sourceTree = "<group>"; };
@@ -132,6 +136,14 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		70684640F1D45ACA328A5F64 /* WhatsAppClone */ = {
+			isa = PBXGroup;
+			children = (
+				6C67C552F0FD36BEF9F9E3A3 /* ExpoModulesProvider.swift */,
+			);
+			name = WhatsAppClone;
+			sourceTree = "<group>";
+		};
 		7DA7A0743EC54F5499F625C4 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -163,6 +175,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
 				7DA7A0743EC54F5499F625C4 /* Resources */,
+				D445D74DF4F15A1331704EE0 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -201,6 +214,23 @@
 				89C6BE57DB24E9ADA2F236DE /* Pods-WhatsAppClone-WhatsAppCloneTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		D445D74DF4F15A1331704EE0 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				70684640F1D45ACA328A5F64 /* WhatsAppClone */,
+				DEF24E7CA46BC75991CE8AAE /* WhatsAppCloneTests */,
+			);
+			name = ExpoModulesProviders;
+			sourceTree = "<group>";
+		};
+		DEF24E7CA46BC75991CE8AAE /* WhatsAppCloneTests */ = {
+			isa = PBXGroup;
+			children = (
+				BBC3D8133FB860109A233CED /* ExpoModulesProvider.swift */,
+			);
+			name = WhatsAppCloneTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -447,6 +477,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				00E356F31AD99517003FC87E /* WhatsAppCloneTests.m in Sources */,
+				FD2C27EDF9FA2B401DF5721E /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +487,7 @@
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				EA70A3DC9CAEBC67B9B602FA /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -481,7 +513,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = WhatsAppCloneTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -492,6 +524,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhatsAppClone.app/WhatsAppClone";
@@ -506,7 +539,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				INFOPLIST_FILE = WhatsAppCloneTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -517,6 +550,7 @@
 					"-lc++",
 					"$(inherited)",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/WhatsAppClone.app/WhatsAppClone";
@@ -541,6 +575,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_DEBUG";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = WhatsAppClone;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -566,6 +601,7 @@
 					"-ObjC",
 					"-lc++",
 				);
+				OTHER_SWIFT_FLAGS = "$(inherited) -D EXPO_CONFIGURATION_RELEASE";
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = WhatsAppClone;
 				SWIFT_VERSION = 5.0;
@@ -622,7 +658,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
@@ -687,7 +723,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.4;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					/usr/lib/swift,
 					"$(inherited)",
