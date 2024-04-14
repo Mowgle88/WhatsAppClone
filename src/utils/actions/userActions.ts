@@ -1,21 +1,10 @@
-import {
-  child,
-  endAt,
-  get,
-  orderByChild,
-  push,
-  query,
-  remove,
-  startAt,
-} from "firebase/database";
-import { getDbRef } from "../firebaseHelper";
+import database from "@react-native-firebase/database";
 
 export const getUserData = async (userId: string) => {
   try {
-    const dbRef = getDbRef();
+    const userRef = database().ref(`users/${userId}`);
 
-    const userRef = child(dbRef, `users/${userId}`);
-    const snapshot = await get(userRef);
+    const snapshot = await userRef.once("value");
     return snapshot.val();
   } catch (error) {}
 };
@@ -24,17 +13,14 @@ export const searchUsers = async (queryText: string) => {
   const searchTerm = queryText.toLowerCase();
 
   try {
-    const dbRef = getDbRef();
-    const userRef = child(dbRef, `users`);
+    const userRef = database().ref(`users`);
 
-    const queryRef = query(
-      userRef,
-      orderByChild("fullName"),
-      startAt(searchTerm),
-      endAt(searchTerm + "\uf8ff")
-    );
+    const queryRef = userRef
+      .orderByChild("fullName")
+      .startAt(searchTerm)
+      .endAt(searchTerm + "\uf8ff");
 
-    const snapshot = await get(queryRef);
+    const snapshot = await queryRef.once("value");
 
     if (snapshot.exists()) {
       return snapshot.val();
@@ -49,10 +35,9 @@ export const searchUsers = async (queryText: string) => {
 
 export const getUserChats = async (userId: string) => {
   try {
-    const dbRef = getDbRef();
-    const userRef = child(dbRef, `userChats/${userId}`);
+    const userRef = database().ref(`userChats/${userId}`);
 
-    const snapshot = await get(userRef);
+    const snapshot = await userRef.once("value");
     return snapshot.val();
   } catch (error) {
     console.log(error);
@@ -61,10 +46,9 @@ export const getUserChats = async (userId: string) => {
 
 export const deleteUserChat = async (userId: string, key: string) => {
   try {
-    const dbRef = getDbRef();
-    const chatRef = child(dbRef, `userChats/${userId}/${key}`);
+    const chatRef = database().ref(`userChats/${userId}/${key}`);
 
-    await remove(chatRef);
+    await chatRef.remove();
   } catch (error) {
     console.log(error);
     throw error;
@@ -73,10 +57,9 @@ export const deleteUserChat = async (userId: string, key: string) => {
 
 export const addUserChat = async (userId: string, chatId: string) => {
   try {
-    const dbRef = getDbRef();
-    const chatRef = child(dbRef, `userChats/${userId}`);
+    const chatRef = database().ref(`userChats/${userId}`).push();
 
-    await push(chatRef, chatId);
+    await chatRef.set(chatId);
   } catch (error) {
     console.log(error);
     throw error;

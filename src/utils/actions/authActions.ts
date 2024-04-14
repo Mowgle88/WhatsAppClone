@@ -1,21 +1,9 @@
-import { getFirebaseApp } from "../firebaseHelper";
-import {
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  GoogleAuthProvider,
-  signInWithCredential,
-} from "firebase/auth";
+import auth from "@react-native-firebase/auth";
 import {
   GoogleSignin,
   statusCodes,
 } from "@react-native-google-signin/google-signin";
-// import {
-//   initializeAuth,
-//   getReactNativePersistence,
-// } from "firebase/auth/react-native";
-import { FirebaseError } from "@firebase/util";
-import { getDatabase, set, ref, child, update } from "firebase/database";
+import database from "@react-native-firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { authenticate, logout } from "../../store/authSlice";
 import { getUserData } from "./userActions";
@@ -31,9 +19,6 @@ GoogleSignin.configure({
 
 export const signInWithGoogle = () => {
   return async (dispatch: AppDispatch) => {
-    const app = getFirebaseApp();
-    const auth = getAuth(app);
-
     try {
       const isSigned = await GoogleSignin.isSignedIn();
       if (isSigned) await GoogleSignin.signOut();
@@ -41,8 +26,9 @@ export const signInWithGoogle = () => {
       await GoogleSignin.hasPlayServices();
       const { idToken } = await GoogleSignin.signIn();
 
-      const googleCredentials = GoogleAuthProvider.credential(idToken);
-      const { user } = await signInWithCredential(auth, googleCredentials);
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+      const { user } = await auth().signInWithCredential(googleCredential);
       const tokenResult = await user.getIdTokenResult();
       const { token, expirationTime } = tokenResult;
 
@@ -65,24 +51,21 @@ export const signInWithGoogle = () => {
       saveDataToStorage(idToken!, user.uid, expiryDate);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
-    } catch (error: unknown) {
-      console.log(error);
-      if (error instanceof FirebaseError) {
-        const errorCode = error.code;
+    } catch (error: any) {
+      const errorCode = error.code;
 
-        let message = "Something went wrong.";
+      let message = "Something went wrong.";
 
-        if (errorCode === statusCodes.SIGN_IN_CANCELLED) {
-          message = "SIGN_IN_CANCELLED";
-        } else if (errorCode === statusCodes.IN_PROGRESS) {
-          message = "IN_PROGRESS";
-        } else if (errorCode === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-          message = "PLAY_SERVICES_NOT_AVAILABLE";
-        } else {
-          message = error.message;
-        }
-        throw new Error(message);
+      if (errorCode === statusCodes.SIGN_IN_CANCELLED) {
+        message = "SIGN_IN_CANCELLED";
+      } else if (errorCode === statusCodes.IN_PROGRESS) {
+        message = "IN_PROGRESS";
+      } else if (errorCode === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        message = "PLAY_SERVICES_NOT_AVAILABLE";
+      } else {
+        message = error.message;
       }
+      throw new Error(message);
     }
   };
 };
@@ -94,15 +77,19 @@ export const signUp = (
   password: string
 ) => {
   return async (dispatch: AppDispatch) => {
-    const app = getFirebaseApp();
-    const auth = getAuth(app);
+    // const app = getFirebaseApp();
+    // const auth = getAuth(app);
     // const auth = initializeAuth(app, {
     //   persistence: getReactNativePersistence(AsyncStorage),
     // });
 
     try {
-      const response = await createUserWithEmailAndPassword(
-        auth,
+      // const response = await createUserWithEmailAndPassword(
+      //   auth,
+      //   email,
+      //   password
+      // );
+      const response = await auth().createUserWithEmailAndPassword(
         email,
         password
       );
@@ -118,32 +105,25 @@ export const signUp = (
       saveDataToStorage(token, uid, expiryDate);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        const errorCode = error.code;
+    } catch (error: any) {
+      // if (error instanceof FirebaseError) {
+      const errorCode = error.code;
+      let message = "Something went wrong.";
 
-        let message = "Something went wrong.";
-
-        if (errorCode === "auth/email-already-in-use") {
-          message = "This email is already is use";
-        }
-
-        throw new Error(message);
+      if (errorCode === "auth/email-already-in-use") {
+        message = "This email is already is use";
       }
+
+      throw new Error(message);
+      // }
     }
   };
 };
 
 export const signIn = (email: string, password: string) => {
   return async (dispatch: AppDispatch) => {
-    const app = getFirebaseApp();
-    const auth = getAuth(app);
-    // const auth = initializeAuth(app, {
-    //   persistence: getReactNativePersistence(AsyncStorage),
-    // });
-
     try {
-      const response = await signInWithEmailAndPassword(auth, email, password);
+      const response = await auth().signInWithEmailAndPassword(email, password);
 
       const { uid } = response.user;
       const tokenResult = await response.user.getIdTokenResult();
@@ -156,21 +136,8 @@ export const signIn = (email: string, password: string) => {
       saveDataToStorage(token, uid, expiryDate);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
-    } catch (error: unknown) {
-      if (error instanceof FirebaseError) {
-        const errorCode = error.code;
-
-        let message = "Something went wrong.";
-
-        if (
-          errorCode === "auth/wrong-password" ||
-          errorCode === "auth/user-not-found"
-        ) {
-          message = "The username or password was incorrect";
-        }
-
-        throw new Error(message);
-      }
+    } catch (error: any) {
+      throw new Error(error.nativeErrorMessage);
     }
   };
 };
@@ -196,9 +163,8 @@ export const updateSignedInUserData = async (
   userId: string,
   newData: State["inputValues"]
 ) => {
-  const dbRef = ref(getDatabase());
-  const childRef = child(dbRef, `users/${userId}`);
-  await update(childRef, newData);
+  const childRef = database().ref(`users/${userId}`);
+  await childRef.update(newData);
 };
 
 const createUser = async (
@@ -218,10 +184,8 @@ const createUser = async (
     profilePicture,
     signUpDate: new Date().toISOString(),
   };
-
-  const dbRef = ref(getDatabase());
-  const childRef = child(dbRef, `users/${userId}`);
-  await set(childRef, userData);
+  const childRef = database().ref(`users/${userId}`);
+  await childRef.update(userData);
   return userData;
 };
 

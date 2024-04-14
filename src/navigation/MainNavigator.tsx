@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
-import { child, off, onValue } from "firebase/database";
+import database from "@react-native-firebase/database";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
@@ -10,7 +10,6 @@ import ChatScreen from "../screens/ChatScreen";
 import { RootStackParamList, TabParamList } from "./types";
 import NewChatScreen from "../screens/NewChatScreen";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { getDbRef } from "../utils/firebaseHelper";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
 import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
@@ -122,12 +121,10 @@ const MainNavigator: React.FC = () => {
   useEffect(() => {
     console.log("Subscribing to firebase listening");
 
-    const dbRef = getDbRef();
-
-    const userChatsRef = child(dbRef, `userChats/${userData?.userId}`);
+    const userChatsRef = database().ref(`userChats/${userData?.userId}`);
     const refs = [userChatsRef];
 
-    onValue(userChatsRef, (querySnapshot) => {
+    userChatsRef.on("value", (querySnapshot) => {
       const chatIdsData = querySnapshot.val() || {};
       const chatIds = Object.values(chatIdsData);
 
@@ -136,10 +133,10 @@ const MainNavigator: React.FC = () => {
 
       for (let i = 0; i < chatIds.length; i++) {
         const chatId = chatIds[i];
-        const chatRef = child(dbRef, `chats/${chatId}`);
+        const chatRef = database().ref(`chats/${chatId}`);
         refs.push(chatRef);
 
-        onValue(chatRef, (chatSnapshot) => {
+        chatRef.on("value", (chatSnapshot) => {
           chatsFoundCount++;
           const data: IChatData = chatSnapshot.val();
 
@@ -149,9 +146,9 @@ const MainNavigator: React.FC = () => {
             data.key = chatSnapshot.key!;
 
             data.users.forEach((userId) => {
-              const userRef = child(dbRef, `users/${userId}`);
+              const userRef = database().ref(`users/${userId}`);
 
-              onValue(userRef, (userSnapshot) => {
+              userRef.on("value", (userSnapshot) => {
                 const userSnapshotData = userSnapshot.val();
                 dispatch(setStoredUsers({ users: { userSnapshotData } }));
               });
@@ -168,10 +165,10 @@ const MainNavigator: React.FC = () => {
           }
         });
 
-        const messagesRef = child(dbRef, `messages/${chatId}`);
+        const messagesRef = database().ref(`messages/${chatId}`);
         refs.push(messagesRef);
 
-        onValue(messagesRef, (messagesSnaphot) => {
+        messagesRef.on("value", (messagesSnaphot) => {
           const messagesData: IObjectData<IChatMessagesData> =
             messagesSnaphot.val();
           dispatch(setChatMessages({ chatId, messagesData }));
@@ -183,13 +180,12 @@ const MainNavigator: React.FC = () => {
       }
     });
 
-    const userStarredMessageRef = child(
-      dbRef,
+    const userStarredMessageRef = database().ref(
       `userStarredMessages/${userData?.userId}`
     );
     refs.push(userStarredMessageRef);
 
-    onValue(userStarredMessageRef, (querySnapshot) => {
+    userStarredMessageRef.on("value", (querySnapshot) => {
       const starredMessages = querySnapshot.val() ?? {};
       dispatch(setStarredMessages({ starredMessages }));
     });
@@ -197,7 +193,7 @@ const MainNavigator: React.FC = () => {
     return () => {
       console.log("Unsubscribing to firebase lisstening");
 
-      refs.forEach((chatsRef) => off(chatsRef));
+      refs.forEach((chatsRef) => chatsRef.off());
     };
   }, []);
 

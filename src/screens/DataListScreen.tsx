@@ -34,7 +34,9 @@ const DataListScreen = () => {
   const flatListData =
     type === "users"
       ? chatData.users
-      : Object.values(chatStarredMessages).map((data) => data.messageId);
+      : Object.values(chatStarredMessages)
+          .map((data) => data.messageId)
+          .reverse();
 
   useEffect(() => {
     navigation.setOptions({

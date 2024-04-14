@@ -2,12 +2,15 @@ import React, { useEffect } from "react";
 import { StyleSheet, LogBox } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import SplashScreen from "react-native-splash-screen";
+// import firebase from "@react-native-firebase/app";
 import AppNavigator from "./navigation/AppNavigator";
 import { Provider } from "react-redux";
 import { MenuProvider } from "react-native-popup-menu";
 import { store } from "./store/store";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
+
+// console.log("apps: ", firebase.apps);
 
 export default function App() {
   useEffect(() => {
