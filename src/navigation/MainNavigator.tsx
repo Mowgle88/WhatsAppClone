@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import Icon from "react-native-vector-icons/Ionicons";
 import database from "@react-native-firebase/database";
+import * as Notifications from "expo-notifications";
+import { Subscription } from "expo-modules-core";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
@@ -14,11 +16,26 @@ import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
 import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
 import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Alert, View } from "react-native";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
 import ContactScreen from "../screens/ContactScreen";
 import DataListScreen from "../screens/DataListScreen";
+import {
+  registerForPushNotificationsAsync,
+  schedulePushNotification,
+  sendPushNotification,
+} from "../utils/expoNotificationsHelper";
+
+import Clipboard from "@react-native-clipboard/clipboard";
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<TabParamList>();
@@ -117,6 +134,64 @@ const MainNavigator: React.FC = () => {
   const userData = useAppSelector((state) => state.auth.userData);
 
   const [isLoading, setIsLoading] = useState(true);
+  const [expoPushToken, setExpoPushToken] = useState("");
+
+  // for testing
+  if (expoPushToken) {
+    Alert.alert("expoPushToken", expoPushToken, [
+      {
+        text: "schedulePushNotification",
+        onPress: () => {
+          Clipboard.setString(expoPushToken);
+          schedulePushNotification();
+        },
+      },
+      {
+        text: "sendPushNotification",
+        onPress: () => {
+          Clipboard.setString(expoPushToken);
+          sendPushNotification(expoPushToken);
+        },
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  }
+
+  // const [notification, setNotification] = useState<
+  //   Notifications.Notification | undefined
+  // >(undefined);
+
+  const notificationListener = useRef<Subscription>();
+  const responseListener = useRef<Subscription>();
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then((token) => setExpoPushToken(token ?? ""))
+      .catch((error: any) => setExpoPushToken(`${error}`));
+
+    notificationListener.current =
+      Notifications.addNotificationReceivedListener((notification) => {
+        // setNotification(notification);
+        console.log("notification", notification);
+      });
+
+    responseListener.current =
+      Notifications.addNotificationResponseReceivedListener((response) => {
+        console.log("response", response);
+      });
+
+    return () => {
+      notificationListener.current &&
+        Notifications.removeNotificationSubscription(
+          notificationListener.current
+        );
+      responseListener.current &&
+        Notifications.removeNotificationSubscription(responseListener.current);
+    };
+  }, []);
 
   useEffect(() => {
     console.log("Subscribing to firebase listening");

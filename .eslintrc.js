@@ -25,6 +25,7 @@ module.exports = {
     "@typescript-eslint/no-shadow": ["error"],
     "import/no-named-as-default-member": 0,
     "import/named": 0,
+    "import/namespace": 0,
   },
   settings: {
     "import/resolver": {
