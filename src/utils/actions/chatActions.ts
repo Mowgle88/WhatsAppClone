@@ -1,5 +1,4 @@
-import { child, get, push, remove, set, update } from "firebase/database";
-import { getDbRef } from "../firebaseHelper";
+import database from "@react-native-firebase/database";
 import {
   IChatData,
   IChatMessagesData,
@@ -22,13 +21,14 @@ export const createChat = async (
     updatedAt: new Date().toISOString(),
   };
 
-  const dbRef = getDbRef();
-  const newChat = await push(child(dbRef, "chats"), newChatData);
+  const newChat = database().ref("chats").push();
+  await newChat.set(newChatData);
 
   const chatUsers = newChatData.users;
   for (let i = 0; i < chatUsers.length; i++) {
     const userId = chatUsers[i];
-    await push(child(dbRef, `userChats/${userId}`), newChat.key);
+    const userChat = database().ref(`userChats/${userId}`).push();
+    await userChat.set(newChat.key);
   }
 
   return newChat.key;
@@ -42,8 +42,7 @@ const sendMessage = async (
   replyTo?: string | null,
   type?: string
 ) => {
-  const dbRef = getDbRef();
-  const messagesRef = child(dbRef, `messages/${chatId}`);
+  const messagesRef = database().ref(`messages/${chatId}`).push();
 
   const messageData: IChatMessagesData = {
     sentBy: senderId,
@@ -63,10 +62,11 @@ const sendMessage = async (
     messageData.type = type;
   }
 
-  await push(messagesRef, messageData);
+  await messagesRef.set(messageData);
 
-  const chatRef = child(dbRef, `chats/${chatId}`);
-  await update(chatRef, {
+  const chatRef = database().ref(`chats/${chatId}`);
+
+  await chatRef.update({
     updatedBy: senderId,
     updatedAt: new Date().toISOString(),
     latestMessageText: messageText,
@@ -106,25 +106,21 @@ export const starMessage = async (
   userId: string
 ) => {
   try {
-    const dbRef = getDbRef();
-
-    const childRef = child(
-      dbRef,
+    const childRef = database().ref(
       `userStarredMessages/${userId}/${chatId}/${messageId}`
     );
 
-    const snapshot = await get(childRef);
+    const snapshot = await childRef.once("value");
 
     if (snapshot.exists()) {
-      await remove(childRef);
+      await childRef.remove();
     } else {
       const starredMessageData = {
         messageId,
         chatId,
         starredAt: new Date().toISOString(),
       };
-
-      await set(childRef, starredMessageData);
+      await childRef.set(starredMessageData);
     }
   } catch (error) {
     console.log(error);
@@ -136,10 +132,9 @@ export const updateChatData = async (
   userId: string,
   chatData: Partial<IChatData>
 ) => {
-  const dbRef = getDbRef();
-  const chatRef = child(dbRef, `chats/${chatId}`);
+  const chatRef = database().ref(`chats/${chatId}`);
 
-  await update(chatRef, {
+  await chatRef.update({
     ...chatData,
     updatedAt: new Date().toISOString(),
     updatedBy: userId,
