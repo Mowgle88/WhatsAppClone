@@ -23,6 +23,9 @@ export interface IUserData {
   userId: string;
   profilePicture: string;
   signUpDate: string;
+  pushTokens?: {
+    [key: string]: string;
+  };
 }
 
 export interface IUsers {

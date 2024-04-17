@@ -9,6 +9,8 @@ import { authenticate, logout } from "../../store/authSlice";
 import { getUserData } from "./userActions";
 import type { AppDispatch } from "../../store/store";
 import { State } from "../redusers/formReducer";
+import { getFCMToken } from "../firebaseHelper";
+import { IUserData } from "../../types/types";
 
 let timer: ReturnType<typeof setTimeout> | number;
 
@@ -49,6 +51,7 @@ export const signInWithGoogle = () => {
 
       dispatch(authenticate({ token, userData }));
       saveDataToStorage(idToken!, user.uid, expiryDate);
+      await storePushToken(userData);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
     } catch (error: any) {
@@ -77,18 +80,7 @@ export const signUp = (
   password: string
 ) => {
   return async (dispatch: AppDispatch) => {
-    // const app = getFirebaseApp();
-    // const auth = getAuth(app);
-    // const auth = initializeAuth(app, {
-    //   persistence: getReactNativePersistence(AsyncStorage),
-    // });
-
     try {
-      // const response = await createUserWithEmailAndPassword(
-      //   auth,
-      //   email,
-      //   password
-      // );
       const response = await auth().createUserWithEmailAndPassword(
         email,
         password
@@ -103,19 +95,11 @@ export const signUp = (
 
       dispatch(authenticate({ token, userData }));
       saveDataToStorage(token, uid, expiryDate);
+      await storePushToken(userData);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
     } catch (error: any) {
-      // if (error instanceof FirebaseError) {
-      const errorCode = error.code;
-      let message = "Something went wrong.";
-
-      if (errorCode === "auth/email-already-in-use") {
-        message = "This email is already is use";
-      }
-
-      throw new Error(message);
-      // }
+      throw new Error(error.nativeErrorMessage);
     }
   };
 };
@@ -134,6 +118,7 @@ export const signIn = (email: string, password: string) => {
 
       dispatch(authenticate({ token, userData }));
       saveDataToStorage(token, uid, expiryDate);
+      await storePushToken(userData);
 
       logoutOnTokenExpiration(expiryDate, dispatch);
     } catch (error: any) {
@@ -198,4 +183,24 @@ const saveDataToStorage = (token: string, userId: string, expiryDate: Date) => {
       expiryDate: expiryDate.toISOString(),
     })
   );
+};
+
+export const storePushToken = async (userData: IUserData) => {
+  const token = await getFCMToken();
+  const tokenData = { ...userData.pushTokens } || {};
+  const tokenArray = Object.values(tokenData);
+
+  if (!token || tokenArray.includes(token)) {
+    return;
+  }
+
+  tokenArray.push(token);
+
+  for (let i = 0; i < tokenArray.length; i++) {
+    const tok = tokenArray[i];
+    tokenData[i] = tok;
+  }
+
+  const userRef = database().ref(`users/${userData.userId}/pushTokens`);
+  await userRef.set(tokenData);
 };
