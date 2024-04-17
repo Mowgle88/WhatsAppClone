@@ -53,7 +53,7 @@ export const signInWithGoogle = () => {
       saveDataToStorage(idToken!, user.uid, expiryDate);
       await storePushToken(userData);
 
-      logoutOnTokenExpiration(expiryDate, dispatch);
+      logoutOnTokenExpiration(user.uid, expiryDate, dispatch);
     } catch (error: any) {
       const errorCode = error.code;
 
@@ -97,7 +97,7 @@ export const signUp = (
       saveDataToStorage(token, uid, expiryDate);
       await storePushToken(userData);
 
-      logoutOnTokenExpiration(expiryDate, dispatch);
+      logoutOnTokenExpiration(uid, expiryDate, dispatch);
     } catch (error: any) {
       throw new Error(error.nativeErrorMessage);
     }
@@ -120,24 +120,29 @@ export const signIn = (email: string, password: string) => {
       saveDataToStorage(token, uid, expiryDate);
       await storePushToken(userData);
 
-      logoutOnTokenExpiration(expiryDate, dispatch);
+      logoutOnTokenExpiration(uid, expiryDate, dispatch);
     } catch (error: any) {
       throw new Error(error.nativeErrorMessage);
     }
   };
 };
 
-const logoutOnTokenExpiration = (expiryDate: Date, dispatch: AppDispatch) => {
+const logoutOnTokenExpiration = (
+  userId: string,
+  expiryDate: Date,
+  dispatch: AppDispatch
+) => {
   const timeNow = new Date();
   const millisecondsUntilExpiry = +expiryDate - +timeNow;
 
   timer = setTimeout(() => {
-    dispatch(userLogout());
+    dispatch(userLogout(userId));
   }, millisecondsUntilExpiry);
 };
 
-export const userLogout = () => {
+export const userLogout = (userId: string) => {
   return async (dispatch: any) => {
+    await removePushToken(userId);
     AsyncStorage.clear();
     clearTimeout(timer as number);
     dispatch(logout());
@@ -203,4 +208,33 @@ export const storePushToken = async (userData: IUserData) => {
 
   const userRef = database().ref(`users/${userData.userId}/pushTokens`);
   await userRef.set(tokenData);
+};
+
+export const removePushToken = async (userId: string) => {
+  const token = await getFCMToken();
+  const tokenData = await getUserPushTokens(userId);
+
+  for (const key in tokenData) {
+    if (tokenData[key] === token) {
+      delete tokenData[key];
+      break;
+    }
+  }
+
+  const userRef = database().ref(`users/${userId}/pushTokens`);
+  await userRef.set(tokenData);
+};
+
+export const getUserPushTokens = async (userId: string) => {
+  try {
+    const userRef = database().ref(`users/${userId}/pushTokens`);
+    const snapshot = await userRef.once("value");
+
+    if (snapshot.exists()) {
+      return snapshot.val();
+    }
+    return {};
+  } catch (error) {
+    console.log("getUserPushTokens", error);
+  }
 };
