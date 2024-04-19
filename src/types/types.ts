@@ -76,8 +76,9 @@ export interface IStarredMessage {
 
 export interface ISendedData {
   chatId: string;
-  senderId: string;
+  senderData: IUserData;
   imageUrl?: string;
   messageText?: string;
   replyTo?: string | null;
+  chatUsers?: string[];
 }

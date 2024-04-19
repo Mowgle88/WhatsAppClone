@@ -134,9 +134,10 @@ const ChatScreen: React.FC = () => {
 
       const sendedData: ISendedData = {
         chatId: id,
-        senderId: userData!.userId,
+        senderData: userData!,
         messageText: messageText,
         replyTo: replyingTo && replyingTo.key,
+        chatUsers: chatData!.users,
       };
 
       await sendTextMessage(sendedData);
@@ -200,10 +201,11 @@ const ChatScreen: React.FC = () => {
 
       const sendedData: ISendedData = {
         chatId: id,
-        senderId: userData!.userId,
+        chatUsers: chatData!.users,
         imageUrl: uploadUri,
         messageText: imageDescription,
         replyTo: replyingTo && replyingTo.key,
+        senderData: userData!,
       };
 
       await sendImage(sendedData);

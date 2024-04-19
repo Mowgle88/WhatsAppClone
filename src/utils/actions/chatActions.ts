@@ -6,6 +6,9 @@ import {
   IUserData,
 } from "../../types/types";
 import { addUserChat, deleteUserChat, getUserChats } from "./userActions";
+import { getUserPushTokens } from "./authActions";
+
+import { CLOUD_MESSAGING_SERVER_KEY } from "@env";
 
 export const createChat = async (
   loggedInUserId: string,
@@ -75,11 +78,19 @@ const sendMessage = async (
 
 export const sendTextMessage = async ({
   chatId,
-  senderId,
+  senderData,
   messageText,
   replyTo,
+  chatUsers,
 }: ISendedData) => {
-  await sendMessage(chatId, senderId, messageText, "", replyTo!);
+  await sendMessage(chatId, senderData.userId, messageText, "", replyTo!);
+
+  const otherUsers = chatUsers!.filter((uid) => uid !== senderData.userId);
+  await sendPushNotificationForUsers(
+    otherUsers,
+    `${senderData.firstName} ${senderData.lastName}`,
+    messageText!
+  );
 };
 
 export const sendInfoMessage = async (
@@ -92,12 +103,12 @@ export const sendInfoMessage = async (
 
 export const sendImage = async ({
   chatId,
-  senderId,
+  senderData,
   imageUrl,
   messageText,
   replyTo,
 }: ISendedData) => {
-  await sendMessage(chatId, senderId, messageText, imageUrl, replyTo!);
+  await sendMessage(chatId, senderData.userId, messageText, imageUrl, replyTo!);
 };
 
 export const starMessage = async (
@@ -200,4 +211,36 @@ export const addUsersToChat = async (
     userLoggedInData.lastName
   } added ${userAddedName.slice(0, -2)} to the chat`;
   await sendInfoMessage(chatData.key, userLoggedInData.userId, messageText);
+};
+
+const sendPushNotificationForUsers = async (
+  chatUsers: string[],
+  title: string,
+  body: string
+) => {
+  try {
+    for await (const uid of chatUsers) {
+      const tokens: {
+        [key: string]: string;
+      } = await getUserPushTokens(uid);
+      for await (const token of Object.values(tokens)) {
+        await fetch("https://fcm.googleapis.com/fcm/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `key=${CLOUD_MESSAGING_SERVER_KEY}`,
+          },
+          body: JSON.stringify({
+            to: token,
+            notification: {
+              body,
+              title,
+            },
+          }),
+        });
+      }
+    }
+  } catch (error) {
+    console.log("sendError", error);
+  }
 };
