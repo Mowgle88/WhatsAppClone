@@ -201,11 +201,11 @@ const ChatScreen: React.FC = () => {
 
       const sendedData: ISendedData = {
         chatId: id,
-        chatUsers: chatData!.users,
+        senderData: userData!,
         imageUrl: uploadUri,
         messageText: imageDescription,
         replyTo: replyingTo && replyingTo.key,
-        senderData: userData!,
+        chatUsers: chatData!.users,
       };
 
       await sendImage(sendedData);

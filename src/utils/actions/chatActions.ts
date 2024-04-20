@@ -37,6 +37,12 @@ export const createChat = async (
   return newChat.key;
 };
 
+const getMessageData = async (chatId: string, messageId: string) => {
+  const messagesRef = database().ref(`messages/${chatId}/${messageId}`);
+  const snapshot = await messagesRef.once("value");
+  return snapshot.val();
+};
+
 const sendMessage = async (
   chatId: string,
   senderId: string,
@@ -74,6 +80,8 @@ const sendMessage = async (
     updatedAt: new Date().toISOString(),
     latestMessageText: messageText,
   });
+
+  return messagesRef.key;
 };
 
 export const sendTextMessage = async ({
@@ -107,8 +115,25 @@ export const sendImage = async ({
   imageUrl,
   messageText,
   replyTo,
+  chatUsers,
 }: ISendedData) => {
-  await sendMessage(chatId, senderData.userId, messageText, imageUrl, replyTo!);
+  const messageId = await sendMessage(
+    chatId,
+    senderData.userId,
+    messageText,
+    imageUrl,
+    replyTo!
+  );
+
+  const messageData = await getMessageData(chatId, messageId!);
+  const otherUsers = chatUsers!.filter((uid) => uid !== senderData.userId);
+
+  await sendPushNotificationForUsers(
+    otherUsers,
+    `${senderData.firstName} ${senderData.lastName}`,
+    messageText!,
+    messageData.imageUrl
+  );
 };
 
 export const starMessage = async (
@@ -216,7 +241,8 @@ export const addUsersToChat = async (
 const sendPushNotificationForUsers = async (
   chatUsers: string[],
   title: string,
-  body: string
+  body: string,
+  image: string = ""
 ) => {
   try {
     for await (const uid of chatUsers) {
@@ -235,6 +261,7 @@ const sendPushNotificationForUsers = async (
             notification: {
               body,
               title,
+              image,
             },
           }),
         });
