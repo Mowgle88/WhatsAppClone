@@ -95,6 +95,7 @@ export const sendTextMessage = async ({
 
   const otherUsers = chatUsers!.filter((uid) => uid !== senderData.userId);
   await sendPushNotificationForUsers(
+    chatId,
     otherUsers,
     `${senderData.firstName} ${senderData.lastName}`,
     messageText!
@@ -129,6 +130,7 @@ export const sendImage = async ({
   const otherUsers = chatUsers!.filter((uid) => uid !== senderData.userId);
 
   await sendPushNotificationForUsers(
+    chatId,
     otherUsers,
     `${senderData.firstName} ${senderData.lastName}`,
     messageText!,
@@ -239,6 +241,7 @@ export const addUsersToChat = async (
 };
 
 const sendPushNotificationForUsers = async (
+  chatId: string,
   chatUsers: string[],
   title: string,
   body: string,
@@ -262,6 +265,9 @@ const sendPushNotificationForUsers = async (
               body,
               title,
               image,
+            },
+            data: {
+              chatId,
             },
           }),
         });
