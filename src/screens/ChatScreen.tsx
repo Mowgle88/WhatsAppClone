@@ -21,6 +21,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "react-native-image-crop-picker";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import Bubble from "../components/Bubble";
@@ -46,8 +47,8 @@ import {
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import FloatingButton from "../components/FloatingButton";
 
 interface ItemData {
   item: {
@@ -79,6 +80,8 @@ const ChatScreen: React.FC = () => {
   const [replyingTo, setReplyingTo] = useState<IChatMessagesData | null>(null);
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [isShowFloatingButton, setIsShowFloatingButton] = useState(false);
 
   const userChatMessages = useMemo(() => {
     if (!chatId) return [];
@@ -304,6 +307,13 @@ const ChatScreen: React.FC = () => {
                 // onLayout={() =>
                 //   flatList.current.scrollToEnd({ animated: false })
                 // }
+                onScroll={(event) => {
+                  let currentOffset = event.nativeEvent.contentOffset.y;
+                  offset < currentOffset
+                    ? setIsShowFloatingButton(false)
+                    : setIsShowFloatingButton(true);
+                  setOffset(currentOffset);
+                }}
                 showsVerticalScrollIndicator={false}
                 data={userChatMessages}
                 keyExtractor={(item) => item.key}
@@ -312,6 +322,14 @@ const ChatScreen: React.FC = () => {
               />
             )}
           </ScreenContainer>
+          {isShowFloatingButton && offset > 0 && (
+            <FloatingButton
+              icon="arrow-down"
+              onPress={() => {
+                flatList.current.scrollToOffset({ offset: 0, animated: true });
+              }}
+            />
+          )}
           {replyingTo && (
             <ReplyTo
               text={replyingTo.text}
