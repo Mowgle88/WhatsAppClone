@@ -49,6 +49,18 @@ import {
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 
+interface ItemData {
+  item: {
+    sentAt: string;
+    sentBy: string;
+    text: string;
+    key: string;
+    replyTo?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: string | undefined;
+  };
+}
+
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
   const route = useRoute<ChatScreenRouteProp>();
@@ -81,7 +93,7 @@ const ChatScreen: React.FC = () => {
     }
 
     return messageList.sort(
-      (prev, next) => +new Date(prev.sentAt) - +new Date(next.sentAt)
+      (prev, next) => +new Date(next.sentAt) - +new Date(prev.sentAt)
     );
   }, [chatMesages]);
 
@@ -224,6 +236,42 @@ const ChatScreen: React.FC = () => {
     }
   }, [isLoading, tempImageUrl, imageDescription]);
 
+  const renderItem = (itemData: ItemData) => {
+    const message = itemData.item;
+    const isOwnMessage = message.sentBy === userData?.userId;
+    let messageType = isOwnMessage
+      ? BubbleEnum.OwnMessage
+      : BubbleEnum.NotOwnMessage;
+
+    if (message.type) {
+      messageType = BubbleEnum.Info;
+    }
+
+    const repliedTo = userChatMessages.find((i) => i.key === message.replyTo);
+    const repliedToUser = repliedTo && storedUsers[repliedTo.sentBy];
+
+    const sender = message.sentBy && storedUsers[message.sentBy];
+    const name = sender && `${sender.firstName} ${sender.lastName}`;
+
+    return (
+      <Bubble
+        type={messageType}
+        text={message.text}
+        messageId={message.key}
+        userId={userData?.userId!}
+        chatId={chatId}
+        date={message.sentAt}
+        name={!chatData?.isGroupChat || isOwnMessage ? undefined : name}
+        setReply={() => {
+          setReplyingTo(message);
+        }}
+        replyingTo={repliedTo}
+        replyingToUser={repliedToUser}
+        imageUrl={message.imageUrl}
+      />
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <KeyboardAvoidingView
@@ -250,58 +298,17 @@ const ChatScreen: React.FC = () => {
               <FlatList
                 contentContainerStyle={styles.listViewContainer}
                 ref={(ref) => (flatList.current = ref)}
-                onContentSizeChange={() =>
-                  flatList.current.scrollToEnd({ animated: false })
-                }
-                onLayout={() =>
-                  flatList.current.scrollToEnd({ animated: false })
-                }
+                // onContentSizeChange={() =>
+                //   flatList.current.scrollToEnd({ animated: false })
+                // }
+                // onLayout={() =>
+                //   flatList.current.scrollToEnd({ animated: false })
+                // }
                 showsVerticalScrollIndicator={false}
                 data={userChatMessages}
                 keyExtractor={(item) => item.key}
-                renderItem={(itemData) => {
-                  const message = itemData.item;
-                  const isOwnMessage = message.sentBy === userData?.userId;
-                  let messageType = isOwnMessage
-                    ? BubbleEnum.OwnMessage
-                    : BubbleEnum.NotOwnMessage;
-
-                  if (message.type) {
-                    messageType = BubbleEnum.Info;
-                  }
-
-                  const repliedTo = userChatMessages.find(
-                    (i) => i.key === message.replyTo
-                  );
-                  const repliedToUser =
-                    repliedTo && storedUsers[repliedTo.sentBy];
-
-                  const sender = message.sentBy && storedUsers[message.sentBy];
-                  const name =
-                    sender && `${sender.firstName} ${sender.lastName}`;
-
-                  return (
-                    <Bubble
-                      type={messageType}
-                      text={message.text}
-                      messageId={message.key}
-                      userId={userData?.userId!}
-                      chatId={chatId}
-                      date={message.sentAt}
-                      name={
-                        !chatData?.isGroupChat || isOwnMessage
-                          ? undefined
-                          : name
-                      }
-                      setReply={() => {
-                        setReplyingTo(message);
-                      }}
-                      replyingTo={repliedTo}
-                      replyingToUser={repliedToUser}
-                      imageUrl={message.imageUrl}
-                    />
-                  );
-                }}
+                renderItem={renderItem}
+                inverted
               />
             )}
           </ScreenContainer>
@@ -396,7 +403,7 @@ const styles = StyleSheet.create({
   },
   listViewContainer: {
     minHeight: "100%",
-    justifyContent: "flex-end",
+    // justifyContent: "flex-end",
   },
   backgroundImage: {
     flex: 1,
