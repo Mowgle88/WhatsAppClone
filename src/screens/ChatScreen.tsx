@@ -345,10 +345,13 @@ const ChatScreen: React.FC = () => {
             <Icon name="add-outline" size={24} color={colors.blue} />
           </TouchableOpacity>
           <TextInput
+            placeholder="Message"
+            placeholderTextColor={colors.lightGrey}
             value={messageText}
             onChangeText={(text) => setMessageText(text)}
             onSubmitEditing={sendMassage}
             style={styles.input}
+            multiline
           />
           {messageText && (
             <TouchableOpacity
@@ -430,24 +433,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 8,
     paddingHorizontal: 10,
-    height: 50,
+    alignItems: "center",
   },
   button: {
     width: 36,
+    height: 36,
     justifyContent: "center",
     alignItems: "center",
   },
   sendButton: {
     backgroundColor: colors.blue,
-    borderRadius: 50,
+    borderRadius: 18,
     paddingLeft: 4,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: 20,
     borderColor: colors.lightGrey,
-    marginHorizontal: 16,
+    padding: 6,
+    maxHeight: 100,
+    marginHorizontal: 12,
     paddingHorizontal: 12,
   },
   popupTitle: {
