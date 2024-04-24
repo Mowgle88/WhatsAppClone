@@ -23,6 +23,9 @@ export interface IUserData {
   userId: string;
   profilePicture: string;
   signUpDate: string;
+  pushTokens?: {
+    [key: string]: string;
+  };
 }
 
 export interface IUsers {
@@ -73,8 +76,9 @@ export interface IStarredMessage {
 
 export interface ISendedData {
   chatId: string;
-  senderId: string;
+  senderData: IUserData;
   imageUrl?: string;
   messageText?: string;
   replyTo?: string | null;
+  chatUsers?: string[];
 }

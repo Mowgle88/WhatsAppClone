@@ -1,17 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { IUserData } from "../types/types";
 
 export interface AuthState {
   token: string | null;
-  userData: {
-    firstName: string;
-    lastName: string;
-    fullName: string;
-    email: string;
-    userId: string;
-    signUpDate: string;
-    about: string;
-    profilePicture: string | null;
-  } | null;
+  userData: IUserData | null;
   didTryAutoLogin: boolean;
 }
 

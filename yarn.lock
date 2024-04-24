@@ -1541,6 +1541,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/database/-/database-19.0.1.tgz#44a34630aa18c42d28a79248d938d3e72d9cf592"
   integrity sha512-/JycxN/aslFj5UR75lFSM4mLr6kzNqONS7jKpId03i5R/j+9FWgHc3bD8suX+eM291qsmP9gePT0CRIsN7WxAA==
 
+"@react-native-firebase/messaging@^19.1.1":
+  version "19.1.1"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-19.1.1.tgz#9036615e873576a3c68936ad4880204226dd7567"
+  integrity sha512-hCVfSUPh1wLXKSgt+1IYUJfCEe/TUatUGWmoQh3+Z4Q2lTsN9x3BvPM/8geNu0gc0IHAOn4Ohfxza/pvpuGDzQ==
+
 "@react-native-firebase/storage@^19.0.1":
   version "19.0.1"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/storage/-/storage-19.0.1.tgz#d40fddcb2d122ea057f49641c9ec62d995519228"

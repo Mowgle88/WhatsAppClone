@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import database from "@react-native-firebase/database";
+import messaging, {
+  FirebaseMessagingTypes,
+} from "@react-native-firebase/messaging";
 import ChatListScreen from "../screens/ChatListScreen";
 import SettingsScreen from "../screens/SettingsScreen";
 import ChatSettingsScreen from "../screens/ChatSettingsScreen";
@@ -113,10 +117,47 @@ const StackNavigator: React.FC = () => {
 
 const MainNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigation = useNavigation();
 
   const userData = useAppSelector((state) => state.auth.userData);
 
   const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const handleNotification = (
+      remoteMessage: FirebaseMessagingTypes.RemoteMessage | null
+    ) => {
+      const chatId = remoteMessage?.data?.chatId;
+      if (chatId) {
+        const pushAction = StackActions.push("Chat", { chatId });
+        navigation.dispatch(pushAction);
+      }
+    };
+
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        console.log(
+          "App opened by notification from closed state:",
+          remoteMessage
+        );
+        // Handle notification interaction when the app is opened from a closed state
+        handleNotification(remoteMessage);
+      });
+
+    const unsubscribe = messaging().onNotificationOpenedApp((remoteMessage) => {
+      console.log(
+        "App opened by notification while in foreground:",
+        remoteMessage
+      );
+      // Handle notification interaction when the app is in the foreground
+      handleNotification(remoteMessage);
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     console.log("Subscribing to firebase listening");
