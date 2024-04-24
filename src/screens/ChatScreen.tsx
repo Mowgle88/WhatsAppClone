@@ -21,6 +21,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "react-native-image-crop-picker";
 import AwesomeAlert from "react-native-awesome-alerts";
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import Bubble from "../components/Bubble";
@@ -46,8 +47,20 @@ import {
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import CustomHeaderButton from "../components/CustomHeaderButton";
+import FloatingButton from "../components/FloatingButton";
+
+interface ItemData {
+  item: {
+    sentAt: string;
+    sentBy: string;
+    text: string;
+    key: string;
+    replyTo?: string | undefined;
+    imageUrl?: string | undefined;
+    type?: string | undefined;
+  };
+}
 
 const ChatScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -67,6 +80,8 @@ const ChatScreen: React.FC = () => {
   const [replyingTo, setReplyingTo] = useState<IChatMessagesData | null>(null);
   const [tempImageUrl, setTempImageUrl] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [offset, setOffset] = useState(0);
+  const [isShowFloatingButton, setIsShowFloatingButton] = useState(false);
 
   const userChatMessages = useMemo(() => {
     if (!chatId) return [];
@@ -81,7 +96,7 @@ const ChatScreen: React.FC = () => {
     }
 
     return messageList.sort(
-      (prev, next) => +new Date(prev.sentAt) - +new Date(next.sentAt)
+      (prev, next) => +new Date(next.sentAt) - +new Date(prev.sentAt)
     );
   }, [chatMesages]);
 
@@ -134,9 +149,10 @@ const ChatScreen: React.FC = () => {
 
       const sendedData: ISendedData = {
         chatId: id,
-        senderId: userData!.userId,
+        senderData: userData!,
         messageText: messageText,
         replyTo: replyingTo && replyingTo.key,
+        chatUsers: chatData!.users,
       };
 
       await sendTextMessage(sendedData);
@@ -200,10 +216,11 @@ const ChatScreen: React.FC = () => {
 
       const sendedData: ISendedData = {
         chatId: id,
-        senderId: userData!.userId,
+        senderData: userData!,
         imageUrl: uploadUri,
         messageText: imageDescription,
         replyTo: replyingTo && replyingTo.key,
+        chatUsers: chatData!.users,
       };
 
       await sendImage(sendedData);
@@ -221,6 +238,42 @@ const ChatScreen: React.FC = () => {
       }, 3000);
     }
   }, [isLoading, tempImageUrl, imageDescription]);
+
+  const renderItem = (itemData: ItemData) => {
+    const message = itemData.item;
+    const isOwnMessage = message.sentBy === userData?.userId;
+    let messageType = isOwnMessage
+      ? BubbleEnum.OwnMessage
+      : BubbleEnum.NotOwnMessage;
+
+    if (message.type) {
+      messageType = BubbleEnum.Info;
+    }
+
+    const repliedTo = userChatMessages.find((i) => i.key === message.replyTo);
+    const repliedToUser = repliedTo && storedUsers[repliedTo.sentBy];
+
+    const sender = message.sentBy && storedUsers[message.sentBy];
+    const name = sender && `${sender.firstName} ${sender.lastName}`;
+
+    return (
+      <Bubble
+        type={messageType}
+        text={message.text}
+        messageId={message.key}
+        userId={userData?.userId!}
+        chatId={chatId}
+        date={message.sentAt}
+        name={!chatData?.isGroupChat || isOwnMessage ? undefined : name}
+        setReply={() => {
+          setReplyingTo(message);
+        }}
+        replyingTo={repliedTo}
+        replyingToUser={repliedToUser}
+        imageUrl={message.imageUrl}
+      />
+    );
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -248,61 +301,35 @@ const ChatScreen: React.FC = () => {
               <FlatList
                 contentContainerStyle={styles.listViewContainer}
                 ref={(ref) => (flatList.current = ref)}
-                onContentSizeChange={() =>
-                  flatList.current.scrollToEnd({ animated: false })
-                }
-                onLayout={() =>
-                  flatList.current.scrollToEnd({ animated: false })
-                }
+                // onContentSizeChange={() =>
+                //   flatList.current.scrollToEnd({ animated: false })
+                // }
+                // onLayout={() =>
+                //   flatList.current.scrollToEnd({ animated: false })
+                // }
+                onScroll={(event) => {
+                  let currentOffset = event.nativeEvent.contentOffset.y;
+                  offset < currentOffset
+                    ? setIsShowFloatingButton(false)
+                    : setIsShowFloatingButton(true);
+                  setOffset(currentOffset);
+                }}
                 showsVerticalScrollIndicator={false}
                 data={userChatMessages}
                 keyExtractor={(item) => item.key}
-                renderItem={(itemData) => {
-                  const message = itemData.item;
-                  const isOwnMessage = message.sentBy === userData?.userId;
-                  let messageType = isOwnMessage
-                    ? BubbleEnum.OwnMessage
-                    : BubbleEnum.NotOwnMessage;
-
-                  if (message.type) {
-                    messageType = BubbleEnum.Info;
-                  }
-
-                  const repliedTo = userChatMessages.find(
-                    (i) => i.key === message.replyTo
-                  );
-                  const repliedToUser =
-                    repliedTo && storedUsers[repliedTo.sentBy];
-
-                  const sender = message.sentBy && storedUsers[message.sentBy];
-                  const name =
-                    sender && `${sender.firstName} ${sender.lastName}`;
-
-                  return (
-                    <Bubble
-                      type={messageType}
-                      text={message.text}
-                      messageId={message.key}
-                      userId={userData?.userId!}
-                      chatId={chatId}
-                      date={message.sentAt}
-                      name={
-                        !chatData?.isGroupChat || isOwnMessage
-                          ? undefined
-                          : name
-                      }
-                      setReply={() => {
-                        setReplyingTo(message);
-                      }}
-                      replyingTo={repliedTo}
-                      replyingToUser={repliedToUser}
-                      imageUrl={message.imageUrl}
-                    />
-                  );
-                }}
+                renderItem={renderItem}
+                inverted
               />
             )}
           </ScreenContainer>
+          {isShowFloatingButton && offset > 0 && (
+            <FloatingButton
+              icon="arrow-down"
+              onPress={() => {
+                flatList.current.scrollToOffset({ offset: 0, animated: true });
+              }}
+            />
+          )}
           {replyingTo && (
             <ReplyTo
               text={replyingTo.text}
@@ -318,10 +345,13 @@ const ChatScreen: React.FC = () => {
             <Icon name="add-outline" size={24} color={colors.blue} />
           </TouchableOpacity>
           <TextInput
+            placeholder="Message"
+            placeholderTextColor={colors.lightGrey}
             value={messageText}
             onChangeText={(text) => setMessageText(text)}
             onSubmitEditing={sendMassage}
             style={styles.input}
+            multiline
           />
           {messageText && (
             <TouchableOpacity
@@ -394,7 +424,7 @@ const styles = StyleSheet.create({
   },
   listViewContainer: {
     minHeight: "100%",
-    justifyContent: "flex-end",
+    // justifyContent: "flex-end",
   },
   backgroundImage: {
     flex: 1,
@@ -403,24 +433,27 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 8,
     paddingHorizontal: 10,
-    height: 50,
+    alignItems: "center",
   },
   button: {
     width: 36,
+    height: 36,
     justifyContent: "center",
     alignItems: "center",
   },
   sendButton: {
     backgroundColor: colors.blue,
-    borderRadius: 50,
+    borderRadius: 18,
     paddingLeft: 4,
   },
   input: {
     flex: 1,
     borderWidth: 1,
-    borderRadius: 50,
+    borderRadius: 20,
     borderColor: colors.lightGrey,
-    marginHorizontal: 16,
+    padding: 6,
+    maxHeight: 100,
+    marginHorizontal: 12,
     paddingHorizontal: 12,
   },
   popupTitle: {

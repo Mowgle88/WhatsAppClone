@@ -181,7 +181,7 @@ const SettingsScreen: React.FC = () => {
           <SubmitButton
             title="Logout"
             onPress={() => {
-              dispatch(userLogout());
+              dispatch(userLogout(userData!.userId));
             }}
             style={styles.button}
             color={colors.red}
