@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { StackActions, useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/Ionicons";
 import database from "@react-native-firebase/database";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
-import ChatListScreen from "../screens/ChatListScreen";
-import SettingsScreen from "../screens/SettingsScreen";
-import ChatSettingsScreen from "../screens/ChatSettingsScreen";
-import ChatScreen from "../screens/ChatScreen";
-import { RootStackParamList, TabParamList } from "./types";
-import NewChatScreen from "../screens/NewChatScreen";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
@@ -21,99 +12,7 @@ import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
 import { ActivityIndicator, View } from "react-native";
 import colors from "../constants/colors";
 import commonStyles from "../constants/commonStyles";
-import ContactScreen from "../screens/ContactScreen";
-import DataListScreen from "../screens/DataListScreen";
-
-const Stack = createNativeStackNavigator<RootStackParamList>();
-const Tab = createBottomTabNavigator<TabParamList>();
-
-const TabNavigator: React.FC = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerTitle: "",
-        headerShadowVisible: false,
-      }}
-    >
-      <Tab.Screen
-        name="ChatList"
-        component={ChatListScreen}
-        options={{
-          tabBarLabel: "Chats",
-          tabBarIcon: ({ size, color }) => (
-            <Icon name="chatbubble-outline" size={size} color={color} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{
-          tabBarLabel: "Settings",
-          tabBarIcon: ({ size, color }) => (
-            <Icon name="settings-outline" size={size} color={color} />
-          ),
-        }}
-      />
-    </Tab.Navigator>
-  );
-};
-
-const StackNavigator: React.FC = () => {
-  return (
-    <Stack.Navigator>
-      <Stack.Group>
-        <Stack.Screen
-          name="Home"
-          component={TabNavigator}
-          options={{
-            headerShown: false,
-          }}
-        />
-        <Stack.Screen
-          name="Chat"
-          component={ChatScreen}
-          options={{
-            headerTitle: "",
-            headerBackTitle: "Back",
-          }}
-        />
-        <Stack.Screen
-          name="ChatSettings"
-          component={ChatSettingsScreen}
-          options={{
-            headerTitle: "",
-            headerBackTitle: "Back",
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="Contact"
-          component={ContactScreen}
-          options={{
-            headerTitle: "Contact info",
-            headerBackTitle: "Back",
-          }}
-        />
-        <Stack.Screen
-          name="DataList"
-          component={DataListScreen}
-          options={{
-            headerTitle: "",
-            headerBackTitle: "Back",
-          }}
-        />
-      </Stack.Group>
-      <Stack.Group
-        screenOptions={{
-          presentation: "containedModal",
-        }}
-      >
-        <Stack.Screen name="NewChat" component={NewChatScreen} />
-      </Stack.Group>
-    </Stack.Navigator>
-  );
-};
+import StackNavigator from "./components/StackNavigator";
 
 const MainNavigator: React.FC = () => {
   const dispatch = useAppDispatch();
