@@ -1,3 +1,5 @@
+import { ImageSourcePropType } from "react-native";
+
 export enum IdEnum {
   FirstName = "firstName",
   LastName = "lastName",
@@ -26,6 +28,7 @@ export interface IUserData {
   pushTokens?: {
     [key: string]: string;
   };
+  chatImageBackground?: ImageSourcePropType;
 }
 
 export interface IUsers {

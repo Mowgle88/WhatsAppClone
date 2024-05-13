@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
 import { StyleSheet, LogBox } from "react-native";
+import { Provider } from "react-redux";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { MenuProvider } from "react-native-popup-menu";
+import { HeaderButtonsProvider } from "react-navigation-header-buttons";
 import SplashScreen from "react-native-splash-screen";
 import messaging from "@react-native-firebase/messaging";
 // eslint-disable-next-line import/no-named-as-default
 import firebase from "@react-native-firebase/app";
 import AppNavigator from "./navigation/AppNavigator";
-import { Provider } from "react-redux";
-import { MenuProvider } from "react-native-popup-menu";
 import { store } from "./store/store";
 import { requestNotificationPermission } from "./permissions/notificationPermissions";
 import { getFCMToken } from "./utils/firebaseHelper";
@@ -39,9 +40,11 @@ export default function App() {
   return (
     <Provider store={store}>
       <SafeAreaProvider style={styles.container}>
-        <MenuProvider>
-          <AppNavigator />
-        </MenuProvider>
+        <HeaderButtonsProvider stackType={"native"}>
+          <MenuProvider>
+            <AppNavigator />
+          </MenuProvider>
+        </HeaderButtonsProvider>
       </SafeAreaProvider>
     </Provider>
   );

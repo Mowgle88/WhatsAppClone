@@ -1,3 +1,4 @@
+import { ImageSourcePropType } from "react-native";
 import { IdEnum } from "../../types/types";
 
 export type State = {
@@ -9,6 +10,7 @@ export type State = {
     about?: string;
     profilePicture?: string;
     chatName?: string;
+    chatImageBackground?: ImageSourcePropType;
   };
   inputValidities: {
     firstName?: string;
@@ -18,6 +20,7 @@ export type State = {
     about?: string;
     profilePicture?: string;
     chatName?: string;
+    chatImageBackground?: ImageSourcePropType;
   };
   formIsValid: boolean;
 };
