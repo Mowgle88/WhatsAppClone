@@ -16,12 +16,22 @@ import RN, {
   Platform,
   FlatList,
   ActivityIndicator,
+  Image as RNImage,
+  Pressable,
+  ImageSourcePropType,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "react-native-image-crop-picker";
 import AwesomeAlert from "react-native-awesome-alerts";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import {
+  HeaderButtons,
+  Item,
+  OverflowMenu,
+  overflowMenuPressHandlerDropdownMenu,
+  useOverflowMenu,
+} from "react-navigation-header-buttons";
 import colors from "../constants/colors";
 import ScreenContainer from "../components/ScreenContainer";
 import Bubble from "../components/Bubble";
@@ -47,8 +57,11 @@ import {
   showImagePicker,
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
+import { updateSignedInUserData } from "../utils/actions/authActions";
+import { updateLoggetInUserData } from "../store/authSlice";
 import CustomHeaderButton from "../components/CustomHeaderButton";
 import FloatingButton from "../components/FloatingButton";
+import { backgrounds } from "../constants/images";
 
 interface ItemData {
   item: {
@@ -68,10 +81,16 @@ const ChatScreen: React.FC = () => {
 
   const flatList = useRef<any>();
 
+  const dispatch = useDispatch();
+
+  const { toggleMenu } = useOverflowMenu();
+
   const userData = useAppSelector((state) => state.auth.userData);
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
   const chatMesages = useAppSelector((state) => state.messages.messagesData);
+
+  console.log("chatImageBackground", userData?.chatImageBackground);
 
   const [messageText, setMessageText] = useState("");
   const [imageDescription, setImageDescription] = useState("");
@@ -133,11 +152,39 @@ const ChatScreen: React.FC = () => {
                 }
               />
             )}
+            <OverflowMenu
+              style={styles.dropdownMenu}
+              OverflowIcon={() => (
+                <Icon name="image-outline" size={23} color={colors.textColor} />
+              )}
+              onPress={overflowMenuPressHandlerDropdownMenu}
+            >
+              {Object.values(backgrounds).map((source) => {
+                const isActive = source === userData?.chatImageBackground;
+
+                return (
+                  <Pressable
+                    style={[styles.dropdownMenuItem, isActive && styles.active]}
+                    key={source}
+                    onPress={() => {
+                      uploadImageBackground(source);
+                      toggleMenu();
+                    }}
+                  >
+                    <RNImage
+                      source={source}
+                      resizeMode="cover"
+                      style={styles.dropdownMenuImage}
+                    />
+                  </Pressable>
+                );
+              })}
+            </OverflowMenu>
           </HeaderButtons>
         );
       },
     });
-  }, [chatData?.users]);
+  }, [chatData?.users, userData?.chatImageBackground]);
 
   const sendMassage = useCallback(async () => {
     try {
@@ -239,6 +286,18 @@ const ChatScreen: React.FC = () => {
     }
   }, [isLoading, tempImageUrl, imageDescription]);
 
+  const uploadImageBackground = async (source: ImageSourcePropType) => {
+    try {
+      const newData = { chatImageBackground: source };
+
+      await updateSignedInUserData(userData!.userId, newData);
+      dispatch(updateLoggetInUserData({ newData }));
+      // toggleMenu();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   const renderItem = (itemData: ItemData) => {
     const message = itemData.item;
     const isOwnMessage = message.sentBy === userData?.userId;
@@ -283,7 +342,7 @@ const ChatScreen: React.FC = () => {
         style={styles.container}
       >
         <ImageBackground
-          source={require("../assets/images/droplet.jpeg")}
+          source={userData?.chatImageBackground ?? backgrounds.Droplet}
           resizeMode="cover"
           style={styles.backgroundImage}
         >
@@ -471,6 +530,21 @@ const styles = StyleSheet.create({
     paddingVertical: Platform.OS === "android" ? 0 : 4,
     marginTop: 16,
     paddingHorizontal: 12,
+  },
+  dropdownMenu: {
+    marginLeft: 12,
+  },
+  dropdownMenuItem: {
+    margin: 4,
+  },
+  active: {
+    borderColor: colors.blue,
+    borderWidth: 2,
+  },
+  dropdownMenuImage: {
+    width: 40,
+    height: 60,
+    margin: 4,
   },
 });
 
