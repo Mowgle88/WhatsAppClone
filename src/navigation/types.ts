@@ -36,6 +36,9 @@ export type RootStackParamList = {
     type: string;
     chatId: string;
   };
+  Image: {
+    uri: string;
+  };
 };
 
 export type TabParamList = {

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import RN, {
   ActivityIndicator,
+  Pressable,
   StyleSheet,
   TouchableOpacity,
   View,
@@ -29,6 +30,7 @@ interface ProfileImageProps {
   chatId?: string;
   isShowEditButton?: boolean;
   onPress?: () => void;
+  onNavigate?: () => void;
   style?: ViewStyle;
 }
 
@@ -57,6 +59,7 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
   chatId,
   isShowEditButton = true,
   onPress,
+  onNavigate = () => {},
   style,
 }) => {
   const dispatch = useDispatch();
@@ -158,10 +161,12 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
             <ActivityIndicator size={"small"} color={colors.primary} />
           </View>
         ) : (
-          <RN.Image
-            source={imageUri}
-            style={[styles.image, { width: size, height: size }]}
-          />
+          <Pressable onPress={onNavigate}>
+            <RN.Image
+              source={imageUri}
+              style={[styles.image, { width: size, height: size }]}
+            />
+          </Pressable>
         )}
         {isShowEditButton && !isLoading && (
           <TouchableOpacity
