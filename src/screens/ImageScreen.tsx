@@ -10,13 +10,14 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
+import { ImageScreenRouteProp } from "../navigation/types";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 
 const ImageScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
-  const uri = route?.params;
+  const route = useRoute<ImageScreenRouteProp>();
+  const data = route?.params;
 
   return (
     <SafeAreaView style={styles.safeAreaView}>
@@ -29,7 +30,7 @@ const ImageScreen = () => {
         >
           <Icon name={"close-outline"} size={48} color={colors.blue} />
         </TouchableOpacity>
-        <Image source={uri} style={styles.image} />
+        <Image source={{ uri: data.uri }} style={styles.image} />
       </View>
     </SafeAreaView>
   );

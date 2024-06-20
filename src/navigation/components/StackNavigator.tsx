@@ -55,13 +55,6 @@ const StackNavigator: React.FC = () => {
             headerBackTitle: "Back",
           }}
         />
-        <Stack.Screen
-          name="Image"
-          component={ImageScreen}
-          options={{
-            headerShown: false,
-          }}
-        />
       </Stack.Group>
       <Stack.Group
         screenOptions={{
@@ -69,6 +62,13 @@ const StackNavigator: React.FC = () => {
         }}
       >
         <Stack.Screen name="NewChat" component={NewChatScreen} />
+        <Stack.Screen
+          name="Image"
+          component={ImageScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );

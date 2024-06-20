@@ -77,8 +77,10 @@ const ContactScreen = () => {
           size={80}
           isShowEditButton={false}
           style={styles.image}
-          onNavigate={() => {
-            navigation.navigate("Image", { uri: currentUser.profilePicture });
+          onNavigate={(uri: string) => {
+            navigation.navigate("Image", {
+              uri,
+            });
           }}
         />
         <ScreenTitle

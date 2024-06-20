@@ -64,6 +64,7 @@ export type ChatSettingsScreenRouteProp = RouteProp<
   "ChatSettings"
 >;
 export type DataListScreenRouteProp = RouteProp<RootStackParamList, "DataList">;
+export type ImageScreenRouteProp = RouteProp<RootStackParamList, "Image">;
 
 export type ChatScreenNavigationProps = CompositeNavigationProp<
   BottomTabNavigationProp<TabParamList, "ChatList">,
