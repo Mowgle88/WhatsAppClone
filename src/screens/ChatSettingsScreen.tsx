@@ -152,6 +152,11 @@ const ChatSettingsScreen: React.FC = () => {
           chatId={chatId}
           userId={userData!.userId}
           uri={chatData.chatImage}
+          onNavigate={(uri: string) => {
+            navigation.navigate("Image", {
+              uri,
+            });
+          }}
         />
         <Input
           id={IdEnum.ChatName}

@@ -6,6 +6,7 @@ import { RootStackParamList } from "../types";
 import NewChatScreen from "../../screens/NewChatScreen";
 import ContactScreen from "../../screens/ContactScreen";
 import DataListScreen from "../../screens/DataListScreen";
+import ImageScreen from "../../screens/ImageScreen";
 import TabNavigator from "../components/TabNavigator";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -61,6 +62,13 @@ const StackNavigator: React.FC = () => {
         }}
       >
         <Stack.Screen name="NewChat" component={NewChatScreen} />
+        <Stack.Screen
+          name="Image"
+          component={ImageScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
       </Stack.Group>
     </Stack.Navigator>
   );
