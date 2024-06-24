@@ -28,7 +28,7 @@ const AnimatedTabBar = ({
   };
 
   const [layout, dispatch] = useReducer(reducer, []);
-  console.log(layout);
+  // console.log(layout);
 
   const handleLayout = (event: LayoutChangeEvent, index: number) => {
     dispatch({ x: event.nativeEvent.layout.x, index });

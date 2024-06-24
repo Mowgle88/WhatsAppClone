@@ -8,7 +8,9 @@ import {
   Text,
   View,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { ScrollView } from "react-native-gesture-handler";
 import ScreenTitle from "../components/ScreenTitle";
 import ScreenContainer from "../components/ScreenContainer";
 import Input from "../components/Input";
@@ -23,12 +25,14 @@ import {
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { updateLoggetInUserData } from "../store/authSlice";
 import { IdEnum } from "../types/types";
-import { ScrollView } from "react-native-gesture-handler";
 import ProfileImage from "../components/ProfileImage";
+import { ChatScreenNavigationProps } from "../navigation/types";
 
 const SettingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth.userData);
+
+  const navigation = useNavigation<ChatScreenNavigationProps>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [succesMessage, setSuccesMessage] = useState(false);
@@ -111,6 +115,11 @@ const SettingsScreen: React.FC = () => {
             size={100}
             userId={userData!.userId}
             uri={userData?.profilePicture}
+            onNavigate={(uri: string) => {
+              navigation.navigate("Image", {
+                uri,
+              });
+            }}
           />
 
           <Input

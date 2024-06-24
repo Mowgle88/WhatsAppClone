@@ -5,7 +5,7 @@ import React, {
   useRef,
   useState,
 } from "react";
-import RN, {
+import {
   ImageBackground,
   StyleSheet,
   View,
@@ -89,8 +89,6 @@ const ChatScreen: React.FC = () => {
   const storedUsers = useAppSelector((state) => state.users.storedUsers);
   const storedChats = useAppSelector((state) => state.chats.chatsData);
   const chatMesages = useAppSelector((state) => state.messages.messagesData);
-
-  console.log("chatImageBackground", userData?.chatImageBackground);
 
   const [messageText, setMessageText] = useState("");
   const [imageDescription, setImageDescription] = useState("");
@@ -330,6 +328,11 @@ const ChatScreen: React.FC = () => {
         replyingTo={repliedTo}
         replyingToUser={repliedToUser}
         imageUrl={message.imageUrl}
+        onPress={(uri: string) => {
+          navigation.navigate("Image", {
+            uri,
+          });
+        }}
       />
     );
   };
@@ -452,7 +455,7 @@ const ChatScreen: React.FC = () => {
                   )}
                   {!isLoading && tempImageUrl && (
                     <>
-                      <RN.Image
+                      <RNImage
                         source={{ uri: tempImageUrl }}
                         style={styles.image}
                       />

@@ -6,7 +6,8 @@ import {
   View,
   ViewStyle,
   TouchableWithoutFeedback,
-  Image,
+  Image as RNImage,
+  Pressable,
 } from "react-native";
 import {
   Menu,
@@ -36,6 +37,7 @@ interface BubbleProps {
   replyingTo?: IChatMessagesData;
   name?: string;
   imageUrl?: string;
+  onPress?: (uri: string) => void;
 }
 
 interface MenuItemProps {
@@ -75,6 +77,7 @@ const Bubble: React.FC<BubbleProps> = ({
   replyingTo,
   name,
   imageUrl,
+  onPress = () => {},
 }) => {
   const starredMessages = useAppSelector(
     (state) => state.messages.starredMesages
@@ -163,7 +166,13 @@ const Bubble: React.FC<BubbleProps> = ({
             />
           )}
           {imageUrl && (
-            <Image source={{ uri: imageUrl }} style={styles.image} />
+            <Pressable
+              onPress={() => {
+                onPress(imageUrl);
+              }}
+            >
+              <RNImage source={{ uri: imageUrl }} style={styles.image} />
+            </Pressable>
           )}
           {text && <Text style={textStyle}>{text}</Text>}
           {dateString && type !== BubbleEnum.Info && (

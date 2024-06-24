@@ -77,6 +77,11 @@ const ContactScreen = () => {
           size={80}
           isShowEditButton={false}
           style={styles.image}
+          onNavigate={(uri: string) => {
+            navigation.navigate("Image", {
+              uri,
+            });
+          }}
         />
         <ScreenTitle
           text={`${currentUser.firstName} ${currentUser.lastName}`}
