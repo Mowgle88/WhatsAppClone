@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import colors from "../constants/colors";
-import ScreenContainer from "../components/ScreenContainer";
-import SignUpForm from "../components/SignUpForm";
-import SignInForm from "../components/SignInForm";
+import colors from "../shared/constants/colors";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import SignUpForm from "../shared/components/SignUpForm";
+import SignInForm from "../shared/components/SignInForm";
 import { ScrollView } from "react-native-gesture-handler";
 
 const AuthScreen: React.FC = () => {

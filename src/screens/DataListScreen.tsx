@@ -5,10 +5,10 @@ import {
   RootScreenNavigationProps,
   DataListScreenRouteProp,
 } from "../navigation/types";
-import ScreenContainer from "../components/ScreenContainer";
+import ScreenContainer from "../shared/components/ScreenContainer";
 import { useAppSelector } from "../store/hooks";
-import DataItem from "../components/DataItem";
-import { DataItemTypeEnum } from "../types/types";
+import DataItem from "../shared/components/DataItem";
+import { DataItemTypeEnum } from "../shared/types/types";
 
 const DataListScreen = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();

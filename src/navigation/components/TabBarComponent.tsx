@@ -5,7 +5,7 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import colors from "../../constants/colors";
+import colors from "../../shared/constants/colors";
 
 type TabBarComponentProps = {
   active?: boolean;

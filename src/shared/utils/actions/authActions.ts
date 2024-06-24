@@ -5,9 +5,9 @@ import {
 } from "@react-native-google-signin/google-signin";
 import database from "@react-native-firebase/database";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { authenticate, logout } from "../../store/authSlice";
+import { authenticate, logout } from "../../../store/authSlice";
 import { getUserData } from "./userActions";
-import type { AppDispatch } from "../../store/store";
+import type { AppDispatch } from "../../../store/store";
 import { State } from "../redusers/formReducer";
 import { getFCMToken } from "../firebaseHelper";
 import { IUserData } from "../../types/types";

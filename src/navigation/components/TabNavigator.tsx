@@ -6,7 +6,7 @@ import SettingsScreen from "../../screens/SettingsScreen";
 import { TabParamList } from "../types";
 import AnimatedTabBar from "./AnimatedTabBar";
 import { StyleSheet } from "react-native";
-import colors from "../../constants/colors";
+import colors from "../../shared/constants/colors";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 

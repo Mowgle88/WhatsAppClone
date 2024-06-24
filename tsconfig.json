@@ -5,7 +5,7 @@
     /* Visit https://aka.ms/tsconfig.json to read more about this file */
     "typeRoots": [
       "node_modules/@types",
-      "src/types"
+      "src/shared/types"
     ],
     /* Completeness */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */

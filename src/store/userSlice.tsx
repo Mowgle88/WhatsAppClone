@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserData, IUsers } from "../types/types";
+import { IUserData, IUsers } from "../shared/types/types";
 
 export interface UserState {
   storedUsers: IUsers;

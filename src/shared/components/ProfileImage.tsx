@@ -19,8 +19,8 @@ import {
   uploadImageAsync,
 } from "../utils/imagePickerHelper";
 import { updateSignedInUserData } from "../utils/actions/authActions";
-import { updateLoggetInUserData } from "../store/authSlice";
-import userImage from "../assets/images/userImage.jpeg";
+import { updateLoggetInUserData } from "../../store/authSlice";
+import userImage from "../../assets/images/userImage.jpeg";
 import { updateChatData } from "../utils/actions/chatActions";
 import BottomActionsSheet from "./BottomActionsSheet";
 

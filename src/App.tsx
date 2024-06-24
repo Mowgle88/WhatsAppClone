@@ -10,8 +10,8 @@ import messaging from "@react-native-firebase/messaging";
 import firebase from "@react-native-firebase/app";
 import AppNavigator from "./navigation/AppNavigator";
 import { store } from "./store/store";
-import { requestNotificationPermission } from "./permissions/notificationPermissions";
-import { getFCMToken } from "./utils/firebaseHelper";
+import { requestNotificationPermission } from "./shared/permissions/notificationPermissions";
+import { getFCMToken } from "./shared/utils/firebaseHelper";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
 

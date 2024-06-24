@@ -11,21 +11,21 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
-import ScreenTitle from "../components/ScreenTitle";
-import ScreenContainer from "../components/ScreenContainer";
-import Input from "../components/Input";
-import SubmitButton from "../components/SubmitButton";
-import colors from "../constants/colors";
-import { validateInput } from "../utils/actions/formActions";
-import { State, reducer } from "../utils/redusers/formReducer";
+import ScreenTitle from "../shared/components/ScreenTitle";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import Input from "../shared/components/Input";
+import SubmitButton from "../shared/components/SubmitButton";
+import colors from "../shared/constants/colors";
+import { validateInput } from "../shared/utils/actions/formActions";
+import { State, reducer } from "../shared/utils/redusers/formReducer";
 import {
   updateSignedInUserData,
   userLogout,
-} from "../utils/actions/authActions";
+} from "../shared/utils/actions/authActions";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { updateLoggetInUserData } from "../store/authSlice";
-import { IdEnum } from "../types/types";
-import ProfileImage from "../components/ProfileImage";
+import { IdEnum } from "../shared/types/types";
+import ProfileImage from "../shared/components/ProfileImage";
 import { ChatScreenNavigationProps } from "../navigation/types";
 
 const SettingsScreen: React.FC = () => {

@@ -32,10 +32,10 @@ import {
   overflowMenuPressHandlerDropdownMenu,
   useOverflowMenu,
 } from "react-navigation-header-buttons";
-import colors from "../constants/colors";
-import ScreenContainer from "../components/ScreenContainer";
-import Bubble from "../components/Bubble";
-import ReplyTo from "../components/ReplyTo";
+import colors from "../shared/constants/colors";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import Bubble from "../shared/components/Bubble";
+import ReplyTo from "../shared/components/ReplyTo";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
@@ -45,23 +45,23 @@ import {
   IChatMessagesData,
   ISendedData,
   IUserData,
-} from "../types/types";
+} from "../shared/types/types";
 import { useAppSelector } from "../store/hooks";
 import {
   createChat,
   sendImage,
   sendTextMessage,
-} from "../utils/actions/chatActions";
+} from "../shared/utils/actions/chatActions";
 import {
   openCamera,
   showImagePicker,
   uploadImageAsync,
-} from "../utils/imagePickerHelper";
-import { updateSignedInUserData } from "../utils/actions/authActions";
+} from "../shared/utils/imagePickerHelper";
+import { updateSignedInUserData } from "../shared/utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
-import CustomHeaderButton from "../components/CustomHeaderButton";
-import FloatingButton from "../components/FloatingButton";
-import { backgrounds } from "../constants/images";
+import CustomHeaderButton from "../shared/components/CustomHeaderButton";
+import FloatingButton from "../shared/components/FloatingButton";
+import { backgrounds } from "../shared/constants/images";
 
 interface ItemData {
   item: {

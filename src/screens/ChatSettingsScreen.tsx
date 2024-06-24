@@ -20,21 +20,21 @@ import {
   RootScreenNavigationProps,
 } from "../navigation/types";
 import { useAppSelector } from "../store/hooks";
-import ScreenContainer from "../components/ScreenContainer";
-import ScreenTitle from "../components/ScreenTitle";
-import ProfileImage from "../components/ProfileImage";
-import Input from "../components/Input";
-import DataItem from "../components/DataItem";
-import SubmitButton from "../components/SubmitButton";
-import { DataItemTypeEnum, IUserData, IdEnum } from "../types/types";
-import { State, reducer } from "../utils/redusers/formReducer";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenTitle from "../shared/components/ScreenTitle";
+import ProfileImage from "../shared/components/ProfileImage";
+import Input from "../shared/components/Input";
+import DataItem from "../shared/components/DataItem";
+import SubmitButton from "../shared/components/SubmitButton";
+import { DataItemTypeEnum, IUserData, IdEnum } from "../shared/types/types";
+import { State, reducer } from "../shared/utils/redusers/formReducer";
 import {
   addUsersToChat,
   removeUserFromChat,
   updateChatData,
-} from "../utils/actions/chatActions";
-import colors from "../constants/colors";
-import { validateInput } from "../utils/actions/formActions";
+} from "../shared/utils/actions/chatActions";
+import colors from "../shared/constants/colors";
+import { validateInput } from "../shared/utils/actions/formActions";
 
 const ChatSettingsScreen: React.FC = () => {
   const { params } = useRoute<ChatSettingsScreenRouteProp>();

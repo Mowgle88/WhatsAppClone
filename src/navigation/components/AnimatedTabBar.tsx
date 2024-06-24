@@ -9,7 +9,7 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 import TabBarComponent from "./TabBarComponent";
-import colors from "../../constants/colors";
+import colors from "../../shared/constants/colors";
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 

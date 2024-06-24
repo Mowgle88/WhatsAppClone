@@ -22,7 +22,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
 import { starMessage } from "../utils/actions/chatActions";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import { formatAmPm } from "../utils/redusers/dateFormatting";
 
 interface BubbleProps {

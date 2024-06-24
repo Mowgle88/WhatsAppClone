@@ -8,10 +8,14 @@ import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setChatsData } from "../store/chatSlice";
 import { setStoredUsers } from "../store/userSlice";
 import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
-import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
+import {
+  IObjectData,
+  IChatData,
+  IChatMessagesData,
+} from "../shared/types/types";
 import { ActivityIndicator, View } from "react-native";
-import colors from "../constants/colors";
-import commonStyles from "../constants/commonStyles";
+import colors from "../shared/constants/colors";
+import commonStyles from "../shared/constants/commonStyles";
 import StackNavigator from "./components/StackNavigator";
 
 const MainNavigator: React.FC = () => {

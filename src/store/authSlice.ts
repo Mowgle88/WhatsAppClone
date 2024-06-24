@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { IUserData } from "../types/types";
+import { IUserData } from "../shared/types/types";
 
 export interface AuthState {
   token: string | null;

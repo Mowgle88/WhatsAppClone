@@ -14,16 +14,16 @@ import {
   ChatScreenNavigationProps,
   NewChatScreenRouteProp,
 } from "../navigation/types";
-import CustomHeaderButton from "../components/CustomHeaderButton";
-import colors from "../constants/colors";
-import ScreenContainer from "../components/ScreenContainer";
-import commonStyles from "../constants/commonStyles";
-import { searchUsers } from "../utils/actions/userActions";
-import DataItem from "../components/DataItem";
-import { DataItemTypeEnum, IUsers } from "../types/types";
+import CustomHeaderButton from "../shared/components/CustomHeaderButton";
+import colors from "../shared/constants/colors";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import commonStyles from "../shared/constants/commonStyles";
+import { searchUsers } from "../shared/utils/actions/userActions";
+import DataItem from "../shared/components/DataItem";
+import { DataItemTypeEnum, IUsers } from "../shared/types/types";
 import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { setStoredUsers } from "../store/userSlice";
-import ProfileImage from "../components/ProfileImage";
+import ProfileImage from "../shared/components/ProfileImage";
 
 const NewChatScreen = () => {
   const navigation = useNavigation<ChatScreenNavigationProps>();

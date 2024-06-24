@@ -6,15 +6,15 @@ import {
   ChatScreenNavigationProps,
   ContactScreenRouteProp,
 } from "../navigation/types";
-import ScreenContainer from "../components/ScreenContainer";
-import ProfileImage from "../components/ProfileImage";
-import ScreenTitle from "../components/ScreenTitle";
-import { getUserChats } from "../utils/actions/userActions";
-import colors from "../constants/colors";
-import DataItem from "../components/DataItem";
-import { DataItemTypeEnum, IChatData, IUserData } from "../types/types";
-import SubmitButton from "../components/SubmitButton";
-import { removeUserFromChat } from "../utils/actions/chatActions";
+import ScreenContainer from "../shared/components/ScreenContainer";
+import ProfileImage from "../shared/components/ProfileImage";
+import ScreenTitle from "../shared/components/ScreenTitle";
+import { getUserChats } from "../shared/utils/actions/userActions";
+import colors from "../shared/constants/colors";
+import DataItem from "../shared/components/DataItem";
+import { DataItemTypeEnum, IChatData, IUserData } from "../shared/types/types";
+import SubmitButton from "../shared/components/SubmitButton";
+import { removeUserFromChat } from "../shared/utils/actions/chatActions";
 
 const ContactScreen = () => {
   const { params } = useRoute<ContactScreenRouteProp>();

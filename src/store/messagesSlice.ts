@@ -3,7 +3,7 @@ import {
   IObjectData,
   IChatMessagesData,
   IStarredMessage,
-} from "../types/types";
+} from "../shared/types/types";
 
 export interface MessagesState {
   messagesData: IObjectData<IObjectData<IChatMessagesData>>;
