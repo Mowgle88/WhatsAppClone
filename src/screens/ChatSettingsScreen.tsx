@@ -20,12 +20,12 @@ import {
   RootScreenNavigationProps,
 } from "../navigation/types";
 import { useAppSelector } from "../store/hooks";
-import ScreenContainer from "../shared/components/ScreenContainer";
-import ScreenTitle from "../shared/components/ScreenTitle";
+import ScreenContainer from "../shared/ui/ScreenContainer";
+import ScreenTitle from "../shared/ui/ScreenTitle";
 import ProfileImage from "../shared/components/ProfileImage";
 import Input from "../shared/components/Input";
 import DataItem from "../shared/components/DataItem";
-import SubmitButton from "../shared/components/SubmitButton";
+import SubmitButton from "../shared/ui/SubmitButton";
 import { DataItemTypeEnum, IUserData, IdEnum } from "../shared/types/types";
 import { State, reducer } from "../shared/utils/redusers/formReducer";
 import {

@@ -9,11 +9,11 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { ScrollView } from "react-native-gesture-handler";
 import colors from "../shared/constants/colors";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import SignUpForm from "../shared/components/SignUpForm";
 import SignInForm from "../shared/components/SignInForm";
-import { ScrollView } from "react-native-gesture-handler";
 
 const AuthScreen: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);

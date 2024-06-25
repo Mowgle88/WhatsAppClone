@@ -13,11 +13,11 @@ import {
   ChatListScreenRouteProp,
   RootStackParamList,
 } from "../navigation/types";
-import CustomHeaderButton from "../shared/components/CustomHeaderButton";
+import CustomHeaderButton from "../shared/ui/CustomHeaderButton";
 import { useAppSelector } from "../store/hooks";
 import DataItem from "../shared/components/DataItem";
-import ScreenContainer from "../shared/components/ScreenContainer";
-import ScreenTitle from "../shared/components/ScreenTitle";
+import ScreenContainer from "../shared/ui/ScreenContainer";
+import ScreenTitle from "../shared/ui/ScreenTitle";
 import colors from "../shared/constants/colors";
 
 const ChatListScreen: React.FC = () => {

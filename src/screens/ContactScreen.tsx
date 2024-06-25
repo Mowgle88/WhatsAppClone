@@ -6,14 +6,14 @@ import {
   ChatScreenNavigationProps,
   ContactScreenRouteProp,
 } from "../navigation/types";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import ProfileImage from "../shared/components/ProfileImage";
-import ScreenTitle from "../shared/components/ScreenTitle";
+import ScreenTitle from "../shared/ui/ScreenTitle";
 import { getUserChats } from "../shared/utils/actions/userActions";
 import colors from "../shared/constants/colors";
 import DataItem from "../shared/components/DataItem";
 import { DataItemTypeEnum, IChatData, IUserData } from "../shared/types/types";
-import SubmitButton from "../shared/components/SubmitButton";
+import SubmitButton from "../shared/ui/SubmitButton";
 import { removeUserFromChat } from "../shared/utils/actions/chatActions";
 
 const ContactScreen = () => {

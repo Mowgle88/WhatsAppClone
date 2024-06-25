@@ -1,14 +1,14 @@
 import React, { useCallback, useReducer, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet } from "react-native";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import Input from "./Input";
-import SubmitButton from "./SubmitButton";
+import SubmitButton from "../ui/SubmitButton";
 import { validateInput } from "../utils/actions/formActions";
 import { State, reducer } from "../utils/redusers/formReducer";
 import { IdEnum } from "../types/types";
 import { signUp } from "../utils/actions/authActions";
 import colors from "../constants/colors";
 import { useAppDispatch } from "../../store/hooks";
+import { signUpFormInput } from "../constants";
 
 const initialState: State = {
   inputValues: {
@@ -58,48 +58,20 @@ const SignUpForm: React.FC = () => {
 
   return (
     <>
-      <Input
-        id={IdEnum.FirstName}
-        label="First Name"
-        placeholder="First Name"
-        icon="person-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.firstName}
-      />
-      <Input
-        id={IdEnum.LastName}
-        label="Last Name"
-        placeholder="Last Name"
-        icon="person-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.lastName}
-      />
-      <Input
-        id={IdEnum.Email}
-        label="Email"
-        placeholder="Email"
-        icon="mail-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        keyboardType="email-address"
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.email}
-      />
-      <Input
-        id={IdEnum.Password}
-        label="Password"
-        placeholder="Password"
-        icon="lock-closed-outline"
-        IconPack={IonIcon}
-        autoCapitalize="none"
-        secureTextEntry
-        onInputChanged={inputChangedHandler}
-        errorText={formState.inputValidities.password}
-      />
+      {Object.entries(signUpFormInput).map(([key, data]) => (
+        <Input
+          key={key}
+          id={data.id}
+          label={data.label}
+          placeholder={data.placeholder}
+          icon={data.icon}
+          autoCapitalize="none"
+          keyboardType={key === "email" ? "email-address" : "default"}
+          secureTextEntry={key === "password"}
+          onInputChanged={inputChangedHandler}
+          errorText={formState.inputValidities[data.id]}
+        />
+      ))}
       {isLoading ? (
         <ActivityIndicator
           size={"small"}

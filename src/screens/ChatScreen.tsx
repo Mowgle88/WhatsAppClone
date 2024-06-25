@@ -33,9 +33,9 @@ import {
   useOverflowMenu,
 } from "react-navigation-header-buttons";
 import colors from "../shared/constants/colors";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import Bubble from "../shared/components/Bubble";
-import ReplyTo from "../shared/components/ReplyTo";
+import ReplyTo from "../shared/ui/ReplyTo";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
@@ -59,8 +59,8 @@ import {
 } from "../shared/utils/imagePickerHelper";
 import { updateSignedInUserData } from "../shared/utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
-import CustomHeaderButton from "../shared/components/CustomHeaderButton";
-import FloatingButton from "../shared/components/FloatingButton";
+import CustomHeaderButton from "../shared/ui/CustomHeaderButton";
+import FloatingButton from "../shared/ui/FloatingButton";
 import { backgrounds } from "../shared/constants/images";
 
 interface ItemData {

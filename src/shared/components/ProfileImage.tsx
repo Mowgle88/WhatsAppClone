@@ -4,11 +4,9 @@ import {
   Image as RNImage,
   Pressable,
   StyleSheet,
-  TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native";
-import FontAwesome from "react-native-vector-icons/FontAwesome";
 import { Image } from "react-native-image-crop-picker";
 import { useDispatch } from "react-redux";
 import { ActionSheetRef } from "react-native-actions-sheet";
@@ -23,6 +21,8 @@ import { updateLoggetInUserData } from "../../store/authSlice";
 import userImage from "../../assets/images/userImage.jpeg";
 import { updateChatData } from "../utils/actions/chatActions";
 import BottomActionsSheet from "./BottomActionsSheet";
+import { buttons } from "../constants";
+import EditButton from "./EditButton";
 
 interface ProfileImageProps {
   size: number;
@@ -34,24 +34,6 @@ interface ProfileImageProps {
   onNavigate?: (userId: string) => void;
   style?: ViewStyle;
 }
-
-const buttons = [
-  {
-    id: "gallery",
-    icon: "image-outline",
-    label: "Select from gallery",
-  },
-  {
-    id: "camera",
-    icon: "camera-outline",
-    label: "Take new photo",
-  },
-  {
-    id: "remove",
-    icon: "trash-outline",
-    label: "Remove",
-  },
-];
 
 const ProfileImage: React.FC<ProfileImageProps> = ({
   size,
@@ -177,21 +159,15 @@ const ProfileImage: React.FC<ProfileImageProps> = ({
           </Pressable>
         )}
         {isShowEditButton && !isLoading && (
-          <TouchableOpacity
+          <EditButton
+            isRemove={!!onPress}
             onPress={
               onPress ||
               (() => {
                 actionSheetRef.current?.show();
               })
             }
-            style={[styles.editIcon, onPress && styles.removeIcon]}
-          >
-            <FontAwesome
-              name={onPress ? "remove" : "pencil"}
-              size={onPress ? 12 : 16}
-              color="black"
-            />
-          </TouchableOpacity>
+          />
         )}
       </View>
       <BottomActionsSheet
@@ -224,22 +200,9 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     resizeMode: "contain",
   },
-  editIcon: {
-    position: "absolute",
-    bottom: -5,
-    right: -5,
-    padding: 8,
-    borderWidth: 2,
-    borderColor: colors.nearlyWhite,
-    borderRadius: 20,
-    backgroundColor: colors.lightGrey,
-  },
   loadingContainer: {
     justifyContent: "center",
     alignItems: "center",
-  },
-  removeIcon: {
-    padding: 2,
   },
 });
 

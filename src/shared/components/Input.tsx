@@ -7,11 +7,13 @@ import {
   View,
 } from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
+import IonIcon from "react-native-vector-icons/Ionicons";
+
 import colors from "../constants/colors";
 import { IdEnum } from "../types/types";
 
 interface InputProps extends TextInputProps {
-  IconPack: React.ComponentClass<IconProps, any>;
+  IconPack?: React.ComponentClass<IconProps, any>;
   icon?: string;
   id: IdEnum;
   label?: string;
@@ -22,7 +24,7 @@ interface InputProps extends TextInputProps {
 }
 
 const Input: React.FC<InputProps> = ({
-  IconPack,
+  IconPack = IonIcon,
   icon,
   id,
   label = "",

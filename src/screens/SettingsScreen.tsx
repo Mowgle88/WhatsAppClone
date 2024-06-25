@@ -11,10 +11,10 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
-import ScreenTitle from "../shared/components/ScreenTitle";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenTitle from "../shared/ui/ScreenTitle";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import Input from "../shared/components/Input";
-import SubmitButton from "../shared/components/SubmitButton";
+import SubmitButton from "../shared/ui/SubmitButton";
 import colors from "../shared/constants/colors";
 import { validateInput } from "../shared/utils/actions/formActions";
 import { State, reducer } from "../shared/utils/redusers/formReducer";

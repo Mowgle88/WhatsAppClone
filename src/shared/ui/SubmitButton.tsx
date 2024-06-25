@@ -39,8 +39,6 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
   );
 };
 
-export default SubmitButton;
-
 const styles = StyleSheet.create({
   button: {
     backgroundColor: colors.primary,
@@ -60,3 +58,5 @@ const styles = StyleSheet.create({
     color: colors.grey,
   },
 });
+
+export default SubmitButton;

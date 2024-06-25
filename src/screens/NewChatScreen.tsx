@@ -14,9 +14,9 @@ import {
   ChatScreenNavigationProps,
   NewChatScreenRouteProp,
 } from "../navigation/types";
-import CustomHeaderButton from "../shared/components/CustomHeaderButton";
+import CustomHeaderButton from "../shared/ui/CustomHeaderButton";
 import colors from "../shared/constants/colors";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import commonStyles from "../shared/constants/commonStyles";
 import { searchUsers } from "../shared/utils/actions/userActions";
 import DataItem from "../shared/components/DataItem";

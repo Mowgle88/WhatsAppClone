@@ -5,7 +5,7 @@ import {
   RootScreenNavigationProps,
   DataListScreenRouteProp,
 } from "../navigation/types";
-import ScreenContainer from "../shared/components/ScreenContainer";
+import ScreenContainer from "../shared/ui/ScreenContainer";
 import { useAppSelector } from "../store/hooks";
 import DataItem from "../shared/components/DataItem";
 import { DataItemTypeEnum } from "../shared/types/types";

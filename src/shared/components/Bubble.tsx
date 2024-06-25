@@ -6,24 +6,16 @@ import {
   View,
   ViewStyle,
   TouchableWithoutFeedback,
-  Image as RNImage,
+  Image,
   Pressable,
 } from "react-native";
-import {
-  Menu,
-  MenuOption,
-  MenuOptions,
-  MenuTrigger,
-} from "react-native-popup-menu";
 import uuid from "react-native-uuid";
-import Clipboard from "@react-native-clipboard/clipboard";
-import { IconProps } from "react-native-vector-icons/Icon";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import colors from "../constants/colors";
 import { BubbleEnum, IChatMessagesData, IUserData } from "../types/types";
-import { starMessage } from "../utils/actions/chatActions";
-import { useAppSelector } from "../../store/hooks";
 import { formatAmPm } from "../utils/redusers/dateFormatting";
+import { useAppSelector } from "../../store/hooks";
+import PopupMenu from "./PopupMenu";
 
 interface BubbleProps {
   text: string;
@@ -39,31 +31,6 @@ interface BubbleProps {
   imageUrl?: string;
   onPress?: (uri: string) => void;
 }
-
-interface MenuItemProps {
-  text: string;
-  IconPack?: React.ComponentClass<IconProps, any>;
-  icon: string;
-  onSelect: () => void;
-}
-
-const MenuItem: React.FC<MenuItemProps> = ({
-  text,
-  IconPack,
-  onSelect,
-  icon,
-}) => {
-  const Icon = IconPack ?? Ionicons;
-
-  return (
-    <MenuOption onSelect={onSelect}>
-      <View style={styles.menuItemContainer}>
-        <Text style={styles.menuText}>{text}</Text>
-        <Icon name={icon} size={18} style={styles.icon} />
-      </View>
-    </MenuOption>
-  );
-};
 
 const Bubble: React.FC<BubbleProps> = ({
   text,
@@ -137,10 +104,6 @@ const Bubble: React.FC<BubbleProps> = ({
       break;
   }
 
-  const copyToClipboard = async (copiedText: string) => {
-    Clipboard.setString(copiedText);
-  };
-
   const isStarred =
     isUserMessage && chatStarredMessages?.[messageId!] !== undefined;
 
@@ -171,7 +134,7 @@ const Bubble: React.FC<BubbleProps> = ({
                 onPress(imageUrl);
               }}
             >
-              <RNImage source={{ uri: imageUrl }} style={styles.image} />
+              <Image source={{ uri: imageUrl }} style={styles.image} />
             </Pressable>
           )}
           {text && <Text style={textStyle}>{text}</Text>}
@@ -189,27 +152,16 @@ const Bubble: React.FC<BubbleProps> = ({
             </View>
           )}
 
-          <Menu name={id.current as string} ref={menuRef}>
-            <MenuTrigger />
-
-            <MenuOptions>
-              <MenuItem
-                text="Copy to Clipboard"
-                icon="copy-outline"
-                onSelect={() => copyToClipboard(text)}
-              />
-              <MenuItem
-                text={`${isStarred ? "Unstar" : "Star"} message`}
-                icon={isStarred ? "star-outline" : "star"}
-                onSelect={() => starMessage(messageId!, chatId!, userId!)}
-              />
-              <MenuItem
-                text="Reply"
-                icon="arrow-undo-outline"
-                onSelect={setReply!}
-              />
-            </MenuOptions>
-          </Menu>
+          <PopupMenu
+            ref={menuRef}
+            setReply={setReply!}
+            isStarred={isStarred}
+            text={text}
+            id={id.current as string}
+            messageId={messageId!}
+            chatId={chatId!}
+            userId={userId!}
+          />
         </View>
       </TouchableWithoutFeedback>
     </View>
@@ -235,20 +187,6 @@ const styles = StyleSheet.create({
   },
   touchable: {
     width: "100%",
-  },
-  menuItemContainer: {
-    flexDirection: "row",
-    padding: 4,
-  },
-  menuText: {
-    flex: 1,
-    fontFamily: "Alkatra-Regular",
-    letterSpacing: 0.3,
-    fontSize: 16,
-  },
-  icon: {
-    color: colors.blue,
-    alignSelf: "center",
   },
   timeContainer: {
     flexDirection: "row",
