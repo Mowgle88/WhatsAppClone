@@ -61,7 +61,7 @@ import { updateSignedInUserData } from "../shared/utils/actions/authActions";
 import { updateLoggetInUserData } from "../store/authSlice";
 import CustomHeaderButton from "../shared/ui/CustomHeaderButton";
 import FloatingButton from "../shared/ui/FloatingButton";
-import { backgrounds } from "../shared/constants/images";
+import { backgrounds } from "../shared/constants/sources";
 
 interface ItemData {
   item: {

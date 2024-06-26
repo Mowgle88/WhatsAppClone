@@ -1,15 +1,18 @@
 import React, { useCallback, useReducer, useState } from "react";
-import { ActivityIndicator, Alert, StyleSheet } from "react-native";
-import { GoogleSigninButton } from "@react-native-google-signin/google-signin";
-import Input from "./Input";
-import SubmitButton from "../ui/SubmitButton";
-import { validateInput } from "../utils/actions/formActions";
-import { State, reducer } from "../utils/redusers/formReducer";
-import { IdEnum } from "../types/types";
-import { signIn, signInWithGoogle } from "../utils/actions/authActions";
-import { useAppDispatch } from "../../store/hooks";
-import colors from "../constants/colors";
-import { signInFormInput } from "../constants";
+import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
+import Input from "../../../shared/components/Input";
+import SubmitButton from "../../../shared/ui/SubmitButton";
+import { validateInput } from "../../../shared/utils/actions/formActions";
+import { State, reducer } from "../../../shared/utils/redusers/formReducer";
+import { IdEnum } from "../../../shared/types/types";
+import {
+  signIn,
+  signInWithGoogle,
+} from "../../../shared/utils/actions/authActions";
+import { useAppDispatch } from "../../../store/hooks";
+import colors from "../../../shared/constants/colors";
+import { signInFormInput } from "../../../shared/constants";
+import GoogleButton from "./GoogleButton";
 
 const initialState: State = {
   inputValues: {
@@ -92,12 +95,8 @@ const SignInForm: React.FC = () => {
           disabled={!formState.formIsValid}
         />
       )}
-      <GoogleSigninButton
-        style={styles.googleButton}
-        size={GoogleSigninButton.Size.Standard}
-        color={GoogleSigninButton.Color.Dark}
-        onPress={signinWithGoogleHandler}
-      />
+      <Text style={styles.text}>Or continue</Text>
+      <GoogleButton onPress={signinWithGoogleHandler} />
     </>
   );
 };
@@ -108,6 +107,14 @@ const styles = StyleSheet.create({
   },
   googleButton: {
     marginTop: 20,
+    alignSelf: "center",
+  },
+  text: {
+    color: colors.blue,
+    fontFamily: "Alkatra-Medium",
+    fontSize: 18,
+    letterSpacing: 0.3,
+    marginTop: 24,
     alignSelf: "center",
   },
 });

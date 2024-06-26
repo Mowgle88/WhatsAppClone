@@ -9,3 +9,11 @@ export const backgrounds = {
   Valley: require("../../assets/images/background/valley.jpg"),
   Winter: require("../../assets/images/background/winter.jpg"),
 };
+
+export const logo = {
+  src: require("../../assets/images/logo.png"),
+};
+
+export const google = {
+  src: require("../../assets/images/google.png"),
+};
