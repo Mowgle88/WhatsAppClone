@@ -1,7 +1,7 @@
 import React from "react";
 import Lottie from "lottie-react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ChatListScreen from "../../screens/ChatListScreen";
+import ChatListScreen from "../../screens/chat-list/ChatListScreen";
 import SettingsScreen from "../../screens/SettingsScreen";
 import { TabParamList } from "../types";
 import AnimatedTabBar from "./AnimatedTabBar";

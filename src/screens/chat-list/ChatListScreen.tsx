@@ -1,24 +1,18 @@
 import React, { useEffect, useMemo } from "react";
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import {
   RootScreenNavigationProps,
   ChatListScreenRouteProp,
   RootStackParamList,
-} from "../navigation/types";
-import CustomHeaderButton from "../shared/ui/CustomHeaderButton";
-import { useAppSelector } from "../store/hooks";
-import DataItem from "../shared/components/DataItem";
-import ScreenContainer from "../shared/ui/ScreenContainer";
-import ScreenTitle from "../shared/ui/ScreenTitle";
-import colors from "../shared/constants/colors";
+} from "../../navigation/types";
+import { useAppSelector } from "../../store/hooks";
+import DataItem from "../../shared/components/DataItem";
+import ScreenContainer from "../../shared/ui/ScreenContainer";
+import ScreenTitle from "../../shared/ui/ScreenTitle";
+import colors from "../../shared/constants/colors";
+import HeaderRight from "./components/HeaderRight";
+import { IChatData } from "../../shared/types/types";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();
@@ -42,15 +36,11 @@ const ChatListScreen: React.FC = () => {
     navigation.setOptions({
       headerRight: () => {
         return (
-          <HeaderButtons HeaderButtonComponent={CustomHeaderButton}>
-            <Item
-              title="New chat"
-              iconName="create-outline"
-              onPress={() => {
-                navigation.navigate("NewChat");
-              }}
-            />
-          </HeaderButtons>
+          <HeaderRight
+            onPress={() => {
+              navigation.navigate("NewChat");
+            }}
+          />
         );
       },
     });
@@ -93,57 +83,57 @@ const ChatListScreen: React.FC = () => {
     navigation.navigate("Chat", navigationProps);
   }, [route?.params]);
 
+  const renderItem = (itemData: { item: IChatData }) => {
+    const chatData = itemData.item;
+    const chatId = chatData.key;
+    const isGroupChat = chatData.isGroupChat;
+
+    let title = "";
+    const subTitle = chatData.latestMessageText || "New chat";
+    let image = "";
+
+    if (isGroupChat) {
+      title = chatData.chatName!;
+      image = chatData.chatImage!;
+    } else {
+      const otherUserId = chatData.users.find(
+        (uid) => uid !== authorizedUserData!.userId
+      );
+      const otherUser = storedUsers[otherUserId!];
+
+      if (!otherUser) return null;
+
+      title = `${otherUser.firstName} ${otherUser.lastName}`;
+      image = otherUser.profilePicture;
+    }
+
+    return (
+      <DataItem
+        key={chatId}
+        title={title}
+        subTitle={subTitle}
+        image={image}
+        onPress={(): void => {
+          navigation.navigate("Chat", { chatId });
+        }}
+      />
+    );
+  };
+
   return (
     <ScreenContainer>
       <ScreenTitle text={"Chats"} />
-      <View>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate("NewChat", { isGroupChat: true });
-          }}
-        >
-          <Text style={styles.newGroupText}>New group</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate("NewChat", { isGroupChat: true });
+        }}
+      >
+        <Text style={styles.newGroupText}>New group</Text>
+      </TouchableOpacity>
       <FlatList
         data={userChatsList}
         keyExtractor={(item) => item.key}
-        renderItem={(itemData) => {
-          const chatData = itemData.item;
-          const chatId = chatData.key;
-          const isGroupChat = chatData.isGroupChat;
-
-          let title = "";
-          const subTitle = chatData.latestMessageText || "New chat";
-          let image = "";
-
-          if (isGroupChat) {
-            title = chatData.chatName!;
-            image = chatData.chatImage!;
-          } else {
-            const otherUserId = chatData.users.find(
-              (uid) => uid !== authorizedUserData!.userId
-            );
-            const otherUser = storedUsers[otherUserId!];
-
-            if (!otherUser) return null;
-
-            title = `${otherUser.firstName} ${otherUser.lastName}`;
-            image = otherUser.profilePicture;
-          }
-
-          return (
-            <DataItem
-              key={chatId}
-              title={title}
-              subTitle={subTitle}
-              image={image}
-              onPress={(): void => {
-                navigation.navigate("Chat", { chatId });
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
       />
     </ScreenContainer>
   );
