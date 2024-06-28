@@ -1,7 +1,7 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ChatSettingsScreen from "../../screens/ChatSettingsScreen";
-import ChatScreen from "../../screens/ChatScreen";
+import ChatScreen from "../../screens/chat/ChatScreen";
 import { RootStackParamList } from "../types";
 import NewChatScreen from "../../screens/NewChatScreen";
 import ContactScreen from "../../screens/ContactScreen";

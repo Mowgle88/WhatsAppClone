@@ -6,7 +6,7 @@ import {
   ViewStyle,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import colors from "../constants/colors";
+import colors from "../../../shared/constants/colors";
 
 interface FloatingButtonProps {
   style?: StyleProp<ViewStyle>;
