@@ -1,20 +1,25 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { useAppSelector } from "../store/hooks";
+import { useAppSelector } from "../../store/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ChatScreenNavigationProps,
   ContactScreenRouteProp,
-} from "../navigation/types";
-import ScreenContainer from "../shared/ui/ScreenContainer";
-import ProfileImage from "../shared/components/ProfileImage";
-import ScreenTitle from "../shared/ui/ScreenTitle";
-import { getUserChats } from "../shared/utils/actions/userActions";
-import colors from "../shared/constants/colors";
-import DataItem from "../shared/components/DataItem";
-import { DataItemTypeEnum, IChatData, IUserData } from "../shared/types/types";
-import SubmitButton from "../shared/ui/SubmitButton";
-import { removeUserFromChat } from "../shared/utils/actions/chatActions";
+} from "../../navigation/types";
+import ScreenContainer from "../../shared/ui/ScreenContainer";
+import ProfileImage from "../../shared/components/ProfileImage";
+import ScreenTitle from "../../shared/ui/ScreenTitle";
+import { getUserChats } from "../../shared/utils/actions/userActions";
+import colors from "../../shared/constants/colors";
+import DataItem from "../../shared/components/DataItem";
+import {
+  DataItemTypeEnum,
+  IChatData,
+  IUserData,
+} from "../../shared/types/types";
+import SubmitButton from "../../shared/ui/SubmitButton";
+import { removeUserFromChat } from "../../shared/utils/actions/chatActions";
+import CommonChatsList from "./components/CommonChatsList";
 
 const ContactScreen = () => {
   const { params } = useRoute<ContactScreenRouteProp>();
@@ -93,28 +98,13 @@ const ContactScreen = () => {
         )}
       </View>
       {!!commonChats.length && (
-        <>
-          <Text style={styles.heading}>
-            {commonChats.length} {commonChats.length === 1 ? "Group" : "Groups"}{" "}
-            in common
-          </Text>
-          {commonChats.map((cid, index) => {
-            const chatData = storedChats[cid];
-
-            return (
-              <DataItem
-                key={`${chatData?.key}-${index}`}
-                title={chatData?.chatName!}
-                subTitle={chatData?.latestMessageText!}
-                image={chatData?.chatImage!}
-                type={DataItemTypeEnum.Link}
-                onPress={() => {
-                  navigation.push("Chat", { chatId: cid });
-                }}
-              />
-            );
-          })}
-        </>
+        <CommonChatsList
+          commonChats={commonChats}
+          storedChats={storedChats}
+          onPress={(cid: string) => {
+            navigation.push("Chat", { chatId: cid });
+          }}
+        />
       )}
 
       {chatStarredMessages && (
@@ -161,12 +151,6 @@ const styles = StyleSheet.create({
     fontFamily: "Alkatra-Medium",
     fontSize: 16,
     letterSpacing: 0.3,
-  },
-  heading: {
-    fontFamily: "Alkatra-Bold",
-    letterSpacing: 0.3,
-    color: colors.textColor,
-    marginVertical: 8,
   },
 });
 
