@@ -11,30 +11,26 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
 import {
   ChatSettingsScreenRouteProp,
   RootScreenNavigationProps,
-} from "../navigation/types";
-import { useAppSelector } from "../store/hooks";
-import ScreenContainer from "../shared/ui/ScreenContainer";
-import ScreenTitle from "../shared/ui/ScreenTitle";
-import ProfileImage from "../shared/components/ProfileImage";
-import Input from "../shared/components/Input";
-import DataItem from "../shared/components/DataItem";
-import SubmitButton from "../shared/ui/SubmitButton";
-import { DataItemTypeEnum, IUserData, IdEnum } from "../shared/types/types";
-import { State, reducer } from "../shared/utils/redusers/formReducer";
+} from "../../navigation/types";
+import { useAppSelector } from "../../store/hooks";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "../../shared/ui";
+import { DataItem, Input, ProfileImage } from "../../shared/components";
+import { DataItemTypeEnum, IUserData, IdEnum } from "../../shared/types/types";
+import { State, reducer } from "../../shared/utils/redusers/formReducer";
 import {
   addUsersToChat,
   removeUserFromChat,
   updateChatData,
-} from "../shared/utils/actions/chatActions";
-import colors from "../shared/constants/colors";
-import { validateInput } from "../shared/utils/actions/formActions";
+} from "../../shared/utils/actions/chatActions";
+import colors from "../../shared/constants/colors";
+import { validateInput } from "../../shared/utils/actions/formActions";
+import ParticipantsList from "./components/ParticipantsList";
 
 const ChatSettingsScreen: React.FC = () => {
   const { params } = useRoute<ChatSettingsScreenRouteProp>();
@@ -169,56 +165,29 @@ const ChatSettingsScreen: React.FC = () => {
           errorText={formState.inputValidities.chatName}
         />
 
-        <View style={styles.sectionContainer}>
-          <Text style={styles.heading}>
-            {chatData.users.length} Participants
-          </Text>
-          <DataItem
-            title="Add users"
-            icon="person-add-outline"
-            type={DataItemTypeEnum.Button}
-            onPress={() => {
-              navigation.navigate("NewChat", {
-                isGroupChat: true,
-                existingUsers: chatData.users,
-                chatId,
-              });
-            }}
-          />
-          {chatData.users.slice(0, 3).map((uid) => {
-            const currentUser = storedUsers[uid];
-            return (
-              <DataItem
-                key={uid}
-                image={currentUser.profilePicture}
-                title={`${currentUser.firstName} ${currentUser.lastName}`}
-                subTitle={currentUser.about}
-                type={
-                  uid !== userData?.userId ? DataItemTypeEnum.Link : undefined
-                }
-                onPress={() => {
-                  uid !== userData?.userId &&
-                    navigation.navigate("Contact", { uid, chatId });
-                }}
-              />
-            );
-          })}
-          {chatData.users.length > 3 && (
-            <DataItem
-              type={DataItemTypeEnum.Link}
-              title="View all"
-              hideImage
-              onPress={() => {
-                navigation.navigate("DataList", {
-                  title: "Participants",
-                  type: "users",
-                  chatId: chatId,
-                });
-              }}
-            />
-          )}
-        </View>
-
+        <ParticipantsList
+          chatData={chatData}
+          storedUsers={storedUsers}
+          loggedInUserId={userData?.userId!}
+          onPressAddUsers={() => {
+            navigation.navigate("NewChat", {
+              isGroupChat: true,
+              existingUsers: chatData.users,
+              chatId,
+            });
+          }}
+          onPressItem={(uid) => {
+            uid !== userData?.userId &&
+              navigation.navigate("Contact", { uid, chatId });
+          }}
+          onPressViewAll={function (): void {
+            navigation.navigate("DataList", {
+              title: "Participants",
+              type: "users",
+              chatId: chatId,
+            });
+          }}
+        />
         {succesMessage && <Text>Saved!</Text>}
         {isLoading ? (
           <ActivityIndicator size={"small"} color={colors.primary} />
@@ -248,14 +217,12 @@ const ChatSettingsScreen: React.FC = () => {
           />
         )}
       </ScrollView>
-      {
-        <SubmitButton
-          title="Leave chat"
-          color={colors.red}
-          onPress={leaveChat}
-          style={styles.leaveChatButton}
-        />
-      }
+      <SubmitButton
+        title="Leave chat"
+        color={colors.red}
+        onPress={leaveChat}
+        style={styles.leaveChatButton}
+      />
     </ScreenContainer>
   );
 };
@@ -270,16 +237,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingBottom: 24,
-  },
-  sectionContainer: {
-    width: "100%",
-    marginTop: 10,
-  },
-  heading: {
-    marginVertical: 8,
-    color: colors.textColor,
-    fontFamily: "Alkatra-Medium",
-    letterSpacing: 0.3,
   },
   leaveChatButton: {
     marginBottom: 24,
