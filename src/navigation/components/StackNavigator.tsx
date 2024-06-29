@@ -5,7 +5,7 @@ import ChatScreen from "../../screens/chat/ChatScreen";
 import { RootStackParamList } from "../types";
 import NewChatScreen from "../../screens/NewChatScreen";
 import ContactScreen from "../../screens/contact/ContactScreen";
-import DataListScreen from "../../screens/DataListScreen";
+import DataListScreen from "../../screens/data-list/DataListScreen";
 import ImageScreen from "../../screens/ImageScreen";
 import TabNavigator from "../components/TabNavigator";
 
