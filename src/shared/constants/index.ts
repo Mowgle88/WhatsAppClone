@@ -18,22 +18,26 @@ export const buttons = [
   },
 ];
 
-export const signInFormInput = {
-  email: {
-    id: IdEnum.Email,
-    label: "Email",
-    placeholder: "Email",
-    icon: "mail-outline",
-  },
-  password: {
-    id: IdEnum.Password,
-    label: "Password",
-    placeholder: "Password",
-    icon: "lock-closed-outline",
-  },
+const emailInput = {
+  id: IdEnum.Email,
+  label: "Email",
+  placeholder: "Email",
+  icon: "mail-outline",
 };
 
-export const signUpFormInput = {
+const passwordInput = {
+  id: IdEnum.Password,
+  label: "Password",
+  placeholder: "Password",
+  icon: "lock-closed-outline",
+};
+
+export const signInFormInput = {
+  email: emailInput,
+  password: passwordInput,
+};
+
+const firstAndLastName = {
   firstName: {
     id: IdEnum.FirstName,
     label: "First Name",
@@ -46,11 +50,16 @@ export const signUpFormInput = {
     placeholder: "Last Name",
     icon: "person-outline",
   },
+};
+
+export const signUpFormInput = {
+  ...firstAndLastName,
   ...signInFormInput,
 };
 
 export const settingsInput = {
-  ...signInFormInput,
+  ...firstAndLastName,
+  email: emailInput,
   about: {
     id: IdEnum.About,
     label: "About",

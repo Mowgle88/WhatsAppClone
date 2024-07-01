@@ -9,24 +9,24 @@ import {
   View,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import { ScrollView } from "react-native-gesture-handler";
-import ScreenTitle from "../shared/ui/ScreenTitle";
-import ScreenContainer from "../shared/ui/ScreenContainer";
-import Input from "../shared/components/Input";
-import SubmitButton from "../shared/ui/SubmitButton";
-import colors from "../shared/constants/colors";
-import { validateInput } from "../shared/utils/actions/formActions";
-import { State, reducer } from "../shared/utils/redusers/formReducer";
+import ScreenTitle from "../../shared/ui/ScreenTitle";
+import ScreenContainer from "../../shared/ui/ScreenContainer";
+import Input from "../../shared/components/Input";
+import SubmitButton from "../../shared/ui/SubmitButton";
+import colors from "../../shared/constants/colors";
+import { validateInput } from "../../shared/utils/actions/formActions";
+import { State, reducer } from "../../shared/utils/redusers/formReducer";
 import {
   updateSignedInUserData,
   userLogout,
-} from "../shared/utils/actions/authActions";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { updateLoggetInUserData } from "../store/authSlice";
-import { IdEnum } from "../shared/types/types";
-import ProfileImage from "../shared/components/ProfileImage";
-import { ChatScreenNavigationProps } from "../navigation/types";
+} from "../../shared/utils/actions/authActions";
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { updateLoggetInUserData } from "../../store/authSlice";
+import { IdEnum } from "../../shared/types/types";
+import ProfileImage from "../../shared/components/ProfileImage";
+import { ChatScreenNavigationProps } from "../../navigation/types";
+import { settingsInput } from "../../shared/constants";
 
 const SettingsScreen: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -121,53 +121,21 @@ const SettingsScreen: React.FC = () => {
               });
             }}
           />
-
-          <Input
-            id={IdEnum.FirstName}
-            initialValue={userData?.firstName}
-            label="First Name"
-            placeholder="First Name"
-            icon="person-outline"
-            IconPack={IonIcon}
-            autoCapitalize="none"
-            onInputChanged={inputChangedHandler}
-            errorText={formState.inputValidities.firstName}
-          />
-          <Input
-            id={IdEnum.LastName}
-            initialValue={userData?.lastName}
-            label="Last Name"
-            placeholder="Last Name"
-            icon="person-outline"
-            IconPack={IonIcon}
-            autoCapitalize="none"
-            onInputChanged={inputChangedHandler}
-            errorText={formState.inputValidities.lastName}
-          />
-          <Input
-            id={IdEnum.Email}
-            initialValue={userData?.email}
-            label="Email"
-            placeholder="Email"
-            icon="mail-outline"
-            IconPack={IonIcon}
-            autoCapitalize="none"
-            keyboardType="email-address"
-            onInputChanged={inputChangedHandler}
-            errorText={formState.inputValidities.email}
-          />
-          <Input
-            id={IdEnum.About}
-            initialValue={userData?.about}
-            label="About"
-            placeholder="About"
-            icon="reader-outline"
-            IconPack={IonIcon}
-            autoCapitalize="none"
-            multiline
-            onInputChanged={inputChangedHandler}
-            errorText={formState.inputValidities.about}
-          />
+          {Object.entries(settingsInput).map(([key, data]) => (
+            <Input
+              key={key}
+              id={data.id}
+              initialValue={userData?.[key as keyof typeof userData] as string}
+              label={data.label}
+              placeholder={data.placeholder}
+              icon={data.icon}
+              autoCapitalize="none"
+              keyboardType={key === "email" ? "email-address" : "default"}
+              multiline={key === "about"}
+              onInputChanged={inputChangedHandler}
+              errorText={formState.inputValidities[data.id]}
+            />
+          ))}
           <View style={styles.button}>
             {succesMessage && <Text>Saved!</Text>}
             {isLoading ? (
