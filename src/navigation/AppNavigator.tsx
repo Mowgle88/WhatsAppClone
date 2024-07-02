@@ -1,9 +1,8 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
+import { AuthScreen, StartUpScreen } from "#screens";
+import { useAppSelector } from "#store/hooks";
 import MainNavigator from "./MainNavigator";
-import AuthScreen from "../screens/AuthScreen";
-import StartUpScreen from "../screens/StartUpScreen";
-import { useAppSelector } from "../store/hooks";
 
 const AppNavigator: React.FC = () => {
   const isAuth = useAppSelector((state) => state.auth.token);

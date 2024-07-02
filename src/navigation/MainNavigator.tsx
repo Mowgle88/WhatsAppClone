@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from "react";
-import { StackActions, useNavigation } from "@react-navigation/native";
+import { ActivityIndicator, View } from "react-native";
 import database from "@react-native-firebase/database";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
-import { setChatsData } from "../store/chatSlice";
-import { setStoredUsers } from "../store/userSlice";
-import { setChatMessages, setStarredMessages } from "../store/messagesSlice";
-import { IObjectData, IChatData, IChatMessagesData } from "../types/types";
-import { ActivityIndicator, View } from "react-native";
-import colors from "../constants/colors";
-import commonStyles from "../constants/commonStyles";
-import StackNavigator from "./components/StackNavigator";
+import { StackActions, useNavigation } from "@react-navigation/native";
+import { colors } from "#colors";
+import { useAppDispatch, useAppSelector } from "#store/hooks";
+import {
+  setChatMessages,
+  setChatsData,
+  setStarredMessages,
+  setStoredUsers,
+} from "#store/slices";
+import commonStyles from "#styles";
+import { IChatData, IChatMessagesData, IObjectData } from "#types";
+import { StackNavigator } from "./components";
 
 const MainNavigator: React.FC = () => {
   const dispatch = useAppDispatch();

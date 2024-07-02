@@ -1,12 +1,12 @@
 import React from "react";
-import Lottie from "lottie-react-native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import ChatListScreen from "../../screens/ChatListScreen";
-import SettingsScreen from "../../screens/SettingsScreen";
-import { TabParamList } from "../types";
-import AnimatedTabBar from "./AnimatedTabBar";
 import { StyleSheet } from "react-native";
-import colors from "../../constants/colors";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Lottie from "lottie-react-native";
+import { colors } from "#colors";
+import { lottie } from "#constants";
+import { TabParamList } from "#navigation/types";
+import { ChatListScreen, SettingsScreen } from "#screens";
+import AnimatedTabBar from "./AnimatedTabBar";
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
@@ -32,7 +32,7 @@ const TabNavigator: React.FC = () => {
             <Lottie
               ref={ref}
               loop={false}
-              source={require("../../assets/lottie/chat.icon.json")}
+              source={lottie.chat}
               style={styles.icon}
             />
           ),
@@ -48,7 +48,7 @@ const TabNavigator: React.FC = () => {
             <Lottie
               ref={ref}
               loop={false}
-              source={require("../../assets/lottie/settings.icon.json")}
+              source={lottie.settings}
               style={styles.icon}
             />
           ),

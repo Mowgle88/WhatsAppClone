@@ -1,15 +1,15 @@
 import React, { useReducer } from "react";
 import { View, LayoutChangeEvent, StyleSheet } from "react-native";
 import { BottomTabBarProps } from "@react-navigation/bottom-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import Svg, { Path } from "react-native-svg";
 import Animated, {
   useAnimatedStyle,
   withTiming,
   useDerivedValue,
 } from "react-native-reanimated";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import Svg, { Path } from "react-native-svg";
+import { colors } from "#colors";
 import TabBarComponent from "./TabBarComponent";
-import colors from "../../constants/colors";
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 
