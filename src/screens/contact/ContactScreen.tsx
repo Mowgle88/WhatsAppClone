@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { colors } from "#colors";
+import { DataItem, ProfileImage } from "#components";
 import {
   ChatScreenNavigationProps,
   ContactScreenRouteProp,
 } from "#navigation/types";
-import { colors } from "#colors";
-import { DataItem, ProfileImage } from "#components";
-import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
 import { useAppSelector } from "#store/hooks";
 import { DataItemTypeEnum, IChatData, IUserData } from "#types";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
 import { getUserChats, removeUserFromChat } from "#utils";
 import { CommonChatsList } from "./components";
 

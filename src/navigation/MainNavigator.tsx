@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { StackActions, useNavigation } from "@react-navigation/native";
 import database from "@react-native-firebase/database";
 import messaging, {
   FirebaseMessagingTypes,
 } from "@react-native-firebase/messaging";
+import { StackActions, useNavigation } from "@react-navigation/native";
 import { colors } from "#colors";
 import { useAppDispatch, useAppSelector } from "#store/hooks";
 import {

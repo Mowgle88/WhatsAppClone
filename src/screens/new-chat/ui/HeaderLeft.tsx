@@ -1,6 +1,6 @@
-import { CustomHeaderButton } from "#ui";
 import React from "react";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { CustomHeaderButton } from "#ui";
 
 interface HeaderLeftProps {
   onPress: () => void;

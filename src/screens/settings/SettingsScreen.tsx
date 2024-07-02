@@ -10,14 +10,14 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import { ChatScreenNavigationProps } from "#navigation/types";
-import { settingsInput } from "#constants";
 import { colors } from "#colors";
 import { Input, ProfileImage } from "#components";
-import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
+import { settingsInput } from "#constants";
+import { ChatScreenNavigationProps } from "#navigation/types";
 import { useAppDispatch, useAppSelector } from "#store/hooks";
 import { updateLoggetInUserData } from "#store/slices";
 import { IdEnum } from "#types";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
 import {
   State,
   reducer,

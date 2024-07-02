@@ -14,19 +14,19 @@ import {
   FlatList,
   ImageSourcePropType,
 } from "react-native";
-import { useDispatch } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "react-native-image-crop-picker";
 import { useOverflowMenu } from "react-navigation-header-buttons";
+import { useDispatch } from "react-redux";
+import { backgrounds } from "#constants";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
 } from "#navigation/types";
-import { backgrounds } from "#constants";
-import { ScreenContainer } from "#ui";
-import { updateLoggetInUserData } from "#store/slices";
 import { useAppSelector } from "#store/hooks";
+import { updateLoggetInUserData } from "#store/slices";
 import { BubbleEnum, IChatMessagesData, ISendedData, IUserData } from "#types";
+import { ScreenContainer } from "#ui";
 import {
   createChat,
   openCamera,

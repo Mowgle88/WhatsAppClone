@@ -1,6 +1,6 @@
 import React, { ForwardedRef, forwardRef } from "react";
-import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import Clipboard from "@react-native-clipboard/clipboard";
+import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import { MenuItem } from "#ui";
 import { starMessage } from "#utils";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import { useAppSelector } from "#store/hooks";
 import { AuthScreen, StartUpScreen } from "#screens";
+import { useAppSelector } from "#store/hooks";
 import MainNavigator from "./MainNavigator";
 
 const AppNavigator: React.FC = () => {

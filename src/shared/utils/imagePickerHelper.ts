@@ -1,7 +1,7 @@
 import { Platform } from "react-native";
+import storage from "@react-native-firebase/storage";
 import ImagePicker, { Image, Options } from "react-native-image-crop-picker";
 import uuid from "react-native-uuid";
-import storage from "@react-native-firebase/storage";
 import { requestPermissions } from "#permissions";
 
 const pickerOptions: Options = {

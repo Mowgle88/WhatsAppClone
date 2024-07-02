@@ -9,8 +9,8 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { ImageScreenRouteProp } from "#navigation/types";
 import { colors } from "#colors";
+import { ImageScreenRouteProp } from "#navigation/types";
 
 const SCREEN_WIDTH = Dimensions.get("screen").width;
 

@@ -1,7 +1,7 @@
 import React, { ForwardedRef, forwardRef } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
 import ActionSheet, { ActionSheetRef } from "react-native-actions-sheet";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import { colors } from "#colors";
 
 interface BottomActionsSheetProps {

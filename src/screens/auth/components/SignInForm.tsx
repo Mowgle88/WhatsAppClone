@@ -1,11 +1,11 @@
 import React, { useCallback, useReducer, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
 import { colors } from "#colors";
-import { signInFormInput } from "#constants";
 import { Input } from "#components";
-import { SubmitButton } from "#ui";
+import { signInFormInput } from "#constants";
 import { useAppDispatch } from "#store/hooks";
 import { IdEnum } from "#types";
+import { SubmitButton } from "#ui";
 import {
   State,
   reducer,

@@ -1,10 +1,10 @@
 import React, { ComponentType } from "react";
 import { ColorValue, ViewStyle } from "react-native";
+import IonIcon from "react-native-vector-icons/Ionicons";
 import {
   HeaderButton,
   HeaderButtonProps,
 } from "react-navigation-header-buttons";
-import IonIcon from "react-native-vector-icons/Ionicons";
 import { colors } from "#colors";
 
 type IconComponentType =

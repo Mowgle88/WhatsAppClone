@@ -25,6 +25,34 @@ module.exports = {
     "@typescript-eslint/no-shadow": ["error"],
     "import/no-named-as-default-member": 0,
     "import/named": 0,
+    "import/order": [
+      "error",
+      {
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index",
+        ],
+        pathGroups: [
+          {
+            pattern: "@(react|react-native)",
+            group: "external",
+            position: "before",
+          },
+          {
+            pattern: "./*.{css,scss}",
+            group: "index",
+            position: "after",
+          },
+        ],
+        pathGroupsExcludedImportTypes: ["react"],
+        alphabetize: { order: "asc", caseInsensitive: true },
+        "newlines-between": "never",
+      },
+    ],
   },
   settings: {
     "import/resolver": {

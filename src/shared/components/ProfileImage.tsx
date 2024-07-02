@@ -7,9 +7,9 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import { ActionSheetRef } from "react-native-actions-sheet";
 import { Image } from "react-native-image-crop-picker";
 import { useDispatch } from "react-redux";
-import { ActionSheetRef } from "react-native-actions-sheet";
 import { colors } from "#colors";
 import { BottomActionsSheet } from "#components";
 import { buttons } from "#constants";
@@ -21,8 +21,8 @@ import {
   updateSignedInUserData,
   uploadImageAsync,
 } from "#utils";
-import EditButton from "./EditButton";
 import userImage from "../../assets/images/userImage.jpeg";
+import EditButton from "./EditButton";
 
 interface ProfileImageProps {
   size: number;

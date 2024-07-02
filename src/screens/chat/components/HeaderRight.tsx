@@ -1,8 +1,8 @@
 import React from "react";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 import { colors } from "#colors";
-import { CustomHeaderButton } from "#ui";
 import { IUserData } from "#types";
+import { CustomHeaderButton } from "#ui";
 import ChatOverflowMenu from "./ChatOverflowMenu";
 
 interface HeaderRightProps {

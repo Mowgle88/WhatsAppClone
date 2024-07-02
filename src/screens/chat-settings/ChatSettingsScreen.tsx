@@ -14,15 +14,15 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { colors } from "#colors";
+import { DataItem, Input, ProfileImage } from "#components";
 import {
   ChatSettingsScreenRouteProp,
   RootScreenNavigationProps,
 } from "#navigation/types";
-import { colors } from "#colors";
-import { DataItem, Input, ProfileImage } from "#components";
-import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
 import { useAppSelector } from "#store/hooks";
 import { DataItemTypeEnum, IUserData, IdEnum } from "#types";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
 import {
   State,
   addUsersToChat,

@@ -8,16 +8,16 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { colors } from "#colors";
+import { DataItem, ProfileImage } from "#components";
 import {
   ChatScreenNavigationProps,
   NewChatScreenRouteProp,
 } from "#navigation/types";
-import { DataItem, ProfileImage } from "#components";
-import { ScreenContainer } from "#ui";
 import { useAppDispatch, useAppSelector } from "#store/hooks";
 import { setStoredUsers } from "#store/slices";
 import commonStyles from "#styles";
 import { DataItemTypeEnum, IUsers } from "#types";
+import { ScreenContainer } from "#ui";
 import { searchUsers } from "#utils";
 import { HeaderLeft, HeaderRight, NoResult, SearchInput } from "./ui";
 
