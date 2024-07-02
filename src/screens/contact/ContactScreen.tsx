@@ -1,25 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import { useAppSelector } from "../../store/hooks";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   ChatScreenNavigationProps,
   ContactScreenRouteProp,
-} from "../../navigation/types";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import ProfileImage from "../../shared/components/ProfileImage";
-import ScreenTitle from "../../shared/ui/ScreenTitle";
-import { getUserChats } from "../../shared/utils/actions/userActions";
-import colors from "../../shared/constants/colors";
-import DataItem from "../../shared/components/DataItem";
-import {
-  DataItemTypeEnum,
-  IChatData,
-  IUserData,
-} from "../../shared/types/types";
-import SubmitButton from "../../shared/ui/SubmitButton";
-import { removeUserFromChat } from "../../shared/utils/actions/chatActions";
-import CommonChatsList from "./components/CommonChatsList";
+} from "#navigation/types";
+import { colors } from "#colors";
+import { DataItem, ProfileImage } from "#components";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
+import { useAppSelector } from "#store/hooks";
+import { DataItemTypeEnum, IChatData, IUserData } from "#types";
+import { getUserChats, removeUserFromChat } from "#utils";
+import { CommonChatsList } from "./components";
 
 const ContactScreen = () => {
   const { params } = useRoute<ContactScreenRouteProp>();

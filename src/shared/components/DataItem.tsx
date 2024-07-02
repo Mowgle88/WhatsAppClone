@@ -1,9 +1,9 @@
 import React from "react";
 import { StyleSheet, Text, TouchableWithoutFeedback, View } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import ProfileImage from "./ProfileImage";
-import colors from "../constants/colors";
-import { DataItemTypeEnum } from "../types/types";
+import { colors } from "#colors";
+import { ProfileImage } from "#components";
+import { DataItemTypeEnum } from "#types";
 
 interface DataItemProps {
   title: string;

@@ -8,9 +8,8 @@ import {
 } from "react-native";
 import { IconProps } from "react-native-vector-icons/Icon";
 import IonIcon from "react-native-vector-icons/Ionicons";
-
-import colors from "../constants/colors";
-import { IdEnum } from "../types/types";
+import { colors } from "#colors";
+import { IdEnum } from "#types";
 
 interface InputProps extends TextInputProps {
   IconPack?: React.ComponentClass<IconProps, any>;

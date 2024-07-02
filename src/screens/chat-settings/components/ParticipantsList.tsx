@@ -1,12 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { DataItem } from "../../../shared/components";
-import colors from "../../../shared/constants/colors";
-import {
-  DataItemTypeEnum,
-  IChatData,
-  IUsers,
-} from "../../../shared/types/types";
+import { colors } from "#colors";
+import { DataItem } from "#components";
+import { DataItemTypeEnum, IChatData, IUsers } from "#types";
 
 interface ParticipantsListProps {
   chatData: IChatData;

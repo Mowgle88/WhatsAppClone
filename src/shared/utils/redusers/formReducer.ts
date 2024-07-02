@@ -1,5 +1,5 @@
 import { ImageSourcePropType } from "react-native";
-import { IdEnum } from "../../types/types";
+import { IdEnum } from "#types";
 
 export type State = {
   inputValues: {

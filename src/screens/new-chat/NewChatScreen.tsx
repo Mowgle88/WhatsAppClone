@@ -7,23 +7,19 @@ import {
   View,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { colors } from "#colors";
 import {
   ChatScreenNavigationProps,
   NewChatScreenRouteProp,
-} from "../../navigation/types";
-import colors from "../../shared/constants/colors";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import commonStyles from "../../shared/constants/commonStyles";
-import { searchUsers } from "../../shared/utils/actions/userActions";
-import DataItem from "../../shared/components/DataItem";
-import { DataItemTypeEnum, IUsers } from "../../shared/types/types";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { setStoredUsers } from "../../store/userSlice";
-import ProfileImage from "../../shared/components/ProfileImage";
-import HeaderLeft from "./components/HeaderLeft";
-import HeaderRight from "./components/HeaderRight";
-import SearchInput from "./components/SearchInput";
-import NoResult from "./ui/NoResult";
+} from "#navigation/types";
+import { DataItem, ProfileImage } from "#components";
+import { ScreenContainer } from "#ui";
+import { useAppDispatch, useAppSelector } from "#store/hooks";
+import { setStoredUsers } from "#store/slices";
+import commonStyles from "#styles";
+import { DataItemTypeEnum, IUsers } from "#types";
+import { searchUsers } from "#utils";
+import { HeaderLeft, HeaderRight, NoResult, SearchInput } from "./ui";
 
 const NewChatScreen = () => {
   const navigation = useNavigation<ChatScreenNavigationProps>();

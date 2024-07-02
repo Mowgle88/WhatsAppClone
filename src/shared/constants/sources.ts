@@ -17,3 +17,8 @@ export const logo = {
 export const google = {
   src: require("../../assets/images/google.png"),
 };
+
+export const lottie = {
+  chat: require("../../assets/lottie/chat.icon.json"),
+  settings: require("../../assets/lottie/settings.icon.json"),
+};

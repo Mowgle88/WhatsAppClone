@@ -1,12 +1,11 @@
 import database from "@react-native-firebase/database";
+import { IChatData, IChatMessagesData, ISendedData, IUserData } from "#types";
 import {
-  IChatData,
-  IChatMessagesData,
-  ISendedData,
-  IUserData,
-} from "../../types/types";
-import { addUserChat, deleteUserChat, getUserChats } from "./userActions";
-import { getUserPushTokens } from "./authActions";
+  addUserChat,
+  deleteUserChat,
+  getUserChats,
+  getUserPushTokens,
+} from "#utils";
 
 import { CLOUD_MESSAGING_SERVER_KEY } from "@env";
 

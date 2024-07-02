@@ -1,7 +1,7 @@
 import React from "react";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
-import { CustomHeaderButton } from "../../../shared/ui";
-import colors from "../../../shared/constants/colors";
+import { colors } from "#colors";
+import { CustomHeaderButton } from "#ui";
 
 interface HeaderRightProps {
   isGroupChat: boolean;

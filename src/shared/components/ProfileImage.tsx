@@ -10,19 +10,19 @@ import {
 import { Image } from "react-native-image-crop-picker";
 import { useDispatch } from "react-redux";
 import { ActionSheetRef } from "react-native-actions-sheet";
-import colors from "../constants/colors";
+import { colors } from "#colors";
+import { BottomActionsSheet } from "#components";
+import { buttons } from "#constants";
+import { updateLoggetInUserData } from "#store/slices";
 import {
   openCamera,
   showImagePicker,
+  updateChatData,
+  updateSignedInUserData,
   uploadImageAsync,
-} from "../utils/imagePickerHelper";
-import { updateSignedInUserData } from "../utils/actions/authActions";
-import { updateLoggetInUserData } from "../../store/authSlice";
-import userImage from "../../assets/images/userImage.jpeg";
-import { updateChatData } from "../utils/actions/chatActions";
-import BottomActionsSheet from "./BottomActionsSheet";
-import { buttons } from "../constants";
+} from "#utils";
 import EditButton from "./EditButton";
+import userImage from "../../assets/images/userImage.jpeg";
 
 interface ProfileImageProps {
   size: number;

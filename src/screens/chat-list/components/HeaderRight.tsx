@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import { CustomHeaderButton } from "../../../shared/ui";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
+import { CustomHeaderButton } from "#ui";
 
 interface HeaderRightProps {
   onPress: () => void;

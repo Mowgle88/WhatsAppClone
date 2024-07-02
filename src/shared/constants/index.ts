@@ -1,4 +1,6 @@
-import { IdEnum } from "../types/types";
+import { IdEnum } from "../types";
+
+export * from "./sources";
 
 export const buttons = [
   {

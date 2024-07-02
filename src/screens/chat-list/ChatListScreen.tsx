@@ -2,17 +2,16 @@ import React, { useEffect, useMemo } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-  RootScreenNavigationProps,
   ChatListScreenRouteProp,
+  RootScreenNavigationProps,
   RootStackParamList,
-} from "../../navigation/types";
-import { useAppSelector } from "../../store/hooks";
-import DataItem from "../../shared/components/DataItem";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import ScreenTitle from "../../shared/ui/ScreenTitle";
-import colors from "../../shared/constants/colors";
-import HeaderRight from "./components/HeaderRight";
-import { IChatData } from "../../shared/types/types";
+} from "#navigation/types";
+import { colors } from "#colors";
+import { DataItem } from "#components";
+import { ScreenContainer, ScreenTitle } from "#ui";
+import { useAppSelector } from "#store/hooks";
+import { IChatData } from "#types";
+import { HeaderRight } from "./components";
 
 const ChatListScreen: React.FC = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();

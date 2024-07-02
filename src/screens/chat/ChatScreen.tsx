@@ -18,37 +18,26 @@ import { useDispatch } from "react-redux";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image } from "react-native-image-crop-picker";
 import { useOverflowMenu } from "react-navigation-header-buttons";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
 import {
   ChatScreenRouteProp,
   RootScreenNavigationProps,
-} from "../../navigation/types";
-import {
-  BubbleEnum,
-  IChatMessagesData,
-  ISendedData,
-  IUserData,
-} from "../../shared/types/types";
-import { useAppSelector } from "../../store/hooks";
+} from "#navigation/types";
+import { backgrounds } from "#constants";
+import { ScreenContainer } from "#ui";
+import { updateLoggetInUserData } from "#store/slices";
+import { useAppSelector } from "#store/hooks";
+import { BubbleEnum, IChatMessagesData, ISendedData, IUserData } from "#types";
 import {
   createChat,
+  openCamera,
   sendImage,
   sendTextMessage,
-} from "../../shared/utils/actions/chatActions";
-import {
-  openCamera,
   showImagePicker,
+  updateSignedInUserData,
   uploadImageAsync,
-} from "../../shared/utils/imagePickerHelper";
-import { updateSignedInUserData } from "../../shared/utils/actions/authActions";
-import { updateLoggetInUserData } from "../../store/authSlice";
-import { backgrounds } from "../../shared/constants/sources";
-import HeaderRight from "./components/HeaderRight";
-import SendImageModal from "./components/SendImageModal";
-import ChatInput from "./components/ChatInput";
-import Bubble from "./components/Bubble";
-import ReplyTo from "./ui/ReplyTo";
-import FloatingButton from "./ui/FloatingButton";
+} from "#utils";
+import { Bubble, ChatInput, HeaderRight, SendImageModal } from "./components";
+import { FloatingButton, ReplyTo } from "./ui";
 
 interface ItemData {
   item: {

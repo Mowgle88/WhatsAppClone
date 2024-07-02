@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import colors from "../../../shared/constants/colors";
+import { colors } from "#colors";
 
 interface SearchProps {
   onChangeText: (text: string) => void;

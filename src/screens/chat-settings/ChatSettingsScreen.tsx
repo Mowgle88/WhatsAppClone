@@ -17,20 +17,21 @@ import IonIcon from "react-native-vector-icons/Ionicons";
 import {
   ChatSettingsScreenRouteProp,
   RootScreenNavigationProps,
-} from "../../navigation/types";
-import { useAppSelector } from "../../store/hooks";
-import { ScreenContainer, ScreenTitle, SubmitButton } from "../../shared/ui";
-import { DataItem, Input, ProfileImage } from "../../shared/components";
-import { DataItemTypeEnum, IUserData, IdEnum } from "../../shared/types/types";
-import { State, reducer } from "../../shared/utils/redusers/formReducer";
+} from "#navigation/types";
+import { colors } from "#colors";
+import { DataItem, Input, ProfileImage } from "#components";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
+import { useAppSelector } from "#store/hooks";
+import { DataItemTypeEnum, IUserData, IdEnum } from "#types";
 import {
+  State,
   addUsersToChat,
+  reducer,
   removeUserFromChat,
   updateChatData,
-} from "../../shared/utils/actions/chatActions";
-import colors from "../../shared/constants/colors";
-import { validateInput } from "../../shared/utils/actions/formActions";
-import ParticipantsList from "./components/ParticipantsList";
+  validateInput,
+} from "#utils";
+import { ParticipantsList } from "./components";
 
 const ChatSettingsScreen: React.FC = () => {
   const { params } = useRoute<ChatSettingsScreenRouteProp>();

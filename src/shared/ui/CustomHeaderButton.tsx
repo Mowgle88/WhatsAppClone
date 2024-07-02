@@ -5,7 +5,7 @@ import {
   HeaderButtonProps,
 } from "react-navigation-header-buttons";
 import IonIcon from "react-native-vector-icons/Ionicons";
-import colors from "../constants/colors";
+import { colors } from "#colors";
 
 type IconComponentType =
   | ComponentType<{

@@ -5,9 +5,9 @@ import {
   OverflowMenu,
   overflowMenuPressHandlerDropdownMenu,
 } from "react-navigation-header-buttons";
-import { backgrounds } from "../../../shared/constants/sources";
-import { IUserData } from "../../../shared/types/types";
-import colors from "../../../shared/constants/colors";
+import { colors } from "#colors";
+import { backgrounds } from "#constants";
+import { IUserData } from "#types";
 
 interface ChatOverflowMenuProps {
   onPress: (source: number) => void;

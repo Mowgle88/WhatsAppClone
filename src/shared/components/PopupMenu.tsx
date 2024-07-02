@@ -1,8 +1,8 @@
 import React, { ForwardedRef, forwardRef } from "react";
 import { Menu, MenuOptions, MenuTrigger } from "react-native-popup-menu";
 import Clipboard from "@react-native-clipboard/clipboard";
-import { starMessage } from "../utils/actions/chatActions";
-import { MenuItem } from "../ui";
+import { MenuItem } from "#ui";
+import { starMessage } from "#utils";
 
 interface PopupMenuProps {
   id: string;

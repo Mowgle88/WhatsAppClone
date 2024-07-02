@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, TouchableOpacity } from "react-native";
-import colors from "../constants/colors";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import { colors } from "#colors";
 
 interface EditButtonProps {
   isRemove: boolean;

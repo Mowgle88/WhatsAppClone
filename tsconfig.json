@@ -8,6 +8,54 @@
       "src/shared/types"
     ],
     /* Completeness */
-    "skipLibCheck": true /* Skip type checking all .d.ts files. */
+    "skipLibCheck": true, /* Skip type checking all .d.ts files. */
+    "baseUrl": "./src",
+    "paths": {
+      "#assets/*": [
+        "./assets/*"
+      ],
+      "#navigation": [
+        "./navigation"
+      ],
+      "#navigation/*": [
+        "./navigation/*"
+      ],
+      "#screens": [
+        "./screens"
+      ],
+      "#store": [
+        "./store"
+      ],
+      "#store/*": [
+        "./store/*"
+      ],
+      "#components": [
+        "./shared/components"
+      ],
+      "#constants": [
+        "./shared/constants"
+      ],
+      "#colors": [
+        "./shared/constants/colors"
+      ],
+      "#styles": [
+        "./shared/constants/commonStyles"
+      ],
+      "#hooks": [
+        "./shared/hooks"
+      ],
+      "#permissions": [
+        "./shared/permissions"
+      ],
+      "#types": [
+        "./shared/types"
+      ],
+      "#utils": [
+        "./shared/utils"
+      ],
+      "#ui": [
+        "./shared/ui"
+      ]
+    }
   }
 }

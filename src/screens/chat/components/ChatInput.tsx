@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import colors from "../../../shared/constants/colors";
 import Icon from "react-native-vector-icons/Ionicons";
+import { colors } from "#colors";
 
 interface ChatInputProps {
   onPickImage: () => void;

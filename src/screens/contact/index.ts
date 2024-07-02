@@ -1,1 +1,1 @@
-export { default as ContactScreen } from "./ContactScreen";
+export { default } from "./ContactScreen";

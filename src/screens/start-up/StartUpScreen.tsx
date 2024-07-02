@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { ActivityIndicator, View } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import colors from "../../shared/constants/colors";
-import commonStyles from "../../shared/constants/commonStyles";
-import { authenticate, setDidTryAutoLogin } from "../../store/authSlice";
-import { useAppDispatch } from "../../store/hooks";
-import { getUserData } from "../../shared/utils/actions/userActions";
+import { colors } from "#colors";
+import commonStyles from "#styles";
+import { useAppDispatch } from "#store/hooks";
+import { authenticate, setDidTryAutoLogin } from "#store/slices";
+import { getUserData } from "#utils";
 
 const StartUpScreen = () => {
   const dispatch = useAppDispatch();

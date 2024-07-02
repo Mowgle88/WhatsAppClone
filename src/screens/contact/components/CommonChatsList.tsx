@@ -1,12 +1,8 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
-import { DataItem } from "../../../shared/components";
-import colors from "../../../shared/constants/colors";
-import {
-  DataItemTypeEnum,
-  IChatData,
-  IObjectData,
-} from "../../../shared/types/types";
+import { colors } from "#colors";
+import { DataItem } from "#components";
+import { DataItemTypeEnum, IChatData, IObjectData } from "#types";
 
 interface CommonChatsListProps {
   commonChats: string[];

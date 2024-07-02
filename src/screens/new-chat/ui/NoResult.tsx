@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
-import colors from "../../../shared/constants/colors";
-import commonStyles from "../../../shared/constants/commonStyles";
+import { colors } from "#colors";
+import commonStyles from "#styles";
 
 interface NoResultProps {
   icon: "users" | "question";

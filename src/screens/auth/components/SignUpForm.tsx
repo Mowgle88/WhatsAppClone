@@ -1,14 +1,12 @@
 import React, { useCallback, useReducer, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet } from "react-native";
-import Input from "../../../shared/components/Input";
-import SubmitButton from "../../../shared/ui/SubmitButton";
-import { validateInput } from "../../../shared/utils/actions/formActions";
-import { State, reducer } from "../../../shared/utils/redusers/formReducer";
-import { IdEnum } from "../../../shared/types/types";
-import { signUp } from "../../../shared/utils/actions/authActions";
-import colors from "../../../shared/constants/colors";
-import { useAppDispatch } from "../../../store/hooks";
-import { signUpFormInput } from "../../../shared/constants";
+import { colors } from "#colors";
+import { signUpFormInput } from "#constants";
+import { Input } from "#components";
+import { SubmitButton } from "#ui";
+import { useAppDispatch } from "#store/hooks";
+import { IdEnum } from "#types";
+import { State, reducer, signUp, validateInput } from "#utils";
 
 const initialState: State = {
   inputValues: {

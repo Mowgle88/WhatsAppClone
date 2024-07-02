@@ -10,11 +10,10 @@ import {
   View,
 } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import colors from "../../shared/constants/colors";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import SignUpForm from "./components/SignUpForm";
-import SignInForm from "./components/SignInForm";
-import { logo } from "../../shared/constants/sources";
+import { colors } from "#colors";
+import { logo } from "#constants";
+import { ScreenContainer } from "#ui";
+import { SignInForm, SignUpForm } from "./components";
 
 const AuthScreen: React.FC = () => {
   const [isSignUp, setIsSignUp] = useState(false);

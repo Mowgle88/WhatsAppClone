@@ -10,29 +10,27 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-gesture-handler";
-import ScreenTitle from "../../shared/ui/ScreenTitle";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import Input from "../../shared/components/Input";
-import SubmitButton from "../../shared/ui/SubmitButton";
-import colors from "../../shared/constants/colors";
-import { validateInput } from "../../shared/utils/actions/formActions";
-import { State, reducer } from "../../shared/utils/redusers/formReducer";
+import { ChatScreenNavigationProps } from "#navigation/types";
+import { settingsInput } from "#constants";
+import { colors } from "#colors";
+import { Input, ProfileImage } from "#components";
+import { ScreenContainer, ScreenTitle, SubmitButton } from "#ui";
+import { useAppDispatch, useAppSelector } from "#store/hooks";
+import { updateLoggetInUserData } from "#store/slices";
+import { IdEnum } from "#types";
 import {
+  State,
+  reducer,
   updateSignedInUserData,
   userLogout,
-} from "../../shared/utils/actions/authActions";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { updateLoggetInUserData } from "../../store/authSlice";
-import { IdEnum } from "../../shared/types/types";
-import ProfileImage from "../../shared/components/ProfileImage";
-import { ChatScreenNavigationProps } from "../../navigation/types";
-import { settingsInput } from "../../shared/constants";
+  validateInput,
+} from "#utils";
 
 const SettingsScreen: React.FC = () => {
+  const navigation = useNavigation<ChatScreenNavigationProps>();
+
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.auth.userData);
-
-  const navigation = useNavigation<ChatScreenNavigationProps>();
 
   const [isLoading, setIsLoading] = useState(false);
   const [succesMessage, setSuccesMessage] = useState(false);

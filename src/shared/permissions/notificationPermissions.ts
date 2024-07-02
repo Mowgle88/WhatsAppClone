@@ -1,5 +1,5 @@
-import messaging from "@react-native-firebase/messaging";
 import { Platform } from "react-native";
+import messaging from "@react-native-firebase/messaging";
 import { PERMISSIONS, request } from "react-native-permissions";
 
 const requestAndroidPermission = async () => {
@@ -24,7 +24,7 @@ const requestIOSPermission = async () => {
   }
 };
 
-export const requestNotificationPermission = Platform.select({
+const requestNotificationPermission = Platform.select({
   android: () => {
     return requestAndroidPermission();
   },
@@ -32,3 +32,5 @@ export const requestNotificationPermission = Platform.select({
     return requestIOSPermission();
   },
 });
+
+export default requestNotificationPermission;

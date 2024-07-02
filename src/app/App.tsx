@@ -8,10 +8,10 @@ import SplashScreen from "react-native-splash-screen";
 import messaging from "@react-native-firebase/messaging";
 // eslint-disable-next-line import/no-named-as-default
 import firebase from "@react-native-firebase/app";
-import AppNavigator from "./navigation/AppNavigator";
-import { store } from "./store/store";
-import { requestNotificationPermission } from "./shared/permissions/notificationPermissions";
-import { getFCMToken } from "./shared/utils/firebaseHelper";
+import { AppNavigator } from "#navigation";
+import { requestNotificationPermission } from "#permissions";
+import { store } from "#store";
+import { getFCMToken } from "#utils";
 
 LogBox.ignoreLogs(["AsyncStorage has been extracted"]);
 

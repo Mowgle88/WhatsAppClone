@@ -1,7 +1,7 @@
 import React from "react";
 import { Image, Pressable, StyleSheet, Text } from "react-native";
-import colors from "../../../shared/constants/colors";
-import { google } from "../../../shared/constants/sources";
+import { colors } from "#colors";
+import { google } from "#constants";
 
 interface GoogleButtonProps {
   onPress: () => void;

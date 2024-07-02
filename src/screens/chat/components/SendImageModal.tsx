@@ -8,7 +8,7 @@ import {
   View,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
-import colors from "../../../shared/constants/colors";
+import { colors } from "#colors";
 
 interface SendImageModalprops {
   isShowed: boolean;

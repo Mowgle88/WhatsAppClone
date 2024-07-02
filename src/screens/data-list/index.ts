@@ -1,1 +1,1 @@
-export { default as DataListScreen } from "./DataListScreen";
+export { default } from "./DataListScreen";

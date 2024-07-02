@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from "react";
 import { FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-  RootScreenNavigationProps,
   DataListScreenRouteProp,
-} from "../../navigation/types";
-import ScreenContainer from "../../shared/ui/ScreenContainer";
-import { useAppSelector } from "../../store/hooks";
-import DataItem from "../../shared/components/DataItem";
-import { DataItemTypeEnum } from "../../shared/types/types";
+  RootScreenNavigationProps,
+} from "#navigation/types";
+import { DataItem } from "#components";
+import { ScreenContainer } from "#ui";
+import { useAppSelector } from "#store/hooks";
+import { DataItemTypeEnum } from "#types";
 
 const DataListScreen = () => {
   const navigation = useNavigation<RootScreenNavigationProps>();

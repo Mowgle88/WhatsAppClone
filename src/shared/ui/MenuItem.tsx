@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { MenuOption } from "react-native-popup-menu";
 import { IconProps } from "react-native-vector-icons/Icon";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import colors from "../constants/colors";
+import { colors } from "#colors";
 
 interface MenuItemProps {
   text: string;

@@ -11,15 +11,11 @@ import {
 } from "react-native";
 import uuid from "react-native-uuid";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import colors from "../../../shared/constants/colors";
-import {
-  BubbleEnum,
-  IChatMessagesData,
-  IUserData,
-} from "../../../shared/types/types";
-import { formatAmPm } from "../../../shared/utils/redusers/dateFormatting";
-import { useAppSelector } from "../../../store/hooks";
-import PopupMenu from "../../../shared/components/PopupMenu";
+import { colors } from "#colors";
+import { PopupMenu } from "#components";
+import { useAppSelector } from "#store/hooks";
+import { BubbleEnum, IChatMessagesData, IUserData } from "#types";
+import { formatAmPm } from "#utils";
 
 interface BubbleProps {
   text: string;

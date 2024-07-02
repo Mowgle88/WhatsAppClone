@@ -1,13 +1,15 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { ChatSettingsScreen } from "../../screens/chat-settings";
-import ChatScreen from "../../screens/chat/ChatScreen";
-import { RootStackParamList } from "../types";
-import NewChatScreen from "../../screens/new-chat/NewChatScreen";
-import ContactScreen from "../../screens/contact/ContactScreen";
-import DataListScreen from "../../screens/data-list/DataListScreen";
-import ImageScreen from "../../screens/ImageScreen";
-import TabNavigator from "../components/TabNavigator";
+import { RootStackParamList } from "#navigation/types";
+import {
+  ChatScreen,
+  ChatSettingsScreen,
+  ContactScreen,
+  DataListScreen,
+  ImageScreen,
+  NewChatScreen,
+} from "#screens";
+import TabNavigator from "./TabNavigator";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

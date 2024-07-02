@@ -1,1 +1,1 @@
-export { default as AuthScreChatListScreenen } from "./ChatListScreen";
+export { default } from "./ChatListScreen";

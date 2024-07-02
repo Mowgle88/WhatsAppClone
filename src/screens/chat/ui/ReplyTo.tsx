@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
-import { IUserData } from "../../../shared/types/types";
-import colors from "../../../shared/constants/colors";
+import { colors } from "#colors";
+import { IUserData } from "#types";
 
 interface ReplyToProps {
   text: string;

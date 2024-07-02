@@ -8,8 +8,8 @@ import Animated, {
   withTiming,
   useDerivedValue,
 } from "react-native-reanimated";
+import { colors } from "#colors";
 import TabBarComponent from "./TabBarComponent";
-import colors from "../../shared/constants/colors";
 
 const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 

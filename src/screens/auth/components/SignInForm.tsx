@@ -1,17 +1,18 @@
 import React, { useCallback, useReducer, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
-import Input from "../../../shared/components/Input";
-import SubmitButton from "../../../shared/ui/SubmitButton";
-import { validateInput } from "../../../shared/utils/actions/formActions";
-import { State, reducer } from "../../../shared/utils/redusers/formReducer";
-import { IdEnum } from "../../../shared/types/types";
+import { colors } from "#colors";
+import { signInFormInput } from "#constants";
+import { Input } from "#components";
+import { SubmitButton } from "#ui";
+import { useAppDispatch } from "#store/hooks";
+import { IdEnum } from "#types";
 import {
+  State,
+  reducer,
   signIn,
   signInWithGoogle,
-} from "../../../shared/utils/actions/authActions";
-import { useAppDispatch } from "../../../store/hooks";
-import colors from "../../../shared/constants/colors";
-import { signInFormInput } from "../../../shared/constants";
+  validateInput,
+} from "#utils";
 import GoogleButton from "./GoogleButton";
 
 const initialState: State = {
